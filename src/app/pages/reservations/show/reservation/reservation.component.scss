@@ -1,0 +1,15 @@
+.btn-square {
+    padding: 0 10px !important;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer !important;
+}
+
+.btn-secondary.border-left-0 {
+    width: 46px;
+    cursor: pointer !important;
+}

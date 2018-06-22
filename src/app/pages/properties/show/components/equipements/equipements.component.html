@@ -1,0 +1,30 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span (click)="isCollapsed = !isCollapsed" class="d-flex cursor-pointer align-items-center">
+      <i class="ion-ios-monitor-outline mr-2"></i>
+      Equipements
+    </span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header> 
+  <nb-card-body [ngbCollapse]="isCollapsed" class="p-0">
+    <ngb-accordion [closeOthers]="true">
+      <ngb-panel *ngFor="let category of categories" [id]="category.title">
+        <ng-template ngbPanelTitle>
+          <span>{{ category.title }}</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <div class="row m-0 p-2 pt-4">
+            <div *ngFor="let equipement of category.equipements" class="col-md-3">
+              <app-equipement [equipements]="equipements" [title]="equipement.name" type="success">
+                <i class="nb-power-circled"></i>
+              </app-equipement>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </nb-card-body>
+</nb-card>

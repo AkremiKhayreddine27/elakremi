@@ -1,0 +1,23 @@
+<div class="actions d-md-none d-lg-none d-xl-none  height-50 mb-2 border-bottom">
+  <div *ngFor="let action of actions" [class.d-none]="action.displayInMobile">
+    <a *ngIf="action.type === 'link'" (click)="actionClicked(action.clickAction)" class="action">
+      <i [class.text-success]="!isFilterCollapsed && action.title === 'Filtrer'" [class]="action.icon"></i>
+    </a>
+    <a *ngIf="action.type === 'toggle'" (click)="toggleClicked(action)" class="action">
+      <i [class]="action.icon"></i>
+    </a>
+    <div *ngIf="action.type === 'dropdown'" [class.d-none]="action.displayInMobile" class="dropdown" ngbDropdown>
+      <a class="action" ngbDropdownToggle>
+        <i [class]="action.icon"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+        <li *ngFor="let item of action.dropdownItems" (click)="dropdownItemClicked(item);" class="dropdown-item d-flex align-items-center justify-content-between">
+          <i *ngIf="item.icon" [class]="item.icon"></i>
+          <span class="ml-2">{{ item.title }}</span>
+          <i *ngIf="item.action === 'sort' && item.direction ==='asc'" class="fa fa-sort-up ml-2 small"></i>
+          <i *ngIf="item.action === 'sort' && item.direction ==='desc'" class="fa fa-sort-down ml-2 small"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

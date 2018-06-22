@@ -1,0 +1,21 @@
+<nb-card>
+  <nb-card-header class="d-flex p-0 justify-content-between align-items-center flex-wrap">
+    <span class="d-flex align-items-center pl-2 m-0">
+      <i class="lnr lnr-clock mr-2"></i>
+      {{ pageTitle }}
+    </span>
+  </nb-card-header>
+  <nb-card-body class="p-0">
+    <div class="row m-0">
+      <div class="col-12">
+        <form-reservation [contact]="contact" [reservation]="reservation" (propertyChange)="propertyChange($event.property)" (validityChange)="formChanged($event);"></form-reservation>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-end">
+    <button [disabled]="!reservationFormValid" (click)="save()" type="submit" class="btn btn-sm btn-success">
+      <i class="fa fa-save mr-1"></i>
+      <span i18n>Sauvegarder</span>
+    </button>
+  </nb-card-footer>
+</nb-card>

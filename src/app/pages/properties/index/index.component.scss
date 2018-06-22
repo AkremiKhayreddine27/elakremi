@@ -1,0 +1,23 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+    .border-bottom {
+        border-color: nb-theme(card-separator) !important;
+    }
+    nb-card-header {
+        height: 62px;
+        span {
+            i {
+                font-size: 2rem;
+                text-align: center;
+            }
+        }
+    }
+    nb-card-body {
+        overflow: visible;
+        position: relative;
+    }
+
+    .dropdown-menu-right {
+        margin-top: 10px;
+    }
+}

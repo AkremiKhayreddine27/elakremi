@@ -1,0 +1,80 @@
+<form class="my-calendars-form" [formGroup]="propertyForm">
+<!--
+    <div class="my-calendars-header">
+        <h6 class="pt-4 pb-2" i18n>Local Calendars</h6>
+        <button class="btn btn-new-calendar" (click)="newCalendar.emit({})">
+            <i class="fa fa-plus"></i>
+        </button>
+    </div>
+    <div *ngFor="let calendar of activeCalendars.controls; let i=index" class="pt-2 checkbox-div">
+        <label class="checkbox-container">
+            <span class="checkbox-text">{{ originalCalendars[i].name }}</span>
+            <input (change)="filter(activeCalendars, property)" [formControl]="calendar" type="checkbox">
+            <span [style.backgroundColor]="originalCalendars[i].color" class="checkmark"></span>
+        </label>
+        <div class="dropdown" ngbDropdown>
+            <button class="btn-toggle" ngbDropdownToggle>
+                <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a *ngIf="!originalCalendars[i].isLocal" (click)="refreshCalendar(originalCalendars[i])" class="dropdown-item text-dark">
+                    <i class="fa fa-refresh pr-2"></i>
+                    <span i18n>Refresh</span>
+                </a>
+                <a *ngIf="originalCalendars[i].id !== originalCalendars[0].id" (click)="delete(originalCalendars[i].id)" class="dropdown-item text-dark">
+                    <i class="fa fa-trash pr-2"></i>
+                    <span i18n>Delete</span>
+                </a>
+                <a appCalendarExport [refresh]="refresh" [calendars]="[originalCalendars[i]]" class="dropdown-item text-dark">
+                    <i class="fa fa-download pr-2"></i>
+                    <span i18n>Export</span>
+                </a>
+                <div class="colors">
+                    <input formControlName="color" type="hidden">
+                    <div *ngFor="let color of colors" [style.backgroundColor]="color" (click)="setColor(color, originalCalendars[i])" [class.active]="originalCalendars[i].color === color"
+                        class="color"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+    <div *ngIf="property">
+        <div class="my-calendars-header">
+            <h6 class="pt-4 pb-2" i18n>{{ property.title }}</h6>
+            <button class="btn btn-new-calendar" (click)="newCalendar.emit({})">
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
+        <div *ngFor="let calendar of propertyCalendars.controls; let i=index" class="pt-2 checkbox-div">
+            <label class="checkbox-container">
+                <span class="checkbox-text">{{ property.calendars[i].name }}</span>
+                <input (change)="filter(propertyCalendars, property)" [formControl]="calendar" type="checkbox">
+                <span [style.backgroundColor]="property.calendars[i].color" class="checkmark"></span>
+            </label>
+            <div class="dropdown" ngbDropdown>
+                <button class="btn-toggle" ngbDropdownToggle>
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                    <a *ngIf="!property.calendars[i].isLocal" (click)="refreshCalendar(property.calendars[i])" class="dropdown-item text-dark">
+                        <i class="fa fa-refresh pr-2"></i>
+                        <span i18n>Refresh</span>
+                    </a>
+                    <a *ngIf="property.calendars[i].id !== property.calendars[0].id" (click)="delete(property.calendars[i].id)" class="dropdown-item text-dark">
+                        <i class="fa fa-trash pr-2"></i>
+                        <span i18n>Delete</span>
+                    </a>
+                    <a appCalendarExport [refresh]="refresh" [calendars]="[property.calendars[i]]" class="dropdown-item text-dark">
+                        <i class="fa fa-download pr-2"></i>
+                        <span i18n>Export</span>
+                    </a>
+                    <div class="colors">
+                        <input formControlName="color" type="hidden">
+                        <div *ngFor="let color of colors" [style.backgroundColor]="color" (click)="setColor(color, property.calendars[i])" [class.active]="property.calendars[i].color === color"
+                            class="color"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

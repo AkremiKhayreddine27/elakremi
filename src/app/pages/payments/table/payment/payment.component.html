@@ -1,0 +1,53 @@
+<div class="row border-bottom pb-3 pt-3">
+  <div class="col">
+    <span class="small">{{ payment.deadlineDate | date:'dd MMM yyyy'}}</span>
+  </div>
+  <div class="col">
+    <span class="small">{{ payment.payer.firstname }} {{ payment.payer.lastname }}</span>
+  </div>
+  <div class="col d-flex align-items-center">
+    <span class="text-success payment-type font-weight-bold mr-1" *ngIf="payment.type.isIncome">+</span>
+    <span class="text-danger payment-type font-weight-bold mr-1" *ngIf="payment.type.isOutgo">-</span>
+    <span [class.text-success]="payment.type.isIncome" [class.text-danger]="payment.type.isOutgo" class="small">
+      {{ payment.amount }}$
+    </span>
+  </div>
+  <div class="col">
+    <span class="small">{{ payment.type.label }}</span>
+  </div>
+  <div class="col" [ngSwitch]="payment.status">
+    <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status }}</span>
+    <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status }}</span>
+    <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status }}</span>
+    <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status }}</span>
+  </div>
+  <div class="col">
+    <span class="small">{{ payment.method }}</span>
+  </div>
+  <div class="col d-flex justify-content-end">
+    <div class="dropdown" ngbDropdown>
+      <a class="action" ngbDropdownToggle>
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+        <li (click)="sendNotification(payment)" class="dropdown-item">
+          <i class="fa fa-bell mr-1"></i>
+          Envoyer un rappel
+        </li>
+        <li class="dropdown-item">
+          <i class="fa fa-hourglass-half mr-1"></i>
+          Envoyer l'avis d'échéance
+        </li>
+        <li class="dropdown-item">
+          <i class="fa fa-upload mr-1"></i>
+          Document
+        </li>
+        <div class="dropdown-divider"></div>
+        <li (click)="openEditPayment(payment)" class="dropdown-item">
+          <i class="fa fa-edit mr-1"></i>éditer</li>
+        <li (click)="delete(payment)" class="dropdown-item">
+          <i class="fa fa-trash mr-1"></i>supprimer</li>
+      </ul>
+    </div>
+  </div>
+</div>

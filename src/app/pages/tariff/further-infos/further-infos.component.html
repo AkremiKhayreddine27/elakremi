@@ -1,0 +1,21 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span class="cursor-pointer" (click)="isCollapsed = !isCollapsed">Informations complémentaires</span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header>
+  <nb-card-body [ngbCollapse]="isCollapsed">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <textarea rows="5" class="form-control" placeholder="Caution">
+              </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

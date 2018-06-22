@@ -1,0 +1,28 @@
+<nb-card>
+  <nb-card-header class="d-flex p-0 align-items-center justify-content-between">
+    <span *ngIf="!isSearching" class="d-flex align-items-center pl-2 m-0">
+      <i class="ion-ios-folder-outline mr-2"></i>
+      Documents
+    </span>
+    <card-header-actions *ngIf="!isSearching" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)" (dropdownItemEvent)="handleDropdownEvent($event)">
+    </card-header-actions>
+    <card-header-search class="w-100" [source]="data" [fields]="searchFields" (closeSearch)="isSearching = false" [isSearching]="isSearching"
+      *ngIf="isSearching"></card-header-search>
+  </nb-card-header>
+  <nb-card-body class="p-0">
+    <card-mobile-header-actions [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)" (dropdownItemEvent)="handleDropdownEvent($event)"></card-mobile-header-actions>
+    <div *ngIf="documents.length > 0" class="row m-0">
+      <div class="col-12 p-0 pt-3">
+        <ngx-table [config]="config" [data]="documents" (actionEvent)="handleServiceEvent($event)"></ngx-table>
+      </div>
+    </div>
+    <div *ngIf="documents.length === 0" class="row m-0">
+      <div class="col-12 p-4">
+        <ngx-alert [message]="'pas de document'"></ngx-alert>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-end p-0">
+    <ngx-pagination [source]="data"></ngx-pagination>
+  </nb-card-footer>
+</nb-card>

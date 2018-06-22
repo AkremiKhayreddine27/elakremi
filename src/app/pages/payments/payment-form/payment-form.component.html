@@ -1,0 +1,120 @@
+<form [formGroup]="form">
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>
+      {{ title }}
+    </h4>
+    <button type="button" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="mode-switch">
+            <span class="light">Dépense</span>
+            <div class="switch">
+              <input type="checkbox" [checked]="!currentMode()" (change)="toggleMode(mode.checked)" #mode>
+              <span class="slider"></span>
+            </div>
+            <span class="cosmic">Revenu</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="nightAmount" class="col-form-label">Payeur *</label>
+        <ngx-select [element]="payer" [elements]="payers" (selectChanged)="setPayer($event)"></ngx-select>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="description" class="col-form-label">Description</label>
+          <div class="input-group input-group-sm">
+            <textarea id="description" class="form-control" name="description" formControlName="description">
+                </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="nom" class="col-form-label">Date paiement *</label>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <input class="form-control" formControlName="paymentDate" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #payDate="ngbDatepicker"
+              [class.form-control-danger]="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required">
+            <span class="input-group-btn">
+              <h2 [class.border-danger]="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required" class="btn btn-secondary cursor-pointer border-left-0 p-2 pl-2 pr-2"
+                (click)="payDate.toggle()">
+                <i class="fa fa-calendar"></i>
+              </h2>
+            </span>
+          </div>
+          <small class="form-text error" *ngIf="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required">
+            Ce champ est requis !
+          </small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="nom" class="col-form-label">Date d'échéance *</label>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <input class="form-control" formControlName="deadlineDate" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #deadDate="ngbDatepicker"
+              [class.form-control-danger]="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required">
+            <span class="input-group-btn">
+              <h2 [class.border-danger]="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required" class="btn btn-secondary cursor-pointer border-left-0 p-2 pl-2 pr-2"
+                (click)="deadDate.toggle()">
+                <i class="fa fa-calendar"></i>
+              </h2>
+            </span>
+          </div>
+          <small class="form-text error" *ngIf="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required">
+            Ce champ est requis !
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="nightAmount" class="col-form-label">Montant (TTC) *</label>
+          <div class="input-group input-group-sm">
+            <input id="amount" type="number" class="form-control" name="amount" formControlName="amount" pattern="^((?!(0))[0-9]{1,9})$"
+              [class.form-control-danger]="amount.invalid && amount.touched">
+          </div>
+          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.required">
+            Le Montant est requis !
+          </small>
+          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.pattern">
+            Le Montant devrait être un nombre positif > 0 !
+          </small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="nightAmount" class="col-form-label">Montant (TVA) *</label>
+        <ngx-select [elements]="tvas" [element]="tva" (selectChanged)="setTva($event)"></ngx-select>
+      </div>
+      <div class="col-md-6">
+        <label for="nightAmount" class="col-form-label">Type *</label>
+        <ngx-select [elements]="filtredTypes" [element]="type" (selectChanged)="setType($event)"></ngx-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="nightAmount" class="col-form-label">Statut *</label>
+        <ngx-select [elements]="statuses" [element]="status" (selectChanged)="setStatus($event)"></ngx-select>
+      </div>
+      <div class="col-md-6">
+        <label for="nightAmount" class="col-form-label">Mode *</label>
+        <ngx-select [elements]="methods" [element]="method" (selectChanged)="setMethod($event)"></ngx-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button [disabled]="!form.valid" (click)="submit()" class="btn btn-sm btn-success">
+      <i class="fa fa-save mr-1"></i>
+      <span i18n>Sauvegarder</span>
+    </button>
+  </div>
+</form>

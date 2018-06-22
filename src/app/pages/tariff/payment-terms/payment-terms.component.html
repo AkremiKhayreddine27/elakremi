@@ -1,0 +1,19 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span class="cursor-pointer" (click)="isCollapsed = !isCollapsed">Conditions de paiement</span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header>
+  <nb-card-body [ngbCollapse]="isCollapsed">
+    <div [(ngModel)]="radioModel" ngbRadioGroup class="d-flex flex-wrap justify-content-center btn-group btn-group-toggle btn-outline-toggle-group btn-toggle-radio-group">
+      <label ngbButtonLabel class="btn btn-tn btn-outline-success m-1">
+        <input ngbButton type="radio" value="left"> 100% du à la réservation
+      </label>
+      <label ngbButtonLabel class="btn btn-tn btn-outline-success m-1">
+        <input ngbButton type="radio" value="middle"> Plusieurs payements
+      </label>
+    </div>
+  </nb-card-body>
+</nb-card>

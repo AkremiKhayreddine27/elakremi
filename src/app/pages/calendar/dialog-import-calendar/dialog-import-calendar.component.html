@@ -1,0 +1,92 @@
+<div class="modal-header">
+  <h4 class="modal-title" i18n>Import calendar</h4>
+  <button type="button" (click)="close()" class="close" aria-label="Close">
+    <i class="nb-close"></i>
+  </button>
+</div>
+<div class="modal-body p-0">
+  <nb-tabset>
+    <nb-tab tabTitle="File">
+      <form class="p-3" (ngSubmit)="submitFileForm(fileForm)" [formGroup]="fileForm">
+        <div class="form-group mt-3">
+          <div class="input-group input-group-sm">
+            <input appCalendarImport (change)="fileChange($event)" (newImportedEvents)="newEvents($event.events, $event.calendarName)"
+              type="file" name="file" id="file" class="inputfile" />
+            <label class="input-file" for="file">
+              <i class="fa fa-upload pr-2"></i>
+              <span *ngIf="!fileName" i18n>Select file from your computer</span>
+              <span *ngIf="fileName">{{ fileName }}</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="calendars.length !== 0">
+          <select (change)="selectCalendar($event)" class="custom-select w-100">
+            <option value="new" i18n>Add new calendar</option>
+            <option class="custom-option" *ngFor="let c of calendars" [value]="c.id" [selected]="c.id === calendars[0].id">{{ c.name }}</option>
+          </select>
+        </div>
+        <div *ngIf="isNewCalendar" class="form-group">
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" i18n>name</span>
+            <input formControlName="name" type="text" placeholder="name" class="form-control" required minlength="2" />
+          </div>
+        </div>
+        <div *ngIf="isNewCalendar" class="form-group">
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" i18n>color</span>
+            <div class="colors">
+              <div *ngFor="let c of colors" [style.backgroundColor]="c" (click)="setColor(c)" [class.active]="fileForm.get('color').value === c"
+                class="color">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" [disabled]="!fileName || (isNewCalendar && fileForm.invalid)" class="btn btn-sm btn-success">
+          <i class="fa fa-upload mr-1"></i>
+          <span i18n>Import</span>
+        </button>
+      </form>
+    </nb-tab>
+    <nb-tab tabTitle="URL">
+      <form class="pt-3 pb-3 pl-3 pr-3" (ngSubmit)="submitUrlForm(urlForm)" [formGroup]="urlForm">
+        <div class="form-group">
+          <select (change)="selectProperty($event.target.value)" class="custom-select w-100">
+            <option value="">Select a property</option>
+            <option *ngFor="let property of properties" [value]="property.id">{{ property.title }}</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <div class="input-group input-group-sm d-flex">
+            <span class="input-group-addon">name</span>
+            <input formControlName="name" type="text" placeholder="name" class="form-control" required minlength="2" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon">url</span>
+            <input formControlName="url" type="text" placeholder="url" class="form-control" required minlength="2" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon" i18n>color</span>
+            <div class="colors">
+              <div *ngFor="let c of colors" [style.backgroundColor]="c" (click)="setColor(c)" [class.active]="urlForm.get('color').value === c"
+                class="color"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon" i18n>Sychronize each (minutes)</span>
+            <input formControlName="sync" type="text" placeholder="url" class="form-control" required minlength="2" />
+          </div>
+        </div>
+        <button type="submit" [disabled]="urlForm.get('name').invalid || urlForm.get('url').invalid" class="btn btn-sm btn-success">
+          <i class="fa fa-upload mr-1"></i>
+          <span i18n>Import</span>
+        </button>
+      </form>
+    </nb-tab>
+  </nb-tabset>
+</div>

@@ -1,0 +1,83 @@
+<nb-card>
+    <nb-card-header class="border-bottom-0">
+        <app-calendar-header
+            [view]="view"
+            [viewDate]="viewDate"
+            (newCalendar)="newCalendar()"
+            (viewChange)="view = $event"
+            (weekStratsOnChange)="refresh.next();weekStartsOn = $event;"
+            (viewDateChange)="viewDateChange($event)">
+        </app-calendar-header>
+    </nb-card-header>
+    <nb-card-body class="p-0">
+        <div class="row no-gutters">
+        <div class="col-md-5 col-lg-4 col-xl-3 d-none d-md-block">
+                <ngb-datepicker 
+                    [(ngModel)]="toDay"
+                    (select)="daySelected($event)" 
+                    [dayTemplate]="customDay">
+                </ngb-datepicker>
+            <div class="pl-2 pr-2">
+                <app-my-calendars 
+                    (newCalendar)="newCalendar()"
+                    [refresh]="refresh">
+                </app-my-calendars>
+            </div>
+        </div>
+        <div class="col-md-7 col-lg-8 col-xl-9">
+                    <div [ngSwitch]="view">
+                    	<calendar-year-view
+                            *ngSwitchCase="'year'"
+                            [viewDate]="viewDate"  
+                            (dayClicked)="dayClicked($event)"
+                            [calendars]="calendars"
+                            [refresh]="refresh">
+			            </calendar-year-view>
+                        <calendar-month-view
+                            *ngSwitchCase="'month'"
+                            [calendars]="calendars"
+                            [viewDate]="viewDate"
+                            [weekStartsOn]="weekStartsOn"
+                            (dayClicked)="dayClicked($event)"
+                            (eventClicked)="eventClicked($event)"
+                            (addEventMonthCellClicked)="newEventStart($event.event, $event.isEventClicked)"
+                            (newEventTimesChanged)="editEvent($event.event, $event.end, $event.isEventClicked)"
+                            (eventTimesChanged)="eventTimesChanged($event)"
+                            [refresh]="refresh">
+                        </calendar-month-view>            
+                        <calendar-day-view 
+                            *ngSwitchCase="'day'"
+                            [calendars]="calendars"
+                            [viewDate]="viewDate"
+                            (eventClicked)="eventClicked($event)"
+                            [refresh]="refresh">
+                        </calendar-day-view>            
+                        <calendar-week-view  
+                            *ngSwitchCase="'week'"           
+                            [calendars]="calendars"
+                            [viewDate]="viewDate"
+                            [weekStartsOn]="weekStartsOn"
+                            (eventClicked)="eventClicked($event)"
+                            [refresh]="refresh">
+                        </calendar-week-view> 
+                        <calendar-schedule-view
+                            *ngSwitchCase="'schedule'"           
+                            [calendars]="calendars"
+                            [viewDate]="viewDate"
+                            (eventClicked)="eventClicked($event)"
+                            [refresh]="refresh">
+                        </calendar-schedule-view>   
+                    </div>   
+                </div>       
+        </div>
+        <calendar-btn-new-event [calendars]="calendars"></calendar-btn-new-event>
+    </nb-card-body>
+</nb-card>
+
+<ng-template #customDay let-date="date" let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled" let-focused="focused">
+    <span class="custom-day" [class.focused]="focused"
+          [class.bg-primary]="isToday(date)" 
+          [class.bg-grey]="selected" [class.hidden]="date.month !== currentMonth" [class.text-muted]="disabled">
+      {{ date.day }}
+    </span>
+</ng-template>

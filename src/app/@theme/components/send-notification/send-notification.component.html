@@ -1,0 +1,75 @@
+<form [formGroup]="form">
+  <div *ngIf="object.value.length === 0 || edit" class="modal-header">
+    <h4 class="modal-title" i18n>{{ title }}</h4>
+    <button type="button" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </button>
+  </div>
+  <div *ngIf="object.value.length > 0 && !edit" class="modal-header bg-success">
+    <h4 class="modal-title text-white" i18n>{{ object.value }}</h4>
+    <div class="d-flex">
+      <button type="button" (click)="edit = true" class="close" aria-label="Close">
+        <i class="nb-compose"></i>
+      </button>
+      <button type="button" (click)="close()" class="close" aria-label="Close">
+        <i class="nb-close"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="object.value.length === 0 || edit" class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <label for="contact" class="col-form-label small-xs col-md-4">Destinataire *</label>
+          <div class="form-group col-md-8">
+            <div class="input-group input-group-sm">
+              <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" formControlName="recipient" [ngbTypeahead]="search"
+                (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);" (selectItem)="assignContact($event)"
+                #instance="ngbTypeahead" [resultTemplate]="rt" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group row">
+          <label for="object" class="col-form-label small-xs col-md-4">Objet *</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="object" class="form-control" [class.form-control-danger]="object.invalid && object.touched && object.errors?.required"
+              formControlName="object" name="object">
+          </div>
+          <small class="form-text error" *ngIf="object.invalid && object.touched && object.errors?.required">
+            Ce champ est requis !
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group row">
+          <label for="content" class="col-form-label col-md-4"></label>
+          <div class="input-group input-group-sm col-md-8">
+            <textarea rows="6" id="content" class="form-control" name="content" formControlName="content">
+                                </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="object.value.length > 0 && !edit" class="modal-body">
+    <div class="small">
+      {{ content.value }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn cursor-pointer btn-sm btn-success">
+      <i class="fa fa-send mr-1"></i>
+      <span i18n>Envoyer</span>
+    </button>
+  </div>
+</form>
+
+<ng-template #rt let-r="result" let-t="term">
+  {{ r.firstname }} {{ r.lastname}}
+</ng-template>

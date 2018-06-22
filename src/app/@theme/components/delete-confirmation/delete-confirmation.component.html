@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h6 class="modal-title" i18n> 
+    Voulez-vous supprimer le {{ type }} {{ title }}
+  </h6>
+  <button type="button" (click)="close()" class="close" aria-label="Close">
+    <i class="nb-close"></i>
+  </button>
+</div>
+<div class="modal-footer">
+  <button (click)="confirm()" class="btn btn-sm btn-success cursor-pointer">
+    <span i18n>Confirmer</span>
+  </button>
+  <button (click)="cancel()" type="submit" class="btn btn-sm btn-danger cursor-pointer">
+    <span i18n>Annuler</span>
+  </button>
+</div>

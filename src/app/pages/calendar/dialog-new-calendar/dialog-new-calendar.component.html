@@ -1,0 +1,33 @@
+<form (ngSubmit)="submit(form)" [formGroup]="form">
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>New Calendar</h4>
+    <button type="button" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="form-group">
+        <div class="input-group input-group-sm">
+          <input formControlName="name" type="text" placeholder="name" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+          <div class="colors">
+            <input formControlName="color" type="hidden">                    
+            <div 
+              *ngFor="let color of colors"
+              [style.backgroundColor]="color"
+              (click)="setColor(color)"
+              [class.active]="form.get('color').value === color"
+              class="color"
+            ></div>
+          </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-sm btn-success">
+      <i class="fa fa-save mr-1"></i>
+      <span i18n>Add</span>
+      </button>
+  </div>
+</form> 

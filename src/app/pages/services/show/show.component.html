@@ -1,0 +1,32 @@
+<nb-card>
+  <nb-card-header class="d-flex p-0 justify-content-between align-items-center flex-wrap">
+    <span *ngIf="!isSearching" class="d-flex align-items-center pl-2 m-0">
+      <i class="nb-gear"></i>Services
+    </span>
+    <card-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (dropdownItemEvent)="handleDropdownEvent($event)"
+      (actionEvent)="handleHeaderEvent($event)" *ngIf="!isSearching">
+    </card-header-actions>
+    <card-header-search class="w-100" [source]="source" [fields]="searchFields" (closeSearch)="isSearching = false" [isSearching]="isSearching"
+      *ngIf="isSearching"></card-header-search>
+  </nb-card-header>
+  <nb-card-body class="p-0">
+    <card-mobile-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
+      (dropdownItemEvent)="handleDropdownEvent($event)"></card-mobile-header-actions>
+    <div [ngbCollapse]="isFilterCollapsed">
+      <filters [source]="source" (hasFilters)="hasFilters($event.filters)"></filters>
+    </div>
+    <div *ngIf="data.length > 0" class="row m-0">
+      <div class="col-12 p-0 pt-3">
+        <ngx-table [config]="config" [data]="data" (actionEvent)="handleServiceEvent($event)"></ngx-table>
+      </div>
+    </div>
+    <div *ngIf="data.length === 0" class="row m-0">
+      <div class="col-12 p-0">
+        <ngx-alert [message]="'pas de service '"></ngx-alert>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-end p-0">
+    <ngx-pagination [source]="source"></ngx-pagination>
+  </nb-card-footer>
+</nb-card>

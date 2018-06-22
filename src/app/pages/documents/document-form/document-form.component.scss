@@ -1,0 +1,115 @@
+@import '../../../@theme/styles/themes'; 
+@import '~@nebular/theme/styles/global/bootstrap/hero-buttons';
+
+@include nb-install-component() {
+    /deep/ .qq-gallery.qq-uploader {
+        border-radius: 0;
+        background-color: transparent;
+    }
+    /deep/ .qq-total-progress-bar-container-selector {
+        border-radius: 0;
+    }
+    /deep/ .qq-progress-bar-container-selector {
+        border-radius: 0;
+    }
+    /deep/ .qq-gallery .qq-upload-list li.qq-upload-fail {
+        background-color: white;
+        box-shadow: 2px 1px 2px 0px #ff6780;
+        border: 0;
+    }
+    /deep/ .qq-gallery .qq-upload-list li {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px 10px;
+    }
+    /deep/ .qq-gallery .qq-upload-list li .list-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+        .list-item-info {
+            flex: 1;
+            max-width: 80%;
+        }
+    }
+    /deep/ .qq-gallery .qq-upload-retry {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+    }
+    /deep/ .qq-gallery .qq-thumbnail-wrapper {
+        overflow: hidden;
+        position: relative;
+        height: 50px;
+        width: 50px;
+    }
+    /deep/ .qq-gallery .qq-upload-spinner {
+        display: none;
+    }
+    /deep/ .qq-gallery .qq-upload-list {
+        margin: 10px 0 0 0;
+        padding: 10px;
+    } 
+
+    /deep/ .qq-gallery .qq-upload-list li {
+        max-width: 100%; 
+        width: 100%;
+        margin: 10px 0;
+        line-height: 16px;
+        font-size: 13px;
+        color: #424242;
+        background-color: transparent;
+        vertical-align: top;
+        height: auto;
+        box-shadow: 2px 5px 12px 0px #dfe3eb;
+    }
+
+    /deep/ .qq-gallery .qq-upload-file {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 0;
+        width: auto;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow-x: hidden;
+    }
+    /deep/ .qq-gallery .qq-upload-cancel {
+        background-color: transparent;
+        color: #525252;
+        font-weight: 700;
+        font-family: Arial,Helvetica,sans-serif;
+        border-radius: 0;
+        border: none;
+        padding: 0;
+        position: relative;
+        margin: 0;
+        line-height: 17px;
+        .nb-trash {
+            font-size: 2rem;
+        }
+    }
+    /deep/ .qq-gallery.qq-uploader {
+        position: relative;
+        //min-height: auto;
+    }
+    /deep/ .btn-select {
+        padding: 0.65rem 1.125rem;
+    }
+.modal-header .close {
+    font-size: 2rem;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer !important;
+}
+
+.modal-header .close:hover {
+    background-color: #f2f2f2;
+}
+}

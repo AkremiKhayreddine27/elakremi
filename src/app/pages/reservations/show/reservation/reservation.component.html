@@ -1,0 +1,143 @@
+<form [formGroup]="form">
+  <div class="row pt-4">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <label for="nightAmount" class="col-form-label col-md-4">Bien *</label>
+            <div class="col-md-8">
+              <ngx-select (selectChanged)="setProperty($event)" [element]="currentProperty" [elements]="properties"></ngx-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group row">
+            <label for="title" class="col-form-label col-md-4">Titre *</label>
+            <div class="input-group input-group-sm col-md-8">
+              <input id="title" class="form-control" [class.form-control-danger]="title.invalid && title.touched && title.errors?.required"
+                formControlName="title" name="title">
+            </div>
+            <small class="form-text error" *ngIf="title.invalid && title.touched && title.errors?.required">
+              Ce champ est requis !
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group row">
+        <label for="description" class="col-form-label col-md-4">Description</label>
+        <div class="input-group input-group-sm col-md-8">
+          <textarea rows="3" id="description" class="form-control" name="description" formControlName="description">
+                      </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group row">
+        <label for="startDate" class="col-form-label col-md-4">Arrivée *</label>
+        <div class="input-group input-group-sm col-md-8">
+          <input id="startDate" (focus)="start.toggle()" class="form-control" [class.form-control-danger]="startDate.invalid && startDate.touched && startDate.errors?.required"
+            formControlName="startDate" placeholder="yyyy-mm-dd" name="startDate" ngbDatepicker #start="ngbDatepicker">
+          <span class="input-group-btn">
+            <h2 [class.border-danger]="startDate.invalid && startDate.touched && startDate.errors?.required" class="btn btn-secondary border-left-0 p-2"
+              (click)="start.toggle()">
+              <i class="fa fa-calendar"></i>
+            </h2>
+          </span>
+        </div>
+        <small class="form-text error" *ngIf="startDate.invalid && startDate.touched && startDate.errors?.required">
+          Ce champ est requis !
+        </small>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group row">
+        <label for="endDate" class="col-form-label col-md-4">Départ *</label>
+        <div class="input-group input-group-sm col-md-8">
+          <input id="endDate" (focus)="end.toggle()" class="form-control" [class.form-control-danger]="endDate.invalid && endDate.touched && endDate.errors?.required"
+            formControlName="endDate" placeholder="yyyy-mm-dd" name="endDate" ngbDatepicker #end="ngbDatepicker">
+          <span class="input-group-btn">
+            <h2 [class.border-danger]="endDate.invalid && endDate.touched && endDate.errors?.required" class="btn btn-secondary border-left-0 p-2 pl-2 pr-2"
+              (click)="end.toggle()">
+              <i class="fa fa-calendar"></i>
+            </h2>
+          </span>
+        </div>
+        <small class="form-text error" *ngIf="endDate.invalid && endDate.touched && endDate.errors?.required">
+          Ce champ est requis !
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group row">
+        <label for="reservationDate" class="col-form-label col-md-4">Date de réservation</label>
+        <div class="input-group input-group-sm col-md-8">
+          <input (focus)="reservationDate.toggle()" id="reservationDate" class="form-control" formControlName="reservationDate" placeholder="yyyy-mm-dd"
+            name="reservationDate" ngbDatepicker #reservationDate="ngbDatepicker">
+          <span class="input-group-btn">
+            <h2 class="btn btn-secondary border-left-0 p-2" (click)="reservationDate.toggle()">
+              <i class="fa fa-calendar"></i>
+            </h2>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <label for="contact" class="col-form-label col-md-4">Locataire *</label>
+        <div class="form-group col-md-8">
+          <div class="input-group input-group-sm">
+            <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" formControlName="lodger" [ngbTypeahead]="search"
+              (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);" (selectItem)="assignContact($event)"
+              #instance="ngbTypeahead" [resultTemplate]="rt" />
+            <span class="input-group-btn">
+              <h2 class="btn btn-secondary border-left-0 p-2" (click)="newContact()">
+                <i class="fa fa-plus"></i>
+              </h2>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <label for="nightAmount" class="col-form-label col-md-4">Statut *</label>
+        <div class="col-md-8">
+          <ngx-select [element]="currentStatus" [elements]="statuses" (selectChanged)="setStatus($event)"></ngx-select>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="form-group col-md-4">
+          <div class="input-group d-flex">
+            <label class="d-flex align-items-center mr-3" for="">adultes </label>
+            <app-nbr-input (numberChanged)="adultesChanged($event.number)" [number]="adultes"></app-nbr-input>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <div class="input-group d-flex">
+            <label class="d-flex align-items-center mr-3" for="">enfants </label>
+            <app-nbr-input (numberChanged)="childrenChanged($event.number)" [number]="children"></app-nbr-input>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <div class="input-group d-flex">
+            <label class="d-flex align-items-center mr-3" for="">animaux </label>
+            <app-nbr-input (numberChanged)="petsChanged($event.number)" [number]="pets"></app-nbr-input>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #rt let-r="result" let-t="term">
+    {{ r.firstname }} {{ r.lastname}}
+  </ng-template>
+</form>

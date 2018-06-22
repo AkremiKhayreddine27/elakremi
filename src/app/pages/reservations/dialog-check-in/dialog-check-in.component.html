@@ -1,0 +1,55 @@
+<form #form="ngForm">
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>Check-in</h4>
+    <button type="button" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <label for="nom" class="col-form-label col-md-4">Date *</label>
+          <div class="form-group col-md-8">
+            <div class="input-group input-group-sm">
+              <input class="form-control" [(ngModel)]="checkin.date" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #checkinDate="ngbDatepicker"
+                #date="ngModel" required="true" [class.form-control-danger]="date.invalid && date.touched">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary border-left-0 p-2 pl-2 pr-2" (click)="checkinDate.toggle()" type="button">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <label for="contact" class="col-form-label col-md-4">Prestataire *</label>
+          <div class="form-group col-md-8">
+            <div class="input-group input-group-sm">
+              <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" [(ngModel)]="checkin.provider" name="provider" #provider="ngModel"
+                [ngbTypeahead]="search" (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);"
+                (selectItem)="assignContact($event)" #instance="ngbTypeahead" [resultTemplate]="rt" />
+              <span class="input-group-btn">
+                <h2 class="btn btn-secondary border-left-0 p-2" (click)="newContact()">
+                  <i class="fa fa-plus"></i>
+                </h2>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-sm btn-success">
+      <i class="fa fa-save mr-1"></i>
+      <span i18n>Sauvegarder</span>
+    </button>
+  </div>
+</form>
+
+<ng-template #rt let-r="result" let-t="term">
+  {{ r.firstname }} {{ r.lastname}}
+</ng-template>

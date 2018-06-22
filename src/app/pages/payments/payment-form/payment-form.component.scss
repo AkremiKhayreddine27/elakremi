@@ -1,0 +1,105 @@
+@import '../../../@theme/styles/themes'; 
+@import '~@nebular/theme/styles/global/bootstrap/hero-buttons';
+
+@include nb-install-component() {
+/deep/ .btn-select {
+    padding: 0.65rem 1.125rem;
+}
+.modal-header .close {
+    font-size: 2rem;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer !important;
+}
+
+.modal-header .close:hover {
+    background-color: #f2f2f2;
+}
+.mode-switch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+
+    & > span {
+      font-size: 1.125rem;
+      font-weight: nb-theme(font-weight-bold);
+      transition: opacity 0.3s ease;
+
+      &.light {
+        color: nb-theme(color-fg-text);
+        padding-right: 10px;
+      }
+
+      &.cosmic {
+        color: nb-theme(color-fg);
+        padding-left: 10px;
+      }
+
+      @include nb-for-theme(cosmic) {
+        &.light {
+          color: nb-theme(color-fg);
+        }
+
+        &.cosmic {
+          color: nb-theme(color-white);
+        }
+      }
+
+      &:active {
+        opacity: 0.78;
+      }
+    }
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 4rem;
+    height: 1.75rem;
+    margin: 0;
+
+    input {
+      display: none;
+
+      &:checked + .slider::before {
+        transform: translateX(2.25rem);
+      }
+    }
+
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 1.75rem;
+      background-color: nb-theme(layout-bg);
+    }
+
+    .slider::before {
+      position: absolute;
+      content: '';
+      height: 1.75rem;
+      width: 1.75rem;
+      border-radius: 50%;
+      background-color: nb-theme(color-success);
+      transition: 0.2s;
+
+      box-shadow: 0 0 0.25rem 0 rgba(nb-theme(color-fg), 0.4);
+
+      @include nb-for-theme(cosmic) {
+        @include btn-hero-primary-gradient();
+      }
+    }
+  }
+}

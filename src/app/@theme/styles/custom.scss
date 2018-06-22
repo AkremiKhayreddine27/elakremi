@@ -1,0 +1,168 @@
+@import '~linearicons/dist/web-font/style.css';
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+.badge {
+    font-weight: lighter;
+}
+
+/* Calendar icon */
+.nb-theme-default nb-menu .menu-item .menu-icon.lnr {
+    font-size: 1.5rem !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Tariff icon */
+.nb-theme-default nb-menu .menu-item .menu-icon.ion-ios-pricetag-outline {
+    font-size: 1.6rem !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Documents icon */
+.nb-theme-default nb-menu .menu-item .menu-icon.ion-ios-folder-outline {
+    font-size: 1.54rem !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+.dropdown-menu-right {
+    right: 0 !important;
+    left: auto !important;
+}
+
+  
+.nb-theme-default .dropdown .dropdown-menu, .nb-theme-default .dropup .dropdown-menu {
+    width: auto !important;
+    padding: 0 !important;
+    min-width: 100px;
+}
+
+.nb-theme-default .dropdown:not(.btn-group) .dropdown-toggle::after,
+.nb-theme-default .dropup:not(.btn-group) .dropdown-toggle::after {
+    display: none;
+}
+
+
+.nb-theme-default .dropdown {
+    border: none !important;
+    .dropdown-item {
+        color: #555555 !important;
+    }
+    .dropdown-menu {
+        box-shadow: rgba(0, 0, 0, 0.3) 0 4px 16px;
+        background-color: white !important;
+        border-radius: 0 !important;
+    }
+}
+
+
+/**
+  DatePicker custom style
+*/
+ngb-datepicker {
+    border-radius: 0 !important;
+  }
+  .ngb-dp-months {
+      display: flex !important;
+      flex-wrap: wrap !important;
+  }
+  .ngb-dp-month {
+      flex: 1;
+  }
+  .ngb-dp-month-name {
+    font-size: 14px !important;
+  }
+  .ngb-dp-navigation-select {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    flex: 1;
+    select {
+      background-color: transparent !important;
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+      padding-left: 0.5rem !important;
+      padding-right: 2rem !important;
+      line-height: 1.25 !important;
+      width: auto !important;
+      border: none !important;
+      color: #8f8f8f !important;
+      -webkit-appearance: none !important;
+    }
+    select::-ms-expand {
+      display: none !important;
+    }
+  }
+  .ngb-dp-month {
+    width: 100%;
+  }
+  .ngb-dp-day {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ngb-dp-header {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+  }
+  .ngb-dp-arrow-btn {
+    width: 2rem !important;
+    height: 2rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important;
+    padding: 0 !important;
+  }
+  span.ngb-dp-navigation-chevron {
+    color:#8f8f8f !important;
+  }
+  .ngb-dp-arrow-btn:hover {
+    background-color: #f2f2f2;
+  
+  }
+  .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
+    min-width: 2rem !important;
+    min-height: 2rem !important;
+  }
+  .ngb-dp-weekday[_ngcontent-c20] {
+    color: #555555 !important;
+  }
+  .ngb-dp-month:first-child .ngb-dp-week {
+    padding-left: 0.25rem !important;
+  }
+  .ngb-dp-month:last-child .ngb-dp-week {
+     padding-right: 0.25rem !important;
+}
+  
+  .ngb-dp-header {
+    background-color: transparent !important;
+  }
+  
+  .ngb-dp-weekdays {
+    background-color: transparent !important;
+    width: 100%;
+  }
+  .ngb-dp-weekday {
+    flex: 1;
+  }
+  .ngb-dp-arrow-btn {
+    color: #555555 !important;
+    cursor: pointer !important;
+  }
+

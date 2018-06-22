@@ -1,0 +1,51 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+    /deep/ .card {
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        border-radius: 0 !important;
+    }
+    /deep/ .card-header {
+        background-color: nb-theme(color-white) !important;
+        border-bottom: 0 !important;
+        a {
+            text-decoration: none !important;
+            color: nb-theme(color-fg);
+        }
+    }
+    /deep/ .card-header:hover {
+        a {
+            color: nb-theme(menu-fg) !important;
+        }
+    }
+    /deep/ .card-header.active {
+        a {
+            color: nb-theme(menu-fg) !important;
+            border-bottom: 2px solid nb-theme(color-fg-highlight);
+            padding-bottom: 0.6rem;
+        }
+    }
+    
+.btn-fixed-bottom {
+    position: fixed;
+    bottom: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    cursor: pointer !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 0 !important;
+}
+.btn-save {
+    right: 15px;
+    font-size: 1.4rem;
+}
+.btn-cancel {
+    right: 70px;
+    font-size: 2rem;
+}
+}

@@ -1,0 +1,28 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span class="cursor-pointer" (click)="isCollapsed = !isCollapsed">Caution</span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header>
+  <nb-card-body [ngbCollapse]="isCollapsed">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group row ml-0 mr-0"> 
+          <label for="nom" class="col-sm-4 col-form-label">Caution</label>
+          <div class="input-group input-group-sm col-sm-8">
+            <input #caution="ngModel" id="caution" type="number" class="form-control" placeholder="Caution" [(ngModel)]="tariff.caution"
+              required="true" pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="caution.invalid && caution.touched">
+          </div>
+          <small class="form-text error" *ngIf="caution.invalid && caution.touched && caution.errors?.required">
+            Le caution est requis !
+          </small>
+          <small class="form-text error" *ngIf="caution.invalid && caution.touched && caution.errors?.pattern">
+            Le caution devrait être un nombre positif > 0 !
+          </small>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

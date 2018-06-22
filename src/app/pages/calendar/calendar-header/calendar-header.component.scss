@@ -1,0 +1,150 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+.calendar-header {
+    display: flex;
+    position: relative;
+    .calendar-header-title {
+        font-size: 16px;
+        margin-top: 0.5em;
+    }
+    .col-md-9 {
+        display: flex;
+        flex-wrap: wrap;
+        .calendar-header-current-date {
+            flex: 1;
+            display: flex;
+            align-items: center !important; 
+            color: nb-theme(card-fg-text);
+            font-weight: normal;
+        }
+        .calendar-header-navigation {
+            display: flex;
+            .btn-secondary {
+                color: nb-theme(card-fg-text);
+            }
+            .calendar-header-navigation-arrows {
+                display: flex;
+                .btn-secondary {
+                    color: nb-theme(card-fg-text);
+                }
+            }
+        }
+        .calendar-header-settings {
+            display: flex; 
+            justify-content: flex-end;
+            color: nb-theme(card-fg-text);
+        }
+    }
+}
+
+.calendar-settings {
+    display: flex;
+    align-items: center;
+    font-size: 2rem !important;
+    cursor: pointer !important;
+    padding: 1px;
+}
+@media(max-width: 798px) {
+    .calendar-header-title {
+        margin-top: 0.5em;
+    }
+}
+.bg-white {
+    border: 1px solid #EBEEF2;
+    border-bottom: none !important;
+}
+
+.dropdown {
+    .btn-secondary {
+        border: 2px solid #DFE3EA !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: nb-theme(card-fg-text);
+        cursor: pointer !important;
+        .fa {
+            font-size: 16px;
+        }
+    }
+}
+.align-center {
+    display: flex;
+    align-items: center;
+}
+.btn-width {
+    width: 35px;
+    height: 35px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer !important;
+}
+
+.flex-mobile-center {
+    display: flex;
+}
+
+.last-col {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+ngb-datepicker {
+    background-color: white;
+    width: 100%;
+    border-radius: 0;
+    margin: 0 !important;
+    border-left: none !important;
+    border-right: none !important; 
+    border-top: none !important;
+}
+
+.custom-day {      
+    text-align: center;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    font-size: 12px;
+}
+.custom-day:hover, .custom-day.bg-grey {
+    background-color: #f2f2f2 !important;
+}
+
+.custom-day:hover, .custom-day.bg-primary {
+    background-color: #40dc7e !important;
+    color: white !important;
+}
+
+.border-radius-0 {
+    border-radius: 0 !important;
+}
+
+.text-dark {
+    font-size: 14px;
+}
+.custom-btn-padding {
+    padding: 10px 10px 0 10px !important; 
+}
+.custom-btn-padding:last-child {
+    padding-bottom: 10px !important; 
+}
+
+.btn.btn-tn {
+    cursor: pointer;
+}
+
+.current-property {
+    font-size: 14px !important;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    padding: 0 !important;
+}
+
+}

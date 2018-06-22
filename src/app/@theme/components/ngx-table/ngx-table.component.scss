@@ -1,0 +1,12 @@
+@import '../../styles/themes'; 
+@include nb-install-component() {
+    .header-col {
+        text-transform: uppercase !important;
+        font-size: 85% !important;
+    }
+
+    /deep/ row.row-data div:hover{
+        background: nb-theme(smart-table-bg-even) !important;
+        background-color: nb-theme(smart-table-bg-even) !important;
+    }
+}

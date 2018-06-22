@@ -1,0 +1,37 @@
+@import '../../../../@theme/styles/themes'; 
+@include nb-install-component() {
+    .small {
+        font-size: 80% !important;
+    }
+    .badge {
+        color: white !important;
+    }
+    .payment-type {
+        font-size: 1.1rem;
+    }
+    .bg-grey {
+        background-color: nb-theme(smart-table-bg-even);
+    }
+    a, .btn { 
+        cursor: pointer;
+    }
+
+    .action {
+        width: 30px;
+        height: 30px;
+        border:1px solid nb-theme(separator);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .action:hover {
+        color: nb-theme(color-success);
+        box-shadow: nb-theme(shadow);
+        border: none;
+    }
+    .dropdown-item {
+        cursor: pointer;
+    }
+}

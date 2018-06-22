@@ -1,0 +1,96 @@
+<nb-card class="border">
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span [class.text-danger]="form.invalid && btnSaveClicked" (click)="isCollapsed = !isCollapsed" class="d-flex cursor-pointer align-items-center">
+      <i class="ion-ios-home-outline mr-2"></i>
+      Identification
+    </span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header>
+  <nb-card-body [ngbCollapse]="isCollapsed">
+    <form [formGroup]="form">
+      <div class="row pb-3">
+        <div class="col-md-12 p-0">
+          <div class="form-group row ml-0 mr-0">
+            <label for="nom" class="col-sm-4 col-form-label">Nom *</label>
+            <div class="input-group input-group-sm col-sm-8">
+              <input id="nom" type="text" [class.border-danger]="form.controls.name.invalid && btnSaveClicked" formControlName="name" class="form-control"
+                placeholder="Nom">
+            </div>
+          </div>
+        </div>
+        <div class="col-12 p-0">
+          <div class="form-group row ml-0 mr-0">
+            <label for="description" class="col-sm-4 col-form-label">Description</label>
+            <div class="input-group input-group-sm col-sm-8">
+              <textarea id="description" rows="5" [class.border-danger]="form.controls.description.invalid && btnSaveClicked" formControlName="description"
+                placeholder="Description du bien" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 p-0">
+          <div class="form-group row ml-0 mr-0">
+            <label for="pltaform" class="col-sm-4 col-form-label">Platform</label>
+            <div id="platform" class="dropdown d-flex col-sm-8 align-items-center" ngbDropdown>
+              <button [class.text-secondary]="form.get('platform').value === null" [class.border-danger]="form.controls.platform.invalid && btnSaveClicked"
+                class="btn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
+                {{ form.get('platform').value ? form.get('platform').value : 'Platform' }}
+                <i class="fa fa-caret-down pl-1"></i>
+              </button>
+              <ul class="dropdown-menu" ngbDropdownMenu>
+                <li *ngFor="let platform of platforms" (click)="setPlatform(platform);" class="dropdown-item">
+                  {{ platform }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 p-0">
+          <div class="form-group row ml-0 mr-0">
+            <label for="type" class="col-sm-4 col-form-label">Type *</label>
+            <div id="type" class="dropdown d-flex col-sm-8 align-items-center" ngbDropdown>
+              <h2 [class.text-secondary]="form.get('type').value === null" [class.border-danger]="form.controls.type.invalid && btnSaveClicked"
+                class="btn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
+                {{ form.get('type').value ? form.get('type').value : 'Type' }}
+                <i class="fa fa-caret-down pl-1"></i>
+              </h2>
+              <ul class="dropdown-menu" ngbDropdownMenu>
+                <li *ngFor="let type of types" (click)="setType(type);" class="dropdown-item">
+                  {{ type }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 p-0">
+          <div class="form-group row ml-0 mr-0">
+            <label for="owner" class="col-sm-4 col-form-label">Propriétaire *</label>
+            <div id="owner" class="dropdown d-flex col-sm-8 align-items-center" ngbDropdown>
+              <h2 [class.text-secondary]="form.get('owner').value === null" [class.border-danger]="form.controls.owner.invalid && btnSaveClicked"
+                class="btn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
+                {{ form.get('owner').value ? form.get('owner').value : 'Propriétaire' }}
+                <i class="fa fa-caret-down pl-1"></i>
+              </h2>
+              <ul class="dropdown-menu" ngbDropdownMenu>
+                <li *ngFor="let owner of owners" (click)="setOwner(owner);" class="dropdown-item">
+                  {{ owner }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 p-0">
+          <div class="form-group row ml-0 mr-0">
+            <div class="col-12 d-flex justify-content-end">
+              <a class="btn btn-tn btn-success d-flex align-items-center cursor-pointer" routerLink="/pages/tariff">
+                <i class="ion-ios-pricetag-outline mr-1"></i> Tarifs
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

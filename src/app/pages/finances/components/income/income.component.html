@@ -1,0 +1,20 @@
+<nb-card>
+  <nb-card-body class="d-flex flex-column align-items-center">
+    <span class="font-weight-bold d-flex align-items-center pb-4">
+      Revenues
+      <i *ngIf="finances.earningsValue < finances.potentialEarningsValue" class="nb-arrow-thin-up icon-status text-success small"></i>
+      <i *ngIf="finances.earningsValue > finances.potentialEarningsValue" class="nb-arrow-thin-down icon-status text-danger small"></i>
+    </span>
+    <div class="w-100 border-bottom mb-4"></div>
+    <div class="row w-100">
+      <div class="col-6 d-flex align-items-center justify-content-center flex-column border-right">
+        <span class="small text-secondary mb-2">Net</span>
+        <span class="finances-value text-secondary">{{ finances.earningsValue }}$</span>
+      </div>
+      <div class="col-6 d-flex align-items-center justify-content-center flex-column">
+        <span class="small text-secondary mb-2">Potentiel</span>
+        <span class="finances-value text-secondary">{{ finances.potentialEarningsValue }}$</span>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

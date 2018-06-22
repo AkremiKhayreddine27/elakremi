@@ -1,0 +1,66 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+    .fixed-bottom {
+        position: fixed;
+        right: 5px;
+        bottom: 10px;
+        left: auto !important;
+    }
+    .btn-options {
+        font-size: 1.4rem;
+        width: 40px;
+        height: 40px;
+        border-radius: 50px;
+        cursor: pointer !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 0 !important;
+        background-color: nb-theme(color-white);
+        box-shadow: nb-theme(shadow);
+        color: nb-theme(color-success);
+    }
+    .dropdown-top-right {
+        position: absolute;
+        transform: translate3d(0px, -140px, 0px);
+        top: 0px;
+        right: 0 !important; 
+        left: auto !important; 
+        will-change: transform;
+    }
+    .dropdown-menu {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    .dropdown-item:hover {
+        .bg-white {
+            color: nb-theme(color-success) !important;
+        }
+    }
+    .dropdown-item {
+        background-color: transparent !important;
+        cursor: pointer;
+        .bg-white {
+            height: 30px;
+            padding-left: 3px !important;
+            padding-right: 3px !important; 
+            border-radius: 10px;
+            text-transform: capitalize !important;
+        }
+        .btn-icon { 
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            .nb-close {
+                font-size: 1rem;
+            }
+            .fa {
+                font-size: 1rem;
+            }
+        }
+    }
+}

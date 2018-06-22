@@ -1,0 +1,47 @@
+@import '../../../styles/themes'; 
+@include nb-install-component() {
+    
+    .small {
+        color: #777;
+    }
+    .small-xs {
+        font-size: 80% !important;
+        color: #777;
+    }
+    .badge {
+        color: white !important;
+    }
+    .property-img {
+        width: 60px;
+        height: 50px;
+    }
+    .actions {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+    .dropdown-item {
+        width: 15rem;
+        cursor: pointer !important;
+        text-transform: capitalize !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .action {
+        width: 30px;
+        height: 30px;
+        border:1px solid nb-theme(separator);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer !important;
+    }
+    .action:hover {
+        color: nb-theme(color-success);
+        box-shadow: nb-theme(shadow);
+        border: none;
+    }
+}

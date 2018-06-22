@@ -1,0 +1,21 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+    .btn {
+        height: 100%;
+        width: 60px;
+        padding: 0;
+    }
+    .nb-close {
+        font-size: 2rem;
+    }
+    .form-control {
+        height: 61px;
+        border: 0;
+    }
+    .input-group-append {
+        .btn-outline-secondary {
+            border: 0 !important;
+            border-left: 1px solid nb-theme(separator) !important;
+        }
+    }
+}

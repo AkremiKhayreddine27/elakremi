@@ -1,0 +1,40 @@
+@import '../../../@theme/styles/themes'; 
+@import '~@nebular/theme/styles/global/bootstrap/hero-buttons';
+
+@include nb-install-component() {
+    /deep/ .btn-select {
+        padding: 0.65rem 1.125rem;
+    }
+    .modal-header .close {
+        font-size: 2rem;
+        width: 35px !important;
+        height: 35px !important;
+        border-radius: 50%;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer !important;
+    }
+
+    .modal-header .close:hover {
+        background-color: #f2f2f2;
+    }
+
+    .btn-secondary.border-left-0 {
+        width: 46px;
+        cursor: pointer !important;
+    }
+
+    .text-danger:hover, .text-success:hover, .text-info:hover, .text-danger.active, .text-success.active, .text-info.active {
+        color: white !important;
+        cursor: pointer;
+    }
+
+    .btn-group {
+        padding-bottom: 1rem !important;
+    }
+}

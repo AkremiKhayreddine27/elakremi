@@ -1,0 +1,152 @@
+<form (ngSubmit)="register()" #form="ngForm">
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>Tarif Saison</h4>
+    <button type="button" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="name" class="col-form-label">Nom *</label>
+          <div class="input-group input-group-sm">
+            <input id="name" [(ngModel)]="newSeason.title" name="title" type="text" class="form-control" placeholder="Nom" required="true"
+              [minlength]="3" [maxlength]="50" #name="ngModel" [class.form-control-danger]="name.invalid && name.touched">
+          </div>
+          <small class="form-text error" *ngIf="name.invalid && name.touched && name.errors?.required">
+            Le Nom de la Saison est requis !
+          </small>
+          <small class="form-text error" *ngIf="name.invalid && name.touched && name.errors?.minlength">
+            Le Nom de la Saison doit contenir au moin 3 caractères !
+          </small>
+          <small class="form-text error" *ngIf="name.invalid && name.touched && name.errors?.maxlength">
+            Le Nom de la Saison ne doit pas dépasser 50 caractères !
+          </small>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="nom" class="col-form-label">Début *</label>
+              <div class="input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="newSeason.startDate" placeholder="yyyy-mm-dd" name="startDate" ngbDatepicker #startDate="ngbDatepicker"
+                  #start="ngModel" required="true" [class.form-control-danger]="start.invalid && start.touched">
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary border-left-0 p-2 pl-2 pr-2" (click)="startDate.toggle()" type="button">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="nom" class="col-form-label">Fin *</label>
+              <div class="input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="newSeason.endDate" placeholder="yyyy-mm-dd" name="endDate" ngbDatepicker #endDate="ngbDatepicker"
+                  #end="ngModel" required="true" [class.form-control-danger]="end.invalid && end.touched">
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary border-left-0 p-2 pl-2 pr-2" (click)="endDate.toggle()" type="button">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!currentPeriod" class="col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="nightAmount" class="col-form-label">Tarif par Nuit *</label>
+              <div class="input-group input-group-sm">
+                <input id="nightAmount" type="number" class="form-control" name="nightAmount" [(ngModel)]="newSeason.nightAmount" #nightAmount="ngModel"
+                  required="true" pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="nightAmount.invalid && nightAmount.touched">
+              </div>
+              <small class="form-text error" *ngIf="nightAmount.invalid && nightAmount.touched && nightAmount.errors?.required">
+                Le Tarif par Nuit est requis !
+              </small>
+              <small class="form-text error" *ngIf="nightAmount.invalid && nightAmount.touched && nightAmount.errors?.pattern">
+                Le Tarif par Nuit devrait être un nombre positif > 0 !
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="weekendAmount" class="col-form-label">Tarif par Weekend *</label>
+              <div class="input-group input-group-sm">
+                <input id="weekendAmount" type="number" class="form-control" name="weekendAmount" [(ngModel)]="newSeason.weekendAmount" #weekendAmount="ngModel"
+                  required="true" pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="weekendAmount.invalid && weekendAmount.touched">
+              </div>
+              <small class="form-text error" *ngIf="weekendAmount.invalid && weekendAmount.touched && weekendAmount.errors?.required">
+                Le Tarif par Weekend est requis !
+              </small>
+              <small class="form-text error" *ngIf="weekendAmount.invalid && weekendAmount.touched && weekendAmount.errors?.pattern">
+                Le Tarif par Weekend devrait être un nombre positif > 0 !
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!currentPeriod" class="col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="weekAmount" class="col-form-label">Tarif par Semaine *</label>
+              <div class="input-group input-group-sm">
+                <input id="weekAmount" type="number" class="form-control" name="weekAmount" [(ngModel)]="newSeason.weekAmount" #weekAmount="ngModel"
+                  required="true" pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="weekAmount.invalid && weekAmount.touched">
+              </div>
+              <small class="form-text error" *ngIf="weekAmount.invalid && weekAmount.touched && weekAmount.errors?.required">
+                Le Tarif par Semaine est requis !
+              </small>
+              <small class="form-text error" *ngIf="weekAmount.invalid && weekAmount.touched && weekAmount.errors?.pattern">
+                Le Tarif par Semaine devrait être un nombre positif > 0 !
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="monthAmount" class="col-form-label">Tarif par Mois *</label>
+              <div class="input-group input-group-sm">
+                <input id="monthAmount" type="number" class="form-control" name="monthAmount" [(ngModel)]="newSeason.monthAmount" #monthAmount="ngModel"
+                  required="true" pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="monthAmount.invalid && monthAmount.touched">
+              </div>
+              <small class="form-text error" *ngIf="monthAmount.invalid && monthAmount.touched && monthAmount.errors?.required">
+                Le Tarif par Mois est requis !
+              </small>
+              <small class="form-text error" *ngIf="monthAmount.invalid && monthAmount.touched && monthAmount.errors?.pattern">
+                Le Tarif par Mois devrait être un nombre positif > 0 !
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="currentPeriod" class="col-md-12">
+        <div class="form-group">
+          <label for="amount" class="col-form-label">Tarif par {{ currentPeriod }} *</label>
+          <div class="input-group input-group-sm">
+            <input id="amount" type="number" class="form-control" name="amount" [(ngModel)]="newSeason.amount" #amount="ngModel" required="true"
+              pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="amount.invalid && amount.touched">
+          </div>
+          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.required">
+            Le Tarif par {{ currentPeriod }} est requis !
+          </small>
+          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.pattern">
+            Le Tarif par {{ currentPeriod }} devrait être un nombre positif > 0 !
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button [disabled]="submitted || !form.valid" (click)="save()" type="submit" class="btn btn-sm btn-success">
+      <i class="fa fa-save mr-1"></i>
+      <span *ngIf="!currentPeriod" i18n>Ajouter</span>
+      <span *ngIf="currentPeriod" i18n>Sauvegarder</span>
+    </button>
+  </div>
+</form>

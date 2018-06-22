@@ -1,0 +1,44 @@
+
+@import '../../@theme/styles/themes';
+@include nb-install-component() {
+    ngb-datepicker {
+        background-color: transparent;
+        width: 100%;
+        border-radius: 0;
+        margin: 0 !important;
+        border-left: none !important;
+        border-right: none !important; 
+        border-color: nb-theme(separator);
+    }
+}
+
+.custom-day {      
+    text-align: center;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    font-size: 12px;
+}
+.custom-day:hover, .custom-day.bg-grey {
+    background-color: #f2f2f2 !important;
+}
+
+.custom-day:hover, .custom-day.bg-primary {
+    background-color: #40dc7e !important;
+    color: white !important;
+}
+
+.bg-white {
+    border: 1px solid #EBEEF2;
+    border-right: none !important;
+}
+nb-card-header {
+    padding: 0 !important;
+}
+
+nb-card-body {
+    overflow: visible;
+}

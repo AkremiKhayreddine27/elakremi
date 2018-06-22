@@ -1,0 +1,32 @@
+@import '../../../../../@theme/styles/themes'; 
+@include nb-install-component() {
+    .badge {
+        color: white !important;
+    }
+    .dropdown-item {
+        cursor: pointer !important;
+        text-transform: capitalize !important;
+    }
+.dropdown {
+    a {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        i {
+            font-size: 1.1rem;
+        }
+    }
+    a:hover {
+        //border: 1px solid nb-theme(color-success);
+        color: nb-theme(color-success);
+        box-shadow: nb-theme(shadow);
+    }
+    .dropdown-menu .dropdown-item{
+        font-size: 0.8rem;
+    }
+}
+}

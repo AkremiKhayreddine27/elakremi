@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h4 class="modal-title" i18n>Export calendars</h4>
+  <button type="button" (click)="close()" class="close" aria-label="Close">
+    <i class="nb-close"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngFor="let calendar of activeCalendars.controls; let i=index" class="pt-2 checkbox-div">
+    <label class="checkbox-container">
+        <span class="checkbox-text">{{ calendars[i].name }}</span>
+        <input (change)="filter()" [formControl]="calendar" type="checkbox">
+        <span [style.backgroundColor]="calendars[i].color" class="checkmark"></span>
+    </label>
+  </div>
+</div>
+<div class="modal-footer">
+  <button appCalendarExport [disabled]="!canExport" [refresh]="refresh" [calendars]="calendarsToExport" type="submit" class="btn btn-sm btn-success">
+    <i class="fa fa-download mr-1"></i>
+    <span i18n>Export</span>
+  </button>
+</div>

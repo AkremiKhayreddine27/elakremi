@@ -1,0 +1,149 @@
+<nb-card>
+  <nb-card-header class="d-flex p-0 align-items-center justify-content-between">
+    <span class="d-flex align-items-center">
+      <i class="ion-ios-people-outline ml-2 mr-2"></i>
+      Contacts
+    </span>
+    <card-header-actions [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)">
+    </card-header-actions>
+  </nb-card-header>
+  <nb-card-body class="p-0">
+    <ngb-tabset justify="justified">
+      <ngb-tab title="Locataires">
+        <ng-template ngbTabContent>
+          <div class="contact p-2 d-flex align-items-center justify-content-between" *ngFor="let user of lodgers">
+            <div class="user-container d-flex">
+              <div *ngIf="user.picture" class="user-img">
+                <img [src]="user.picture" />
+              </div>
+              <span *ngIf="!user.picture" class="userletters">
+                {{ user.firstname[0] }}{{ user.lastname[0] }}
+              </span>
+              <div class="user-infos ml-2">
+                <span class="username pb-2">
+                  {{ user.firstname }} {{ user.lastname }}
+                </span>
+                <span class="user-phone d-flex align-items-center small">
+                  <i class="nb-email"></i>{{ user.email }}
+                </span>
+                <span class="user-phone d-flex align-items-center small">
+                  <i class="nb-phone"></i>{{ user.phone }}
+                </span>
+                <span class="user-address d-none d-md-flex align-items-center small">
+                  <i class="nb-location"></i>
+                  {{ user.location.address }}, {{ user.location.city }}, {{ user.location.state }}, {{ user.location.postcode }}, {{ user.location.country
+                  }}
+                </span>
+              </div>
+            </div>
+            <div class="dropdown" ngbDropdown>
+              <a class="action" ngbDropdownToggle>
+                <i class="fa fa-ellipsis-h"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-compose mr-1"></i>éditer</li>
+                <li (click)="delete(user);" class="dropdown-item">
+                  <i class="nb-trash mr-1"></i>supprimer</li>
+                <li (click)="sendInvitation(user);" class="dropdown-item">
+                  <i class="ion ion-ios-personadd-outline ml-1 mr-2"></i>inviter</li>
+                <li (click)="sendMail(user);" class="dropdown-item">
+                  <i class="nb-email mr-1"></i>envoyer un message</li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Propriétaires">
+        <ng-template ngbTabContent>
+          <div class="contact p-2 d-flex align-items-center justify-content-between" *ngFor="let user of owners">
+            <div class="user-container d-flex">
+              <div *ngIf="user.picture" class="user-img">
+                <img [src]="user.picture" />
+              </div>
+              <span *ngIf="!user.picture" class="userletters">
+                {{ user.firstname[0] }}{{ user.lastname[0] }}
+              </span>
+              <div class="user-infos ml-2">
+                <span class="username pb-2">
+                  {{ user.firstname }} {{ user.lastname }}
+                </span>
+                <span class="user-phone d-flex align-items-center small">
+                  <i class="nb-email"></i>{{ user.email }}
+                </span>
+                <span class="user-phone d-flex align-items-center small">
+                  <i class="nb-phone"></i>{{ user.phone }}
+                </span>
+                <span class="user-address d-none d-md-flex align-items-center small">
+                  <i class="nb-location"></i>
+                  {{ user.location.address }}, {{ user.location.city }}, {{ user.location.state }}, {{ user.location.postcode }}, {{ user.location.country
+                  }}
+                </span>
+              </div>
+            </div>
+            <div class="dropdown" ngbDropdown>
+              <a class="action" ngbDropdownToggle>
+                <i class="fa fa-ellipsis-h"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-compose mr-1"></i>éditer</li>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-trash mr-1"></i>supprimer</li>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="ion ion-ios-personadd-outline ml-1 mr-2"></i>inviter</li>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-email mr-1"></i>envoyer un message</li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Prestataires de services">
+        <ng-template ngbTabContent>
+          <div class="contact p-2 d-flex align-items-center justify-content-between" *ngFor="let user of serviceProviders">
+            <div class="user-container d-flex">
+              <div *ngIf="user.picture" class="user-img">
+                <img [src]="user.picture" />
+              </div>
+              <span *ngIf="!user.picture" class="userletters">
+                {{ user.firstname[0] }}{{ user.lastname[0] }}
+              </span>
+              <div class="user-infos ml-2">
+                <span class="username pb-2">
+                  {{ user.firstname }} {{ user.lastname }}
+                </span>
+                <span class="user-phone d-flex align-items-center small">
+                  <i class="nb-email"></i>{{ user.email }}
+                </span>
+                <span class="user-phone d-flex align-items-center small">
+                  <i class="nb-phone"></i>{{ user.phone }}
+                </span>
+                <span class="user-address d-none d-md-flex align-items-center small">
+                  <i class="nb-location"></i>
+                  {{ user.location.address }}, {{ user.location.city }}, {{ user.location.state }}, {{ user.location.postcode }}, {{ user.location.country
+                  }}
+                </span>
+              </div>
+            </div>
+            <div class="dropdown" ngbDropdown>
+              <a class="action" ngbDropdownToggle>
+                <i class="fa fa-ellipsis-h"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-compose mr-1"></i>éditer</li>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-trash mr-1"></i>supprimer</li>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="ion ion-ios-personadd-outline ml-1 mr-2"></i>inviter</li>
+                <li (click)="edit(user);" class="dropdown-item">
+                  <i class="nb-email mr-1"></i>envoyer un message</li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </nb-card-body>
+</nb-card>

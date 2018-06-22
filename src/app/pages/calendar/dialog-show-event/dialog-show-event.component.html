@@ -1,0 +1,93 @@
+<form (ngSubmit)="submit(form)" [formGroup]="form">
+  <div class="modal-header" [style.backgroundColor]="event.color ? event.color : event.calendar.color">
+    <div *ngIf="canEdit" class="form-group w-100 pr-5">
+      <textarea [style.backgroundColor]="event.color ? event.color : event.calendar.color" formControlName="title" rows="2" placeholder="Text Area"
+        class="form-control event-title-textarea"></textarea>
+    </div>
+    <h6 *ngIf="!canEdit" class="modal-title">
+      {{ event.title }}
+      <br/>
+      <span *ngIf="event.isReservation">{{ event.lodger.phone }}</span>
+      <br/>
+      <span *ngIf="event.isReservation">{{ event.lodger.email }}</span>
+    </h6>
+    <a [style.backgroundColor]="event.color ? event.color : event.calendar.color" *ngIf="canEdit" (click)="save()" class="btn-edit">
+      <i class="fa fa-save"></i>
+    </a>
+    <a [style.backgroundColor]="event.color ? event.color : event.calendar.color" *ngIf="!canEdit" (click)="canEdit = true" class="btn-edit">
+      <i class="fa fa-edit"></i>
+    </a>
+    <a (click)="delete()" [style.backgroundColor]="event.color ? event.color : event.calendar.color" class="btn-trash">
+      <i class="fa fa-trash"></i>
+    </a>
+    <a [style.backgroundColor]="event.color ? event.color : event.calendar.color" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </a>
+  </div>
+  <div class="modal-body pt-5">
+    <div class="event-date d-flex justify-content-between" *ngIf="!canEdit">
+      <div>
+        <i class="fa fa-clock-o mr-1"></i>
+        {{ event.start | date: 'EEEE MMMM d hh:mm' }} to {{ event.end | date: 'EEEE MMMM d hh:mm' }}
+      </div>
+      <span class="badge-info p-1" *ngIf="event.isReservation">{{ event.nights }} nights</span>
+    </div>
+    <div class="event-location" *ngIf="!canEdit && ((event.location !== null) || !!event.location)">
+      <i class="fa fa-map-marker mr-1"></i> {{ event.location.address }}
+    </div>
+    <div class="event-location" *ngIf="!canEdit && event.isReservation">
+      <i class="fa fa-home mr-1"></i>
+      {{ event.property }}
+    </div>
+    <div *ngIf="canEdit" class="form-group row align-items-center">
+      <div class="col-8">
+        <div class="input-group input-group-sm">
+          <input formControlName="startDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #startDate="ngbDatepicker">
+          <span class="input-group-btn">
+            <button class="btn btn-success" (click)="startDate.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="col-4">
+        <select formControlName="startTime" class="custom-select custom-select-sm">
+          <option *ngFor="let hour of hours" [value]="hour">{{ hour }}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="canEdit" class="form-group row align-items-center">
+      <div class="col-8">
+        <div class="input-group input-group-sm">
+          <input formControlName="endDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #endDate="ngbDatepicker">
+          <div class="input-group-btn">
+            <button class="btn btn-success" (click)="endDate.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <select formControlName="endTime" class="custom-select custom-select-sm">
+          <option *ngFor="let hour of hours" [value]="hour">{{ hour }}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="canEdit" class="form-group">
+      <div class="input-group input-group-sm">
+        <input formControlName="location" type="text" placeholder="Location" class="form-control" />
+      </div>
+    </div>
+    <div *ngIf="canEdit" class="form-group">
+      <nb-checkbox (change)="allDayChanged($event.checked)" formControlName="allDay">All day</nb-checkbox>
+    </div>
+    <div *ngIf="canEdit" class="form-group">
+      <div class="colors">
+        <input formControlName="color" type="hidden">
+        <div *ngFor="let color of colors" [style.backgroundColor]="color" (click)="setColor(color)" [class.active]="form.get('color').value === color"
+          class="color"></div>
+      </div>
+    </div>
+
+  </div>
+</form>

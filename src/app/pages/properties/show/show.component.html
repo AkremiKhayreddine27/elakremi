@@ -1,0 +1,39 @@
+<div [ngClass]="{'bg-overlay' : hasOverlay}">
+</div>
+<div class="row m-0">
+  <div class="col-md-6 p-1">
+    <app-identification (saveData)="saveIdentificationForm($event.form)" [btnSaveClicked]="btnSaveClicked" [property]="property"></app-identification>
+  </div>
+  <div class="col-md-6 p-1">
+    <app-description [property]="property"></app-description>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-12 p-1">
+    <app-location (saveData)="saveLocalisationForm($event.form)" [btnSaveClicked]="btnSaveClicked" [property]="property"></app-location>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-12 p-1">
+    <amenities></amenities>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-12 p-1">
+    <app-equipements [equipements]="property.equipements"></app-equipements>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-md-12 p-1">
+    <app-links [links]="property.links"></app-links>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-md-6 p-1">
+    <app-pics [images]="property.images"></app-pics>
+  </div>
+  <div class="col-md-6 p-1">
+    <documents [documents]="property.images"></documents>
+  </div>
+</div>
+<btn-options (openChange)="optionsClicked();"></btn-options>

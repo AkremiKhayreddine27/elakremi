@@ -1,0 +1,117 @@
+.colors {
+    display: flex;
+}
+.color {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: #f4511e;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.color:hover {
+    border: 4px double #ffffff;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+
+.color.active {
+    border: 4px double #ffffff;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+.modal-header {
+    color: white !important;
+}
+.modal-header .close {
+    font-size: 2rem;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer !important;
+}
+.modal-header .btn-edit {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 15px;
+    bottom: -10px;
+    cursor: pointer !important;
+    box-shadow: 2px 2px 2px 2px rgba(100,100,100,.2);
+}
+.modal-header .btn-trash {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 60px;
+    bottom: -10px;
+    cursor: pointer !important;
+    box-shadow: 2px 2px 2px 2px rgba(100,100,100,.2);
+}
+
+.modal-title {
+    margin-right: 30px !important;
+    color: white !important;
+}
+
+.modal-header .close:hover, .modal-header .btn-edit:hover {
+    background-color: white !important; 
+    color: #555555;
+}
+
+.modal-header {
+    position: relative;
+    padding-bottom: 35px !important;
+}
+
+.modal-body {
+    font-size: 14px;
+}
+
+.event-date, .event-location {
+    padding-bottom: 15px;
+}
+
+.custom-select-sm {
+    height: 35px !important;
+    border: 2px solid #DADFE6;
+}
+
+.event-title-textarea {
+    color: white !important;
+    border: none;
+    border-bottom: 2px solid white !important;
+    border-radius: 0;
+    font-size: 14px;
+}
+.event-title-textarea:focus {
+    border: none !important;
+    border-bottom: 2px solid white !important;
+}

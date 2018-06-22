@@ -1,0 +1,8 @@
+<div class="input-group">
+  <input #searchDesktop class="form-control" type="text" placeholder="Chercher..." (keyup)="onSearch(searchDesktop.value)">
+  <div class="input-group-append">
+    <button (click)="close()" class="btn btn-outline-secondary" type="button">
+      <i class="nb-close text-secondary"></i>
+    </button> 
+  </div>
+</div>

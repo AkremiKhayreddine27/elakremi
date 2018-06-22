@@ -1,0 +1,154 @@
+@import '../../../../../@theme/styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@include nb-install-component() {
+
+    nb-card-body {
+        overflow: visible;
+    }
+
+    .dropdown {
+        .btn {
+            .fa {
+                font-size: 1rem;
+            }
+        }
+    }
+    .no-box-shadow {
+        box-shadow: none !important;
+    }
+    @include media-breakpoint-down(md) {
+        .no-box-shadow {
+            box-shadow: nb-theme(shadow) !important;
+        }
+    }
+    .map-view {
+        position: relative;
+        .btn-refresh {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 500;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: nb-theme(color-white) !important;
+            color: nb-theme(color-fg-text) !important;
+            cursor: pointer;
+            padding: 0 !important;
+            i {
+                margin: 0 !important;
+            }
+        }
+    }
+
+    /deep/ .leaflet-control-container .leaflet-top {
+        z-index: 500;
+    }
+    form.disabled {
+        cursor: not-allowed;
+        * {
+            cursor: not-allowed !important;
+        }
+        .form-control {
+            background-color: hsl(0, 0%, 95%) !important;
+            color: hsl(0, 0%, 63%) !important;
+        }
+        .col-form-label {
+            color: hsl(0, 0%, 63%) !important;
+        }
+    }
+    /deep/ app-equipement nb-card {
+        height: 40px !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        .icon {
+            height: 38px !important;
+            width: 38px !important;
+        }
+        .details {
+            background-color: #dddddd !important;
+        }
+    }
+    .col-form-label {
+        font-size: 0.9rem;
+    }
+    .map-location-display {
+        font-size: 0.9rem;
+    }
+    .btn-default {
+        height: 40px;
+        background-color: #dddddd !important;
+    }
+
+    .btn-map-form {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .card {
+        min-width: 300px;
+    }
+    i {
+        font-size: 1.5rem;
+    }
+
+    .nb-close, .nb-checkmark {
+        font-size: 1.5rem;
+    }
+    /deep/ .yaga-map {
+        min-height: 100%;
+        max-width: 100%;
+    }
+
+    .btn-outline-secondary {
+        border-width: 1px;
+    }
+    .heigth-xlarge {
+        height: calc(100vh - 120px); 
+    }
+
+    .ion-ios-location-outline {
+        font-size: 1.5rem;
+    }
+    .header-icon.nb-location {
+       font-size: 1.8rem;
+    }
+    .ion-ios-location {
+        font-size: 1rem;
+    }
+    .input-group-append {
+        .btn-outline-secondary {
+            border-left: 0;
+        }
+    }
+
+    .bg-gray {
+        background-color: nb-theme(color-bg-active) !important;
+    }
+
+    /deep/ .dropdown-menu {
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100% !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        z-index: 1000;
+        .dropdown-item {
+            width: 100%;
+            overflow: hidden;
+            cursor: pointer;
+            text-overflow: ellipsis;
+        }
+        .dropdown-item.active {
+            background-color: nb-theme(color-success) !important;
+        }
+    }
+}

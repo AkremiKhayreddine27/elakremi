@@ -1,0 +1,13 @@
+<nb-card class="p-0" (click)="clicked()" [ngClass]="{'off': !on}">
+  <nb-card-body class="p-0 d-flex align-items-center">
+    <div class="icon-container">
+      <div class="icon {{ type }}">
+        <ng-content></ng-content>
+      </div>
+    </div>
+    <div class="details align-items-center">
+      <div class="title">{{ title }}</div>
+      <div class="status">{{ on ? 'OUI' : 'NON' }}</div>
+    </div>
+  </nb-card-body>
+</nb-card>

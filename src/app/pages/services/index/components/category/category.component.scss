@@ -1,0 +1,56 @@
+@import '../../../../../@theme/styles/themes';
+@include nb-install-component() {
+nb-card:hover {
+    background-color: nb-theme(color-success);
+    nb-card-header {
+        border-bottom: nb-theme(color-white);
+        span {
+            color: nb-theme(color-white) !important; 
+        }
+    }
+    nb-card-body .list-group { 
+        .list-group-item {
+            background-color: nb-theme(color-success);
+            border-color: nb-theme(color-white);
+            color: nb-theme(color-white);
+            cursor: pointer;
+            .btn-add .fa {
+                color: nb-theme(color-white) !important;
+            }
+        }
+    }
+    nb-card-footer {
+        background-color: nb-theme(color-bg);
+        .btn-add  {
+            cursor: pointer;
+        }
+    }
+}    
+nb-card-header {
+    span {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        i.fa {
+            font-size: 1.2rem;
+        }
+    }
+}
+nb-card-body .list-group {
+    margin: 0;
+    padding: 0;
+    .list-group-item {
+        border-bottom: 0;
+        border-left: 0;
+        border-right: 0;
+        margin-bottom: 0;
+    }
+    .list-group-item:first-child {
+        border-top: 0;
+    }
+}
+
+.btn-add  {
+    cursor: pointer;
+}
+}

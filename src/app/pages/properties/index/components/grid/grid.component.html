@@ -1,0 +1,71 @@
+<div class="properties m-0 row p-2 pt-4">
+  <div *ngFor="let property of properties" class="property col-lg-4 col-md-6 d-flex align-items-stretch">
+    <nb-card class="property-card">
+      <nb-card-header class="property-header d-flex flex-column">
+        <div class="d-flex flex-row align-items-center justify-content-between">
+          <span class="text-secondary d-flex align-items-center property-type small">{{ property.type }}</span>
+          <div class="dropdown" ngbDropdown>
+            <a class="action" ngbDropdownToggle>
+              <i class="fa fa-ellipsis-h"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+              <li (click)="navigate('reservations', property);" class="dropdown-item">
+                <i class="fa fa-clock-o mr-1"></i>Réservations</li>
+              <li (click)="navigate('categories/services', property);" class="dropdown-item">
+                <i class="fa fa-gear mr-1"></i>Services</li>
+              <li (click)="navigate('calendar', property);" class="dropdown-item">
+                <i class="fa fa-calendar mr-1"></i>Calendriers</li>
+              <li (click)="navigate('finances', property);" class="dropdown-item">
+                <i class="fa fa-bar-chart mr-1"></i>Finances</li>
+              <div class="dropdown-divider"></div>
+              <li (click)="navigate('properties/' + property.id, property);" class="dropdown-item">
+                <i class="fa fa-edit mr-1"></i>éditer</li>
+              <li (click)="delete(property)" class="dropdown-item">
+                <i class="fa fa-trash mr-1"></i>supprimer</li>
+            </ul>
+          </div>
+        </div>
+        <h6 [routerLink]="property.id" class="card-title pt-2">{{ property.title }}</h6>
+      </nb-card-header>
+      <nb-card-body class="p-2">
+        <div [ngSwitch]="property.status">
+          <span *ngSwitchCase="'réservé'" class="badge badge-info property-status">{{ property.status }}</span>
+          <span *ngSwitchCase="'disponible'" class="badge badge-success property-status">{{ property.status }}</span>
+          <span *ngSwitchCase="'indisponible'" class="badge badge-danger property-status">{{ property.status }}</span>
+        </div>
+        <ngb-carousel *ngIf="property.images.length > 0">
+          <ng-template *ngFor="let image of property.images" ngbSlide>
+            <img [src]="image" class="card-img-bottom" [alt]="property.title">
+          </ng-template>
+        </ngb-carousel>
+        <img *ngIf="property.images.length === 0" class="card-img-bottom" src="assets/images/unavailable.jpg" alt="Card image cap">
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="small text-muted pb-1">
+          <i class="fa fa-map-marker mr-1"></i>
+          {{ property.location.userLocation.address }}, {{ property.location.userLocation.city }}, {{ property.location.userLocation.state
+          }}, {{ property.location.userLocation.postcode}}, {{ property.location.userLocation.country }}
+        </div>
+        <div class="property-links pb-1">
+          <a *ngFor="let link of property.links" [href]="link.href" class="card-link small">{{ link.titre }}</a>
+        </div>
+        <div *ngIf="property.amount" class="pb-1">
+          <span class="small">à partir de
+            <b>{{ property.amount }}$</b> par nuit
+          </span>
+        </div>
+        <div *ngIf="property.rate" class="d-flex align-items-center">
+          <ngb-rating [(rate)]="property.rate" max=5>
+            <ng-template let-fill="fill">
+              <span class="star fill" [class.filled]="fill === 100">
+                <i class="ion-android-star" *ngIf="fill === 100"></i>
+                <i class="ion-android-star-outline" *ngIf="fill !== 100"></i>
+              </span>
+            </ng-template>
+          </ngb-rating>
+          <span class="small ml-2">{{ property.votes }}</span>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div> 

@@ -1,0 +1,46 @@
+<nb-layout [center]="layout.id === 'center-column'" windowMode>
+    <nb-layout-header fixed>
+        <ngx-header [position]="sidebar.id === 'start' ? 'normal': 'inverse'"></ngx-header>
+    </nb-layout-header>
+
+    <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive [end]="sidebar.id === 'end'">
+        <div class="property-btn-group d-flex pb-2">
+            <i routerLink="/pages/properties/create" class="nb-plus-circled btn-add"></i>
+            <div class="dropdown d-flex align-items-center" ngbDropdown>
+                <h2 class="btn btn-dropdown btn-tn" ngbDropdownToggle>
+                    <span *ngIf="currentProperty">{{ currentProperty.title }}</span>
+                    <span class="text-secondary" *ngIf="!currentProperty && properties.length > 0">Choisir un bien</span>
+                    <span class="text-secondary" routerLink="/pages/properties/create" *ngIf="!currentProperty && properties.length === 0">Ajouter un bien</span>
+                    <i *ngIf="properties.length > 0" class="fa fa-caret-down text-secondary pl-1"></i>
+                </h2>
+                <ul *ngIf="properties.length > 0" class="dropdown-menu" ngbDropdownMenu>
+                    <li [class.font-weight-bold]="currentProperty && currentProperty.id === property.id" *ngFor="let property of properties"
+                        (click)="setCurrentProperty(property)" class="dropdown-item">
+                        <span>{{ property.title }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ng-content select="nb-menu"></ng-content>
+    </nb-sidebar>
+
+    <nb-layout-column class="main-content">
+        <ng-content select="router-outlet"></ng-content>
+    </nb-layout-column>
+
+    <nb-layout-column start class="small" *ngIf="layout.id === 'two-column' || layout.id === 'three-column'">
+        <nb-menu [items]="subMenu"></nb-menu>
+    </nb-layout-column>
+
+    <nb-layout-column class="small" *ngIf="layout.id === 'three-column'">
+        <nb-menu [items]="subMenu"></nb-menu>
+    </nb-layout-column>
+
+    <nb-layout-footer fixed>
+        <ngx-footer></ngx-footer>
+    </nb-layout-footer>
+
+    <nb-sidebar class="settings-sidebar" tag="settings-sidebar" state="collapsed" fixed [end]="sidebar.id !== 'end'">
+        <ngx-theme-settings></ngx-theme-settings>
+    </nb-sidebar>
+</nb-layout>

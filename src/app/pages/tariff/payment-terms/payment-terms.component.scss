@@ -1,0 +1,9 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+    .btn-outline-success:hover {
+        background-color: nb-theme(color-success) !important;
+        color: white !important;
+        cursor: pointer;
+    }
+}

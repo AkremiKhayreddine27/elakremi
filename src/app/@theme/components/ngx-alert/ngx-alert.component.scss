@@ -1,0 +1,11 @@
+@import '../../styles/themes';
+@include nb-install-component() {
+.border-danger {
+        border: 1px solid nb-theme(color-danger) !important;
+    }
+    .alert-danger {
+        background-color: nb-theme(color-danger) !important;
+        color: white;
+        border-radius: 0 !important;
+    }
+}

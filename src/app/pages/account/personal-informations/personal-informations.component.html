@@ -1,0 +1,273 @@
+<div class="pt-3">
+  <ngb-accordion [closeOthers]="true">
+    <ngb-panel title="Information de Contact" id="contact-information">
+      <ng-template ngbPanelContent>
+        <div class="row m-0 pt-4 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Nom</label>
+              <div class="input-group input-group-sm">
+                <input name="firstName" [(ngModel)]="user.firstname" id="input-name" #firstName="ngModel" class="form-control" placeholder="Nom"
+                  [class.form-control-danger]="firstName.invalid && firstName.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="firstName.invalid && firstName.touched && firstName.errors?.required">
+                Le nom est requis!
+              </small>
+              <small class="form-text error" *ngIf="firstName.invalid && firstName.touched && (firstName.errors?.minlength || firstName.errors?.maxlength)">
+                Le nom doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Prénom</label>
+              <div class="input-group input-group-sm">
+                <input name="lastName" [(ngModel)]="user.lastname" id="input-name" #lastName="ngModel" class="form-control" placeholder="Prénom"
+                  [class.form-control-danger]="lastName.invalid && lastName.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="lastName.invalid && lastName.touched && lastName.errors?.required">
+                Le nom est requis!
+              </small>
+              <small class="form-text error" *ngIf="lastName.invalid && lastName.touched && (lastName.errors?.minlength || lastName.errors?.maxlength)">
+                Le nom doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-email" class="sr-only">Adresse e-mail</label>
+              <div class="input-group input-group-sm">
+                <input name="email" [(ngModel)]="user.email" id="input-email" #email="ngModel" class="form-control" placeholder="Adresse e-mail"
+                  pattern=".+@.+\..+" [class.form-control-danger]="email.invalid && email.touched" required="true">
+              </div>
+              <small class="form-text error" *ngIf="email.invalid && email.touched && email.errors?.required">
+                Email est requis!
+              </small>
+              <small class="form-text error" *ngIf="email.invalid && email.touched && email.errors?.pattern">
+                L'email devrait être le vrai!
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Téléphone</label>
+              <div class="input-group input-group-sm">
+                <input name="phone" [(ngModel)]="user.phone" id="input-name" #phone="ngModel" class="form-control" placeholder="Téléphone"
+                  [class.form-control-danger]="phone.invalid && phone.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="phone.invalid && phone.touched && phone.errors?.required">
+                Le Téléphone est requis!
+              </small>
+              <small class="form-text error" *ngIf="phone.invalid && phone.touched && (phone.errors?.minlength || phone.errors?.maxlength)">
+                Le Téléphone doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Date de Naissance</label>
+              <div class="input-group input-group-sm">
+                <input [(ngModel)]="user.birthDay" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #birthDay="ngbDatepicker"
+                  [class.form-control-danger]="birthDay.invalid && birthDay.touched" required="true" autofocus>
+                <span class="input-group-btn">
+                  <button class="btn btn-secondary border-left-0 p-2 pl-2 pr-2" (click)="birthDay.toggle()" type="button">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </span>
+              </div>
+              <small class="form-text error" *ngIf="birthDay.invalid && birthDay.touched && birthDay.errors?.required">
+                La Date de Naissance est requis!
+              </small>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+    <ngb-panel title="Adresse postale">
+      <ng-template ngbPanelContent>
+        <div class="row m-0 pt-4 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Adresse</label>
+              <div class="input-group input-group-sm">
+                <input name="address" [(ngModel)]="location.address" id="input-name" #address="ngModel" class="form-control" placeholder="Adresse"
+                  [class.form-control-danger]="address.invalid && address.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="address.invalid && address.touched && address.errors?.required">
+                L'address est requis!
+              </small>
+              <small class="form-text error" *ngIf="address.invalid && address.touched && (address.errors?.minlength || address.errors?.maxlength)">
+                L'address doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Ville</label>
+              <div class="input-group input-group-sm">
+                <input name="state" [(ngModel)]="location.state" id="input-name" #state="ngModel" class="form-control" placeholder="Ville"
+                  [class.form-control-danger]="state.invalid && state.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="state.invalid && state.touched && state.errors?.required">
+                Le champ Ville est requis!
+              </small>
+              <small class="form-text error" *ngIf="state.invalid && state.touched && (state.errors?.minlength || state.errors?.maxlength)">
+                Le champ ville doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Région</label>
+              <div class="input-group input-group-sm">
+                <input name="city" [(ngModel)]="location.city" id="input-name" #city="ngModel" class="form-control" placeholder="Région"
+                  [class.form-control-danger]="city.invalid && city.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="city.invalid && city.touched && city.errors?.required">
+                Le champ Région est requis!
+              </small>
+              <small class="form-text error" *ngIf="city.invalid && city.touched && (city.errors?.minlength || city.errors?.maxlength)">
+                Le champ Région doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Code Postal</label>
+              <div class="input-group input-group-sm">
+                <input name="postalCode" [(ngModel)]="location.postalCode" id="input-name" #postalCode="ngModel" class="form-control" placeholder="Code Postal"
+                  [class.form-control-danger]="postalCode.invalid && postalCode.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="postalCode.invalid && postalCode.touched && postalCode.errors?.required">
+                Le Code Postal est requis!
+              </small>
+              <small class="form-text error" *ngIf="postalCode.invalid && postalCode.touched && (postalCode.errors?.minlength || postalCode.errors?.maxlength)">
+                Le Code Postal doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Pays</label>
+              <div class="input-group input-group-sm">
+                <input name="country" [(ngModel)]="location.country" id="input-name" #country="ngModel" class="form-control" placeholder="Pays"
+                  [class.form-control-danger]="country.invalid && country.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="country.invalid && country.touched && country.errors?.required">
+                Le Pays est requis!
+              </small>
+              <small class="form-text error" *ngIf="country.invalid && country.touched && (country.errors?.minlength || country.errors?.maxlength)">
+                Le Pays doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+    <ngb-panel title="Adresse de facturation">
+      <ng-template ngbPanelContent>
+        <div class="row m-0 pt-4 pb-4">
+          <nb-checkbox class="col-12">Correspond à l'adresse postale</nb-checkbox>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Adresse</label>
+              <div class="input-group input-group-sm">
+                <input name="address" [(ngModel)]="location.address" id="input-name" #address="ngModel" class="form-control" placeholder="Adresse"
+                  [class.form-control-danger]="address.invalid && address.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="address.invalid && address.touched && address.errors?.required">
+                L'address est requis!
+              </small>
+              <small class="form-text error" *ngIf="address.invalid && address.touched && (address.errors?.minlength || address.errors?.maxlength)">
+                L'address doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Ville</label>
+              <div class="input-group input-group-sm">
+                <input name="state" [(ngModel)]="location.state" id="input-name" #state="ngModel" class="form-control" placeholder="Ville"
+                  [class.form-control-danger]="state.invalid && state.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="state.invalid && state.touched && state.errors?.required">
+                Le champ Ville est requis!
+              </small>
+              <small class="form-text error" *ngIf="state.invalid && state.touched && (state.errors?.minlength || state.errors?.maxlength)">
+                Le champ ville doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Région</label>
+              <div class="input-group input-group-sm">
+                <input name="city" [(ngModel)]="location.city" id="input-name" #city="ngModel" class="form-control" placeholder="Région"
+                  [class.form-control-danger]="city.invalid && city.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="city.invalid && city.touched && city.errors?.required">
+                Le champ Région est requis!
+              </small>
+              <small class="form-text error" *ngIf="city.invalid && city.touched && (city.errors?.minlength || city.errors?.maxlength)">
+                Le champ Région doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Code Postal</label>
+              <div class="input-group input-group-sm">
+                <input name="postalCode" [(ngModel)]="location.postalCode" id="input-name" #postalCode="ngModel" class="form-control" placeholder="Code Postal"
+                  [class.form-control-danger]="postalCode.invalid && postalCode.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="postalCode.invalid && postalCode.touched && postalCode.errors?.required">
+                Le Code Postal est requis!
+              </small>
+              <small class="form-text error" *ngIf="postalCode.invalid && postalCode.touched && (postalCode.errors?.minlength || postalCode.errors?.maxlength)">
+                Le Code Postal doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="input-name" class="sr-only">Pays</label>
+              <div class="input-group input-group-sm">
+                <input name="country" [(ngModel)]="location.country" id="input-name" #country="ngModel" class="form-control" placeholder="Pays"
+                  [class.form-control-danger]="country.invalid && country.touched" required="true" [minlength]="3" [maxlength]="20">
+              </div>
+              <small class="form-text error" *ngIf="country.invalid && country.touched && country.errors?.required">
+                Le Pays est requis!
+              </small>
+              <small class="form-text error" *ngIf="country.invalid && country.touched && (country.errors?.minlength || country.errors?.maxlength)">
+                Le Pays doit contenir de 3 à 20 caractères
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row m-0 pb-4">
+          <nb-checkbox class="col-12">Avez-vous un numéro de TVA?</nb-checkbox>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>
+<button (click)="save()" class="btn btn-save btn-fixed-bottom btn-success">
+  <i class="fa fa-save"></i>
+</button>
+<button class="btn btn-cancel btn-fixed-bottom btn-danger">
+  <i class="nb-close"></i>
+</button>

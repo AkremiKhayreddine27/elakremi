@@ -1,0 +1,16 @@
+<nb-card>
+  <nb-card-header class="d-flex align-items-center justify-content-between">
+    <span (click)="isCollapsed = !isCollapsed" class="d-flex cursor-pointer align-items-center">
+      <i class="ion-ios-world-outline mr-2"></i>
+      Sites de réservations
+    </span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header>
+  <nb-card-body [ngbCollapse]="isCollapsed">
+    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

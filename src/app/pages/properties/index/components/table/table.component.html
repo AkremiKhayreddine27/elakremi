@@ -1,0 +1,93 @@
+<div class="properties">
+  <div class="table-header border-bottom">
+    <div class="row">
+      <div class="col-md-4 d-flex align-items-center">
+        <span class="p-2">Bien</span>
+      </div>
+      <div class="col-md-1 d-flex align-items-center">
+        <span class="p-2">Statut</span>
+      </div>
+      <div class="col-md-2 d-flex align-items-center">
+        <span class="p-2">Tarif</span>
+      </div>
+      <div class="col-md-1 d-flex align-items-center">
+        <span class="pt-2 pb-2">Sites de réservations</span>
+      </div>
+      <div class="col-md-2 d-flex align-items-center">
+        <span class="p-2"> Votes</span>
+      </div>
+      <div class="col-md-2 d-flex align-items-center justify-content-center">
+        <span class="p-2">Actions</span>
+      </div>
+    </div>
+  </div>
+  <div *ngFor="let property of properties" class="property border-bottom">
+    <div class="row">
+      <div class="col-md-4 d-flex flex-column">
+        <span [routerLink]="property.id" class="property-title cursor-pointer pl-2 pt-3 pr-2">
+          {{ property.title }}
+        </span>
+        <span class="property-type small text-muted pl-2 pr-2 pb-2">
+          {{ property.type }}
+        </span>
+        <span class="property-address small text-muted pl-2 pr-2 pb-3">
+          <i class="fa fa-map-marker mr-1"></i>
+          {{ property.location.userLocation.address }}, {{ property.location.userLocation.city }}, {{ property.location.userLocation.state
+          }}, {{ property.location.userLocation.postcode}}, {{ property.location.userLocation.country }}
+        </span>
+      </div>
+      <div class="col-md-1 d-flex align-items-center">
+        <div class="p-2" [ngSwitch]="property.status">
+          <span *ngSwitchCase="'réservé'" class="badge badge-info property-status">{{ property.status }}</span>
+          <span *ngSwitchCase="'disponible'" class="badge badge-success property-status">{{ property.status }}</span>
+          <span *ngSwitchCase="'indisponible'" class="badge badge-danger property-status">{{ property.status }}</span>
+        </div>
+      </div>
+      <div class="col-md-2 d-flex align-items-center">
+        <span class="property-amount small pt-2 pl-2">à partir de
+          <b>{{ property.amount }}$</b> par nuit
+        </span>
+      </div>
+      <div class="col-md-1 d-flex align-items-center">
+        <div class="pt-2 d-flex flex-wrap align-items-center">
+          <a *ngFor="let link of property.links" [href]="link.href" class="pb-1 small">{{ link.titre }}</a>
+        </div>
+      </div>
+      <div class="col-md-2 d-flex">
+        <div *ngIf="property.rate" class="d-flex align-items-center pl-2">
+          <ngb-rating [(rate)]="property.rate" max=5>
+            <ng-template let-fill="fill">
+              <span class="star fill" [class.filled]="fill === 100">
+                <i class="ion-android-star" *ngIf="fill === 100"></i>
+                <i class="ion-android-star-outline" *ngIf="fill !== 100"></i>
+              </span>
+            </ng-template>
+          </ngb-rating>
+          <span class="small ml-2">{{ property.votes }}</span>
+        </div>
+      </div>
+      <div class="col-md-2 d-flex justify-content-center align-items-center">
+        <div class="dropdown" ngbDropdown>
+          <a class="action" ngbDropdownToggle>
+            <i class="fa fa-ellipsis-h"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+            <li (click)="navigate('reservations', property);" class="dropdown-item">
+              <i class="fa fa-clock-o mr-1"></i>Réservations</li>
+            <li (click)="navigate('services', property);" class="dropdown-item">
+              <i class="fa fa-gear mr-1"></i>Services</li>
+            <li (click)="navigate('calendar', property);" class="dropdown-item">
+              <i class="fa fa-calendar mr-1"></i>Calendriers</li>
+            <li (click)="navigate('finances', property);" class="dropdown-item">
+              <i class="fa fa-bar-chart mr-1"></i>Finances</li>
+            <div class="dropdown-divider"></div>
+            <li (click)="navigate('properties/' + property.id, property);" class="dropdown-item">
+              <i class="fa fa-edit mr-1"></i>éditer</li>
+            <li (click)="delete(property)" class="dropdown-item">
+              <i class="fa fa-trash mr-1"></i>supprimer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

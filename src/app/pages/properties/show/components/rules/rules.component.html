@@ -1,0 +1,22 @@
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <span>Règlement intérieur</span>
+    <a class="collapse-link" (click)="isCollapsed = !isCollapsed">
+      <i *ngIf="!isCollapsed" class="nb-arrow-up"></i>
+      <i *ngIf="isCollapsed" class="nb-arrow-down"></i>
+    </a>
+  </nb-card-header>
+  <nb-card-body [ngbCollapse]="isCollapsed" class="p-0">
+    <div class="row m-0 p-2 pt-4">
+      <div class="col-md-6">
+        <nb-checkbox>Adapté aux événements</nb-checkbox>
+      </div>
+      <div class="col-md-6">
+        <nb-checkbox>Animaux acceptés</nb-checkbox>
+      </div>
+      <div class="col-md-6">
+        <nb-checkbox>Logement fumeur</nb-checkbox>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

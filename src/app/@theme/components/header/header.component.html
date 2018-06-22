@@ -1,0 +1,56 @@
+<div class="header-container" [class.left]="position === 'normal'" [class.right]="position === 'inverse'">
+  <div class="logo-containter">
+    <a (click)="toggleSidebar()" href="#" class="navigation">
+      <i class="nb-menu"></i>
+    </a>
+    <div class="logo" (click)="goToHome()">
+      <img src="assets/images/logo-default.png" />
+    </div>
+  </div>
+</div>
+
+<div class="header-container">
+  <ngx-layout-direction-switcher></ngx-layout-direction-switcher>
+  <nb-actions size="medium" [class.right]="position === 'normal'" [class.left]="position === 'inverse'">
+    <nb-action icon="nb-gear" class="toggle-layout" (click)="toggleSettings()"></nb-action>
+    <nb-action>
+      <div class="dropdown" ngbDropdown>
+        <a class="btn p-0 btn-tn border-0 d-flex justify-content-between" ngbDropdownToggle>
+          <span class="username"> {{ user.firstname[0] }}{{ user.lastname[0] }} </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <li class="arrow"></li>
+          <li class="user-menu-header dropdown-item">
+            <div class="user-card">
+              <div class="user-picture">
+                <img src="assets/images/nick.png" />
+              </div>
+              <div class="user-details">
+                <span>{{ user.firstname }} {{ user.lastname }}</span>
+                <span>{{ user.email }}</span>
+              </div>
+            </div>
+          </li>
+          <li routerLink="account/personal-informations" class="dropdown-item">
+            <i class="fa fa-user mr-2"></i>
+            Informations Personnelles
+          </li>
+          <li routerLink="account/security" class="dropdown-item">
+            <i class="fa fa-shield mr-2"></i>Connexion et Sécurité
+          </li>
+          <li routerLink="account/preferences" class="dropdown-item">
+            <i class="fa fa-gear mr-2"></i>Préférences
+          </li>
+          <li (click)="logout()" class="dropdown-item">
+            <i class="fa fa-sign-out mr-2"></i>Logout
+          </li>
+        </ul>
+      </div>
+    </nb-action>
+    <nb-action class="control-item" disabled icon="nb-notifications"></nb-action>
+    <nb-action class="control-item" icon="nb-email"></nb-action>
+    <nb-action class="control-item">
+      <nb-search type="rotate-layout" (click)="startSearch()"></nb-search>
+    </nb-action>
+  </nb-actions>
+</div>

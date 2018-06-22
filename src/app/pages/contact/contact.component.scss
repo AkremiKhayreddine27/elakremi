@@ -1,0 +1,139 @@
+@import '../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/bootstrap/hero-buttons';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@include nb-install-component() {
+    nb-card-header {
+        height: 62px;
+        span {
+            i {
+                font-size: 2rem;
+                text-align: center;
+            }
+        }
+    }
+    nb-card-body {
+        overflow: visible;
+        position: relative;
+    }
+    .ion-ios-people-outline {
+        font-size: 1.8rem;
+    }
+
+    .nb-email, .nb-phone, .nb-location {
+        font-size: 1.2rem;
+    }
+
+    .dropdown-item {
+      width: 15rem;
+      cursor: pointer !important;
+      text-transform: capitalize !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      .nb-compose, .nb-trash, .ion-ios-personadd-outline, .nb-email {
+        font-size: 1.5rem;
+      }
+  }
+  .action {
+      width: 30px;
+      height: 30px;
+      border:1px solid nb-theme(separator);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer !important;
+  }
+  .action:hover {
+      color: nb-theme(color-success);
+      box-shadow: nb-theme(shadow);
+      border: none;
+  }
+  /deep/ .nav-tabs {
+    padding: 0 !important;
+    flex-wrap: nowrap;
+  }
+
+  /deep/ .nav-tabs .nav-link {
+      border: 0;
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: nb-theme(color-fg);
+      font-size: 1.125rem;
+      font-weight: 500;
+  }
+
+  /deep/ .nav-tabs .nav-link:hover {
+      color: nb-theme(menu-fg);
+      font-weight: 600;
+  }
+
+  /deep/ .nav-tabs .nav-link.active {
+      border-bottom: 6px solid nb-theme(color-fg-highlight);
+      color: nb-theme(menu-fg);
+      font-weight: 600;
+  }
+
+
+  @include media-breakpoint-down(is) {
+      /deep/ .nav-tabs .nav-link {
+          font-size: 0.9rem;
+      }
+  }
+
+  .contact {
+    color: #777;
+    &:not(:last-child) {
+      border-bottom: 1px solid nb-theme(separator);
+    }
+  }
+
+  .time {
+    font-size: 0.875rem;
+    font-weight: nb-theme(font-weight-light);
+    text-transform: uppercase;
+  }
+
+
+    .user-img {
+        height: 2.25rem;
+        width: 2.25rem;
+        img {
+            height: 100%;
+            width: 100%;
+            border: 1px solid nb-theme(color-gray);
+            border-radius: 50%;
+        }
+    }
+    .userletters {
+        background: nb-theme(color-success);
+        height: 2.25rem;
+        width: 2.25rem;
+        font-size: 1.25rem;
+        line-height: 2.25rem;
+        font-style: normal;
+        font-weight: 400;
+        text-align: center;
+        text-transform: uppercase;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .user-infos {
+        display: flex;
+        flex-direction: column;
+        .username {
+            color: nb-theme(color-fg-heading);
+        }
+    }
+}
+
+

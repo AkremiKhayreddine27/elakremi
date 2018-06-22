@@ -1,0 +1,39 @@
+@import '../../../../../@theme/styles/themes';
+@include nb-install-component() {
+.ion-ios-albums-outline {
+    font-size: 1.5rem; 
+}
+.property-img img{
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: block;
+    z-index: 10;
+}
+.property-img-container {
+    padding: 10px;
+    width: (100% / 3);
+    min-height: 100px;
+}
+/deep/ .qq-gallery.qq-uploader {
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+}
+/deep/ .qq-total-progress-bar-container-selector {
+    border-radius: 0;
+}
+/deep/ .qq-progress-bar-container-selector {
+    border-radius: 0;
+}
+/deep/ .qq-gallery .qq-upload-list li.qq-upload-fail {
+    background-color: white;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.22);
+    border: 0;
+}
+/deep/ .qq-gallery .qq-upload-list li {
+    border-radius: 0;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.22);
+}
+}

@@ -1,0 +1,23 @@
+.nbr-input {
+    display: flex;
+    align-items: center;
+}
+.btn-round {
+    height: 36px;
+    width: 36px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 1px !important;
+    i {
+        font-size: 0.8rem !important;
+        font-weight: lighter !important;
+    }
+}
+.btn-round:hover {
+    cursor: pointer;
+}
+.number {
+    padding: 0 10px;
+}

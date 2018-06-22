@@ -1,0 +1,43 @@
+@import '../../../@theme/styles/themes'; 
+@include nb-install-component() {
+    .danger-card {
+        background-color: nb-theme(card-header-danger-bg);
+        color: white;
+    }
+    .nb-bar-chart {
+        font-size: 1.8rem;
+    }
+    .s-type {
+        font-size: 1.6rem;
+    }
+    .payements-header {
+        color: nb-theme(social-color-github);
+        padding: 10px 0;
+    }
+    .dropdown-item {
+        cursor: pointer !important;
+        text-transform: lowercase !important;
+    }
+    
+    a, .btn {
+        cursor: pointer;
+    }
+
+    .action {
+        width: 30px;
+        height: 30px;
+        border:1px solid nb-theme(separator);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .action:hover {
+        color: nb-theme(color-success);
+        box-shadow: nb-theme(shadow);
+        border: none;
+    }
+    .badge {
+        color: white !important;
+    }
+}

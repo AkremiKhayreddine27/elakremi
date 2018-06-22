@@ -1,0 +1,81 @@
+.colors {
+    display: flex;
+    border: 2px solid #DADFE6;
+    border-radius: 0.375rem;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+.color {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: #f4511e;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.color:hover {
+    border: 4px double #ffffff;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+
+.color.active {
+    border: 4px double #ffffff;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+
+.input-group-addon {
+    font-size: 14px !important;
+}
+
+.input-file {
+    margin-bottom: 0 !important;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    background-color: #f2f2f2;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.custom-select {
+    height: 50px;
+    background-color: #f2f2f2;
+    border-radius: 0;
+    border: none;
+}
+.custom-option {
+    height: 50px;
+    background-color: #f2f2f2;
+}
+
+.modal-header .close {
+    font-size: 2rem;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer !important;
+}
+
+.modal-header .close:hover {
+    background-color: #f2f2f2;
+}

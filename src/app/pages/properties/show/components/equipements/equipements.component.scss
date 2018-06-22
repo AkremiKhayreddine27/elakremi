@@ -1,0 +1,65 @@
+@import '../../../../../@theme/styles/themes';
+@include nb-install-component() {
+    .ion-ios-monitor-outline {
+        font-size: 1.5rem;
+    }
+    nb-card-header {
+        height: 62px;
+        span {
+            i {
+                font-size: 2rem;
+                text-align: center;
+            }
+        }
+    }
+    .actions {
+        display: flex;
+        align-items: center;
+        .action {
+            height: 1.5rem;
+            padding: 0 1.25rem;
+            border-left: 1px solid #ebeef2;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            cursor: pointer;
+            i {
+                color: #a4abb3;
+                font-size: 1.4rem;
+            }
+        }
+        .action:hover {
+            i {
+                color: nb-theme(color-success);
+            }
+        }
+    }
+    /deep/ .card {
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        border-radius: 0 !important;
+    }
+    /deep/ .card-header {
+        background-color: nb-theme(color-white) !important;
+        border-bottom: 0 !important;
+        a {
+            text-decoration: none !important;
+            color: nb-theme(color-fg);
+        }
+    }
+    /deep/ .card-header:hover {
+        a {
+            color: nb-theme(menu-fg) !important;
+        }
+    }
+    /deep/ .card-header.active {
+        a {
+            color: nb-theme(menu-fg) !important;
+            border-bottom: 2px solid nb-theme(color-fg-highlight);
+            padding-bottom: 0.6rem;
+        }
+    }
+}

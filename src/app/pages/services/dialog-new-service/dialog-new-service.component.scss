@@ -1,0 +1,18 @@
+.modal-header .close {
+    font-size: 2rem;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer !important;
+}
+
+.modal-header .close:hover {
+    background-color: #f2f2f2;
+}

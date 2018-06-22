@@ -1,0 +1,39 @@
+@import '../../../@theme/styles/themes';
+@include nb-install-component() {
+    .actions {
+        display: flex;
+        align-items: center;
+        div {
+            height: 1.5rem;
+            border-left: 1px solid #ebeef2;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .action {
+            cursor: pointer;
+            i {
+                color: #a4abb3;
+                font-size: 1.075rem;
+            }
+            .nb-list {
+                font-size: 1.5rem;
+            }
+        }
+        .action:hover {
+            i {
+                color: nb-theme(color-success);
+            }
+        }
+    }
+    .height-50 {
+        height: 50px;
+    }
+}

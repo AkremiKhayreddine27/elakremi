@@ -1,0 +1,15 @@
+<div class="modal-header">
+  {{ day | date: 'EEEE MMMM d' }}
+  <a (click)="close()" class="close" aria-label="Close">
+      <span>&times;</span>
+  </a>
+</div>
+
+<div class="modal-body">
+  <div 
+    [style.backgroundColor]="event.color"
+    class="day-event p-2 mb-2"
+    *ngFor="let event of events">
+    {{ event.start | date: 'hh:mm a' }} {{ event.title }}
+  </div>
+</div>

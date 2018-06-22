@@ -1,0 +1,28 @@
+<div [ngClass]="{'bg-overlay' : hasOverlay}">
+</div>
+<div class="row m-0">
+  <div class="col-md-6 p-1 pt-0 pb-0">
+    <tarif-saison></tarif-saison>
+  </div>
+
+  <div class="col-md-6 p-1 pt-0 pb-0">
+    <tarif-event></tarif-event>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-md-6 p-1 pt-0 pb-0">
+    <fees></fees>
+  </div>
+  <div class="col-md-6 p-1 pt-0 pb-0">
+    <caution></caution>
+  </div>
+</div>
+<div class="row m-0">
+  <div class="col-md-6 p-1 pt-0 pb-0">
+    <payment-terms></payment-terms>
+  </div>
+  <div class="col-md-6 p-1 pt-0 pb-0">
+    <further-infos></further-infos>
+  </div>
+</div>
+<btn-options (openChange)="optionsClicked();"></btn-options>

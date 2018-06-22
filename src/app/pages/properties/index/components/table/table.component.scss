@@ -1,0 +1,52 @@
+@import '../../../../../@theme/styles/themes';
+@include nb-install-component() {
+    .dropdown {
+        a {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            i {
+                font-size: 1.1rem;
+            }
+        }
+        a:hover {
+            //border: 1px solid nb-theme(color-success);
+            color: nb-theme(color-success);
+            box-shadow: nb-theme(shadow);
+        }
+        .dropdown-menu .dropdown-item{
+            font-size: 0.8rem;
+        }
+        .dropdown-menu-right { 
+            right: 0 !important; 
+            left: auto !important; 
+          }
+    }
+    .star {
+        font-size: 1.5rem;
+        color: nb-theme(color-fg);
+    }
+
+    .filled {
+        color: nb-theme(color-fg);
+    }
+    .current-rate {
+        font-size: 1.5rem;
+        padding-left: 1rem;
+        color: nb-theme(color-fg-heading);
+    }
+    ngb-rating {
+        outline: none;
+    }
+
+    ngb-rating i {
+        color: nb-theme(color-success);
+        @include nb-for-theme(cosmic) {
+        color: nb-theme(color-primary);
+        }
+    }
+}

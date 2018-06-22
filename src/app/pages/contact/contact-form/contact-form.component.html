@@ -1,0 +1,165 @@
+<form (ngSubmit)="save()" #form="ngForm">
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>Ajouter un Contact</h4>
+    <button type="button" (click)="close()" class="close" aria-label="Close">
+      <i class="nb-close"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="!contact" class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <label class="col-form-label small col-md-4">Profil *</label>
+          <div class="col-md-8">
+            <div [(ngModel)]="newContact.profil" name="profil" ngbRadioGroup class="d-flex flex-wrap btn-group btn-group-toggle btn-toggle-radio-group">
+              <label ngbButtonLabel class="btn pl-2 pr-2 btn-tn btn-outline-secondary text-secondary">
+                <input ngbButton type="radio" value="particulier"> Particulier
+              </label>
+              <label ngbButtonLabel class="btn pl-2 pr-2 btn-tn btn-outline-secondary text-secondary">
+                <input ngbButton type="radio" value="professionnel"> Professionnel
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="firstname" class="col-form-label col-md-4 small">Type *</label>
+          <div class="col-md-8">
+            <ngx-select [element]="type" [elements]="types" (selectChanged)="setType($event.element);"></ngx-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="firstname" class="col-form-label col-md-4 small">Nom *</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="firstname" type="text" class="form-control" [(ngModel)]="newContact.firstname" #firstname="ngModel" name="firstname"
+              placeholder="Nom" required="true" [minlength]="3" [maxlength]="50" [class.form-control-danger]="firstname.invalid && firstname.touched">
+          </div>
+          <small class="form-text error" *ngIf="firstname.invalid && firstname.touched && firstname.errors?.required">
+            Le Nom est requis !
+          </small>
+          <small class="form-text error" *ngIf="firstname.invalid && firstname.touched && firstname.errors?.minlength">
+            Le Nom doit contenir au moin 3 caractères !
+          </small>
+          <small class="form-text error" *ngIf="firstname.invalid && firstname.touched && firstname.errors?.maxlength">
+            Le Nom ne doit pas dépasser 50 caractères !
+          </small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="lastname" class="col-form-label col-md-4 small">Prénom *</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="lastname" type="text" class="form-control" [(ngModel)]="newContact.lastname" #lastname="ngModel" name="lastname"
+              placeholder="Prénom" required="true" [minlength]="3" [maxlength]="50" [class.form-control-danger]="lastname.invalid && lastname.touched">
+          </div>
+          <small class="form-text error" *ngIf="lastname.invalid && lastname.touched && lastname.errors?.required">
+            Le Prénom est requis !
+          </small>
+          <small class="form-text error" *ngIf="lastname.invalid && lastname.touched && lastname.errors?.minlength">
+            Le Prénom doit contenir au moin 3 caractères !
+          </small>
+          <small class="form-text error" *ngIf="lastname.invalid && lastname.touched && lastname.errors?.maxlength">
+            Le Prénom ne doit pas dépasser 50 caractères !
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="input-email" class="col-form-label col-md-4 small">Adresse e-mail *</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input name="email" [(ngModel)]="newContact.email" id="input-email" #email="ngModel" class="form-control" placeholder="Adresse e-mail"
+              pattern=".+@.+\..+" [class.form-control-danger]="email.invalid && email.touched" required="true">
+          </div>
+          <small class="form-text error" *ngIf="email.invalid && email.touched && email.errors?.required">
+            Email est requis!
+          </small>
+          <small class="form-text error" *ngIf="email.invalid && email.touched && email.errors?.pattern">
+            L'email devrait être le vrai!
+          </small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="phone" class="col-form-label col-md-4 small">Téléphone</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="phone" type="text" class="form-control" [(ngModel)]="newContact.phone" #phone="ngModel" name="phone" placeholder="Numéro de Téléphone">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="address" class="col-form-label col-md-4 small">Addresse</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="address" type="text" class="form-control" [(ngModel)]="newContact.location.address" #address="ngModel" name="address"
+              placeholder="Addresse">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="postcode" class="col-form-label col-md-4 small">Code Postal</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="postcode" type="text" [(ngModel)]="newContact.location.postcode" #postcode="ngModel" name="postCode" class="form-control"
+              placeholder="Code postal">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="city" class="col-form-label col-md-4 small">Ville</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="city" type="text" [(ngModel)]="newContact.location.city" #city="ngModel" name="city" class="form-control" placeholder="Ville">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="country" class="col-form-label col-md-4 small">Pays</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="country" type="text" [(ngModel)]="newContact.location.country" #country="ngModel" name="country" class="form-control"
+              placeholder="Pays">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="city" class="col-form-label small col-md-4">Site web</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="website" type="text" [(ngModel)]="newContact.website" #website="ngModel" name="city" class="form-control" placeholder="Site web">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <label class="col-form-label small col-md-4">Disponibilité</label>
+          <div class="col-md-8">
+            <label *ngFor="let a of availabilities" class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" [(ngModel)]="newContact.availability" name="availability"  [value]="a">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description small">{{ a }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button [disabled]="submitted || !form.valid" (click)="save()" type="submit" class="btn btn-sm btn-success">
+      <i class="fa fa-save mr-1"></i>
+      <span i18n>Sauvegarder</span>
+    </button>
+  </div>
+</form>
