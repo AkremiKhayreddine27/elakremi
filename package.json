@@ -19,6 +19,7 @@
     "conventional-changelog": "conventional-changelog",
     "serve": "ng serve",
     "start": "node server.js",
+    "postinstall": "npm run build:prod",
     "build": "ng build",
     "build:prod": "npm run build -- --prod --aot",
     "test": "ng test",
