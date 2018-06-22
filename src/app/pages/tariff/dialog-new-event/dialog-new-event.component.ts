@@ -12,11 +12,11 @@ export class DialogNewEventComponent implements OnInit {
 
   @Input() event;
 
-  private newEvent;
+  public newEvent;
 
   submitted = false;
 
-  constructor(public activeModal: NgbActiveModal, private tariffsService: TariffsService) { }
+  constructor(public activeModal: NgbActiveModal, public tariffsService: TariffsService) { }
 
   ngOnInit() {
     if (!this.event) {

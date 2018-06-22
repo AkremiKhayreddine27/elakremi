@@ -40,7 +40,7 @@ export class LinksComponent implements OnInit {
   };
 
 
-  private source = new LocalDataSource();
+  public source = new LocalDataSource();
 
   constructor() { }
 

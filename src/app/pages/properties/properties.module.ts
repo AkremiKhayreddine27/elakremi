@@ -4,7 +4,6 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ThemeModule } from '../../@theme/theme.module';
 import { ToasterModule, ToasterService } from 'angular2-toaster';
 import { YagaModule } from '@yaga/leaflet-ng2';
-import { YagaGpsModule } from '@yaga/leaflet-ng2-gps';
 import { PropertiesRoutingModule, routedComponents } from './properties-routing.module';
 import { IdentificationComponent } from './show/components/identification/identification.component';
 import { LocationComponent } from './show/components/location/location.component';
@@ -27,7 +26,6 @@ import { TableComponent } from './index/components/table/table.component';
     CommonModule,
     ThemeModule,
     YagaModule,
-    YagaGpsModule,
     PropertiesRoutingModule,
     Ng2SmartTableModule,
     ToasterModule

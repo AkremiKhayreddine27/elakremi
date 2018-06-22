@@ -14,12 +14,12 @@ export class DialogNewSeasonComponent implements OnInit {
 
   @Input() season;
 
-  private newSeason;
+  public newSeason;
 
 
   submitted = false;
 
-  constructor(public activeModal: NgbActiveModal, private tariffsService: TariffsService) { }
+  constructor(public activeModal: NgbActiveModal, public tariffsService: TariffsService) { }
 
   ngOnInit() {
     if (!this.season) {

@@ -14,11 +14,11 @@ export class TarifSaisonComponent implements OnInit {
     { title: 'add', type: 'link', icon: 'fa fa-plus', clickAction: 'create', displayInMobile: true },
   ];
 
-  private tariffSaison = [];
+  public tariffSaison = [];
 
   currentPeriod = '';
 
-  constructor(private modalService: NgbModal, private propertyService: PropertyService) { }
+  constructor(public modalService: NgbModal, public propertyService: PropertyService) { }
 
   ngOnInit() {
     this.tariffSaison = this.propertyService.currentProperty.tariff.seasons;

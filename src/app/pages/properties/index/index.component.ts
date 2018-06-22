@@ -70,7 +70,7 @@ export class IndexComponent implements OnInit {
   total;
   paging;
 
-  constructor(private propertyService: PropertyService, private router: Router) { }
+  constructor(public propertyService: PropertyService, public router: Router) { }
 
   ngOnInit() {
     this.source = this.propertyService.all();

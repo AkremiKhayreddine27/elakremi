@@ -9,6 +9,8 @@ export class PaymentTermsComponent implements OnInit {
 
   isCollapsed = true;
 
+  radioModel;
+
   constructor() { }
 
   ngOnInit() {

@@ -103,7 +103,7 @@
         <div id="myCalendarCollapse" [ngbCollapse]="isMyCalendarCollapsed">
             <div class="card w-100 p-0 border-0 border-radius-0">
                 <div class="card-header border-radius-0">
-                    <app-my-calendars (newCalendar)="newCalendar.emit({})" [refresh]="refresh">
+                    <app-my-calendars (newCalendar)="newCalendar.emit({})">
                     </app-my-calendars>
                 </div>
             </div>

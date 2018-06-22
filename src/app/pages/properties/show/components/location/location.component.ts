@@ -3,7 +3,6 @@ import { Http } from '@angular/http';
 import { Property } from '../../../../../@core/data/models/property';
 import { PropertyService } from '../../../../../@core/data/property.service';
 import { OSM_TILE_LAYER_URL, MapComponent as LeafletMap, MarkerDirective } from '@yaga/leaflet-ng2';
-import { GpsService } from '@yaga/leaflet-ng2-gps';
 import { LatLng, Point } from 'leaflet';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'style-loader!leaflet/dist/leaflet.css';
@@ -86,7 +85,7 @@ export class LocationComponent implements OnInit, OnChanges {
 
   addresses = [];
 
-  constructor(private http: Http, private toasterService: ToasterService, private propertyService: PropertyService, @Inject(GpsService) public gpsService: GpsService) {
+  constructor(private http: Http, private toasterService: ToasterService, private propertyService: PropertyService) {
 
   }
 
@@ -196,6 +195,7 @@ export class LocationComponent implements OnInit, OnChanges {
     }
   }
 
+  /*
   public setFollow(val: boolean): void {
     if (val && !this.gpsListener) {
       if (this.gpsService.position) {
@@ -209,6 +209,7 @@ export class LocationComponent implements OnInit, OnChanges {
       this.gpsListener = null;
     }
   }
+  */
 
   centerMap() {
     this.mapComponent.setView(new LatLng(this.userLocation.latitude ? this.userLocation.latitude : this.mapLocation.latitude, this.userLocation.longitude ? this.userLocation.longitude : this.mapLocation.longitude), 18);

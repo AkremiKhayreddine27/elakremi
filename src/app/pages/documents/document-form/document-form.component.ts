@@ -15,9 +15,9 @@ import { DOCUMENT } from '@angular/common';
 })
 export class DialogNewDocumentComponent implements OnInit {
 
-  private uploader;
+  public uploader;
 
-  private types: any[] = [
+  public types: any[] = [
     {
       label: 'facture',
       value: 'facture'
@@ -36,18 +36,18 @@ export class DialogNewDocumentComponent implements OnInit {
     }
   ];
 
-  private type = { label: 'Choisir un Type', value: 'Choisir un Type' };
+  public type = { label: 'Choisir un Type', value: 'Choisir un Type' };
 
-  private associations = [
+  public associations = [
     { label: 'Bien', value: 'Bien' },
     { label: 'Réservation', value: 'Réservation' },
     { label: 'Service', value: 'Service' },
     { label: 'Paiement', value: 'Paiement' }
   ];
 
-  private currentAssociation = this.associations[0];
+  public currentAssociation = this.associations[0];
 
-  private currentAssociationValue;
+  public currentAssociationValue;
 
   document = {
     title: null,
@@ -55,7 +55,7 @@ export class DialogNewDocumentComponent implements OnInit {
     type: null
   }
 
-  private owner;
+  public owner;
 
   form: FormGroup;
 
@@ -69,9 +69,9 @@ export class DialogNewDocumentComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
-    private propertyService: PropertyService,
-    private reservationsService: ReservationsService,
-    private servicesService: ServicesService) { }
+    public propertyService: PropertyService,
+    public reservationsService: ReservationsService,
+    public servicesService: ServicesService) { }
 
   ngOnInit() {
     this.uploader = new FineUploader({

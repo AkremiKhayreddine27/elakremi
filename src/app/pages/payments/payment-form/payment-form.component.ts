@@ -16,44 +16,44 @@ export class PaymentFormComponent implements OnInit {
 
   @Input() payment;
 
-  private title;
+  public title;
 
-  private form: FormGroup;
+  public form: FormGroup;
 
   mode: string = 'Dépense';
 
-  private types: any[];
+  public types: any[];
 
-  private type: any;
+  public type: any;
 
-  private statuses: any[];
+  public statuses: any[];
 
-  private status: any;
+  public status: any;
 
-  private methods: any[];
+  public methods: any[];
 
-  private method: any;
+  public method: any;
 
-  private tvas: any[];
+  public tvas: any[];
 
-  private tva: any;
+  public tva: any;
 
-  private payers = [];
+  public payers = [];
 
-  private payer: any;
+  public payer: any;
 
-  private contact;
+  public contact;
 
-  private contactType;
+  public contactType;
 
-  private newPayment: Payment;
+  public newPayment: Payment;
 
-  private filtredTypes;
+  public filtredTypes;
 
   constructor(
     public activeModal: NgbActiveModal,
-    private paymentService: PaymentService,
-    private dateService: DateService) { }
+    public paymentService: PaymentService,
+    public dateService: DateService) { }
 
   ngOnInit() {
     this.title = this.payment ? 'Modifier le paiement ' + this.payment.id : 'Ajouter un paiement';

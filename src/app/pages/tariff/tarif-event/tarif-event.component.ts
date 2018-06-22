@@ -15,10 +15,10 @@ export class TarifEventComponent implements OnInit {
     { title: 'add', type: 'link', icon: 'fa fa-plus', clickAction: 'create', displayInMobile: true },
   ];
 
-  private tariffEvent = [];
+  public tariffEvent = [];
 
 
-  constructor(private modalService: NgbModal, private propertyService: PropertyService) { }
+  constructor(public modalService: NgbModal, public propertyService: PropertyService) { }
 
   ngOnInit() {
     this.tariffEvent = this.propertyService.currentProperty.tariff.events;

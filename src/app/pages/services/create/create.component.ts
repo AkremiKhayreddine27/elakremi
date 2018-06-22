@@ -76,19 +76,19 @@ export class CreateComponent implements OnInit {
 
   public deadlines: any[];
 
-  private currentDeadline = { label: 'une fois', value: 'une fois' };
+  public currentDeadline = { label: 'une fois', value: 'une fois' };
 
   public frequencies: any[];
 
-  private currentFrequency = { label: 'une fois', value: 'une fois' };
+  public currentFrequency = { label: 'une fois', value: 'une fois' };
 
   public statusDefault = { label: 'Choisir un Statut', value: 'Choisir un Statut' };
 
-  private tvas: any[];
+  public tvas: any[];
 
-  private currentTva;
+  public currentTva;
 
-  private subCategory;
+  public subCategory;
 
   public categories;
 
@@ -100,24 +100,24 @@ export class CreateComponent implements OnInit {
 
   public currentProperty;
 
-  private category;
+  public category;
 
-  private reservations;
+  public reservations;
 
-  private reservationDefault;
+  public reservationDefault;
 
-  private pageTitle;
+  public pageTitle;
 
-  private serviceReservation;
+  public serviceReservation;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private modalService: NgbModal,
-    private contactsService: ContactsService,
-    private formBuilder: FormBuilder,
-    private servicesService: ServicesService,
-    private propertyService: PropertyService) { }
+    public route: ActivatedRoute,
+    public router: Router,
+    public modalService: NgbModal,
+    public contactsService: ContactsService,
+    public formBuilder: FormBuilder,
+    public servicesService: ServicesService,
+    public propertyService: PropertyService) { }
 
   ngOnInit() {
     this.serviceId = this.route.snapshot.params.service;

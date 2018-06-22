@@ -9,7 +9,7 @@ export class AmenitiesComponent implements OnInit {
 
   isCollapsed: boolean = true;
 
-  private amenties = [
+  public amenties = [
     { name: 'Parking' },
     { name: 'Salle de sport' },
     { name: 'Jacuzzi' },

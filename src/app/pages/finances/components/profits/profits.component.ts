@@ -9,11 +9,11 @@ import { PropertyService } from '../../../../@core/data/property.service';
 })
 export class ProfitsComponent implements OnInit {
 
-  private finances;
+  public finances;
 
   constructor(
-    private financesService: FinancesService,
-    private propertyService: PropertyService
+    public financesService: FinancesService,
+    public propertyService: PropertyService
   ) { }
 
   ngOnInit() {

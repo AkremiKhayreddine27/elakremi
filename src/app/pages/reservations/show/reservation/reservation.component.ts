@@ -30,7 +30,7 @@ export class ReservationComponent implements OnInit {
   @Output() propertyChange = new EventEmitter<any>();
 
   @ViewChild('form') form: FormGroup;
-  private validStatus: boolean;
+  public validStatus: boolean;
 
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -52,10 +52,10 @@ export class ReservationComponent implements OnInit {
   public currentProperty;
 
   constructor(
-    private modalService: NgbModal,
-    private contactsService: ContactsService,
-    private formBuilder: FormBuilder,
-    private propertyService: PropertyService) { }
+    public modalService: NgbModal,
+    public contactsService: ContactsService,
+    public formBuilder: FormBuilder,
+    public propertyService: PropertyService) { }
 
   ngOnInit() {
     this.contact = this.reservation.lodger;

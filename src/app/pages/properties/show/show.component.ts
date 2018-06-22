@@ -20,7 +20,7 @@ export class ShowComponent implements OnInit {
 
   hasOverlay = false;
 
-  constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
+  constructor(public route: ActivatedRoute, public propertyService: PropertyService) { }
 
   ngOnInit() {
     if (this.route.snapshot.params.id) {

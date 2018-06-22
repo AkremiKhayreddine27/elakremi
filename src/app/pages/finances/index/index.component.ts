@@ -11,14 +11,14 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   source: LocalDataSource = new LocalDataSource();
 
-  private finances;
-  private payments = [];
-  private total: number;
-  private paging;
+  public finances;
+  public payments = [];
+  public total: number;
+  public paging;
 
   constructor(
-    private financesService: FinancesService,
-    private propertyService: PropertyService
+    public financesService: FinancesService,
+    public propertyService: PropertyService
   ) { }
 
   ngOnInit() {
