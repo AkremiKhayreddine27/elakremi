@@ -16,7 +16,7 @@ export class NewReservationComponent implements OnInit {
 
   contact;
 
-  private reservation = {
+  public reservation = {
     id: faker.random.number(100),
     title: null,
     status: null,
@@ -51,21 +51,21 @@ export class NewReservationComponent implements OnInit {
     documents: []
   };
 
-  private reservationForm: FormGroup;
+  public reservationForm: FormGroup;
 
-  private reservationFormValid: boolean;
+  public reservationFormValid: boolean;
 
-  private id;
+  public id;
 
-  private property;
+  public property;
 
-  private pageTitle;
+  public pageTitle;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private propertyService: PropertyService,
-    private reservationsService: ReservationsService) { }
+    public route: ActivatedRoute,
+    public router: Router,
+    public propertyService: PropertyService,
+    public reservationsService: ReservationsService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.reservation;
