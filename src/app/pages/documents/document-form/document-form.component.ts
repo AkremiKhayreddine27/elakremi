@@ -55,17 +55,17 @@ export class DialogNewDocumentComponent implements OnInit {
     type: null
   }
 
-  public owner;
+  public owner: any;
 
   form: FormGroup;
 
-  properties = [];
+  properties: any[] = [];
 
-  reservations = [];
+  reservations: any[] = [];
 
-  services = [];
+  services: any[] = [];
 
-  currentProperty = { label: this.propertyService.currentProperty.title, value: this.propertyService.currentProperty.title, data: this.propertyService.currentProperty };
+  currentProperty: any = { label: this.propertyService.currentProperty.title, value: this.propertyService.currentProperty.title, data: this.propertyService.currentProperty };
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -101,9 +101,9 @@ export class DialogNewDocumentComponent implements OnInit {
     this.currentAssociationValue = { label: this.propertyService.currentProperty.title, value: this.propertyService.currentProperty.title, data: this.propertyService.currentProperty };
   }
 
-  get description() { return this.form.get('description'); }
+  get description(): any { return this.form.get('description'); }
 
-  get title() { return this.form.get('title'); }
+  get title(): any { return this.form.get('title'); }
 
   setType(type) {
     this.form.patchValue({ type: type.element.value });

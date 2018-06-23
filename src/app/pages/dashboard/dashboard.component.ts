@@ -17,22 +17,22 @@ export class DashboardComponent implements OnDestroy {
 
   private alive = true;
 
-  lightCard: CardSettings = {
+  lightCard: any = {
     title: 'Light',
     iconClass: 'nb-lightbulb',
     type: 'primary',
   };
-  rollerShadesCard: CardSettings = {
+  rollerShadesCard: any = {
     title: 'Roller Shades',
     iconClass: 'nb-roller-shades',
     type: 'success',
   };
-  wirelessAudioCard: CardSettings = {
+  wirelessAudioCard: any = {
     title: 'Wireless Audio',
     iconClass: 'nb-audio',
     type: 'info',
   };
-  coffeeMakerCard: CardSettings = {
+  coffeeMakerCard: any = {
     title: 'Coffee Maker',
     iconClass: 'nb-coffee-maker',
     type: 'warning',
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnDestroy {
 
   statusCards: string;
 
-  commonStatusCardsSet: CardSettings[] = [
+  commonStatusCardsSet: any[] = [
     this.lightCard,
     this.rollerShadesCard,
     this.wirelessAudioCard,
@@ -48,9 +48,9 @@ export class DashboardComponent implements OnDestroy {
   ];
 
   statusCardsByThemes: {
-    default: CardSettings[];
-    cosmic: CardSettings[];
-    corporate: CardSettings[];
+    default: any[];
+    cosmic: any[];
+    corporate: any[];
   } = {
     default: this.commonStatusCardsSet,
     cosmic: this.commonStatusCardsSet,

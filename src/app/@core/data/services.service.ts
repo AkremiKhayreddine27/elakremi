@@ -660,15 +660,15 @@ export class ServicesService {
 
     constructor() { }
 
-    setCurrentService(service) {
+    setCurrentService(service): void {
         this.currentService = service ? { ...service } : undefined;
     }
 
-    public all() {
+    public all(): any {
         return this.categories;
     }
 
-    public getCategories() {
+    public getCategories(): any {
         let categories = [];
         this.categories.map(category => {
             category.subCategories.map(s => {
@@ -678,25 +678,25 @@ export class ServicesService {
         return categories;
     }
 
-    public getCategorySub(category: string) {
+    public getCategorySub(category: string): any {
         return this.categories.filter(c => {
             return c.slug === category;
         })[0];
     }
 
-    public getServices(category, subcategory) {
+    public getServices(category, subcategory): any {
         return category.subCategories.filter(sub => {
             return sub.slug === subcategory;
         })[0].services;
     }
 
-    public getService(category: string, subCategory, type) {
+    public getService(category: string, subCategory, type): any {
         return this.categories.find(c => c.slug === category)
             .subCategories.find(sub => sub.slug === subCategory)
             .services.find(service => service.slug === type);
     }
 
-    getPropertyServicesByType(property: Property, slug) {
+    getPropertyServicesByType(property: Property, slug): any {
         this.source.load(property.services.filter(propservice => {
             return propservice.type.slug === slug;
         }).sort((a, b) => {
@@ -705,21 +705,21 @@ export class ServicesService {
         return this.source;
     }
 
-    getAllPropertyServices(property: Property) {
+    getAllPropertyServices(property: Property): any {
         this.source.load(property.services.sort((a, b) => {
             return b.createdAt - a.createdAt;
         }));
         return this.source;
     }
 
-    add(service, property: Property) {
+    add(service, property: Property): void {
         service.id = faker.random.number();
         service.createdAt = new Date();
         property.services.push(service);
         this.serviceCreated.next(service);
     }
 
-    update(service, property: Property) {
+    update(service, property: Property): void {
         property.services = property.services.map(s => {
             if (s.id === service.id) {
                 s = service;
@@ -729,13 +729,13 @@ export class ServicesService {
         this.refresh.next(property.services);
     }
 
-    find(property: Property, id) {
+    find(property: Property, id): any {
         return property.services.filter(service => {
             return service.id === Number.parseInt(id);
         })[0];
     }
 
-    remove(service, property: Property) {
+    remove(service, property: Property): void {
         property.services = property.services.filter(s => {
             return service.id !== s.id;
         });

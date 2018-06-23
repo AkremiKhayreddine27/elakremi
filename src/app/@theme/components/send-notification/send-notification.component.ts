@@ -40,11 +40,11 @@ export class SendNotificationComponent implements OnInit {
     });
   }
 
-  get object() { return this.form.get('object'); }
+  get object(): any { return this.form.get('object'); }
 
-  get content() { return this.form.get('content'); }
+  get content(): any { return this.form.get('content'); }
 
-  get recipient() { return this.form.get('recipient'); }
+  get recipient(): any { return this.form.get('recipient'); }
 
   formatter = (x: any) => x.firstname + ' ' + x.lastname;
 

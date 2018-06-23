@@ -10,20 +10,20 @@ export class ReservationsService {
 
     source: LocalDataSource = new LocalDataSource();
 
-    getPropertyReservations(property: Property) {
+    getPropertyReservations(property: Property): any {
         this.source.load(property.reservations.sort((a, b) => {
             return b.createdAt - a.createdAt;
         }));
         return this.source;
     }
 
-    getReservation(property: Property, id) {
+    getReservation(property: Property, id): any {
         return property.reservations.filter(reservation => {
             return reservation.id === Number.parseInt(id);
         })[0];
     }
 
-    add(reservation, property: Property) {
+    add(reservation, property: Property): void {
         property.reservations.push(reservation);
         this.source.load(property.reservations.sort((a, b) => {
             return b.createdAt - a.createdAt;
@@ -31,7 +31,7 @@ export class ReservationsService {
         this.refresh.next(this.source);
     }
 
-    remove(reservation, property: Property) {
+    remove(reservation, property: Property): void {
         property.reservations = property.reservations.filter(r => {
             return reservation.id !== r.id;
         });

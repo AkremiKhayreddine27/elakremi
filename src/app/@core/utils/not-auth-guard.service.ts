@@ -10,7 +10,7 @@ export class NotAuthGuard implements CanActivate {
     }
 
     // TO DO
-    canActivate() {
+    canActivate(): any {
         return true;
     }
 }

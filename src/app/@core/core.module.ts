@@ -2,6 +2,7 @@ import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
+
 import { of as observableOf } from 'rxjs';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
@@ -30,13 +31,13 @@ const socialLinks = [
 ];
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
-  getRole() {
+  getRole(): any {
     // here you could provide any role based on any auth flow
     return observableOf('guest');
   }
 }
 
-export const NB_CORE_PROVIDERS = [
+export const NB_CORE_PROVIDERS: any = [
   ...DataModule.forRoot().providers,
   ...NbAuthModule.forRoot({
 

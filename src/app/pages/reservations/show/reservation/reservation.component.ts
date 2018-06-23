@@ -112,25 +112,25 @@ export class ReservationComponent implements OnInit {
     this.currentStatus = { label: status.element.value, value: status.element.value };
   }
 
-  get description() { return this.form.get('description'); }
+  get description(): any { return this.form.get('description'); }
 
-  get title() { return this.form.get('title'); }
+  get title(): any { return this.form.get('title'); }
 
-  get startDate() { return this.form.get('startDate'); }
+  get startDate(): any { return this.form.get('startDate'); }
 
-  get endDate() { return this.form.get('endDate'); }
+  get endDate(): any { return this.form.get('endDate'); }
 
-  get reservationDate() { return this.form.get('reservationDate'); }
+  get reservationDate(): any { return this.form.get('reservationDate'); }
 
-  get status() { return this.form.get('status'); }
+  get status(): any { return this.form.get('status'); }
 
-  get adultes() { return this.form.get('nbrAdultes').value; }
+  get adultes(): any { return this.form.get('nbrAdultes').value; }
 
-  get children() { return this.form.get('nbrChildren').value; }
+  get children(): any { return this.form.get('nbrChildren').value; }
 
-  get pets() { return this.form.get('nbrPets').value; }
+  get pets(): any { return this.form.get('nbrPets').value; }
 
-  get lodger() { return this.form.get('lodger'); }
+  get lodger(): any { return this.form.get('lodger'); }
 
   formatter = (x: any) => x.firstname + ' ' + x.lastname;
 

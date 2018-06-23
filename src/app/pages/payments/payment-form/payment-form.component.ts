@@ -91,13 +91,13 @@ export class PaymentFormComponent implements OnInit {
     });
   }
 
-  get description() { return this.form.get('description'); }
+  get description(): any { return this.form.get('description'); }
 
-  get paymentDate() { return this.form.get('paymentDate'); }
+  get paymentDate(): any { return this.form.get('paymentDate'); }
 
-  get deadlineDate() { return this.form.get('deadlineDate'); }
+  get deadlineDate(): any { return this.form.get('deadlineDate'); }
 
-  get amount() { return this.form.get('amount'); }
+  get amount(): any { return this.form.get('amount'); }
 
   setStatus(status) {
     this.form.patchValue({ status: status.element.value });

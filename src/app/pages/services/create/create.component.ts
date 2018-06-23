@@ -156,7 +156,7 @@ export class CreateComponent implements OnInit {
           });
           this.currentCategory = { label: category.title, value: category.title, slug: category };
         }
-      }); 
+      });
     } else {
       this.currentCategory = { label: 'Catégorie', value: 'Catégorie', slug: 'Catégorie' };
       this.currentSubCategory = { label: 'Sous catégorie', value: 'Sous catégorie', slug: 'Sous catégorie' };
@@ -275,29 +275,29 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  get title() { return this.form.get('title'); }
+  get title(): any { return this.form.get('title'); }
 
-  get description() { return this.form.get('description'); }
+  get description(): any { return this.form.get('description'); }
 
-  get priority() { return this.form.get('priority'); }
+  get priority(): any { return this.form.get('priority'); }
 
-  get deadline() { return this.form.get('deadline'); }
+  get deadline(): any { return this.form.get('deadline'); }
 
-  get startDate() { return this.form.get('startDate'); }
+  get startDate(): any { return this.form.get('startDate'); }
 
-  get endDate() { return this.form.get('endDate'); }
+  get endDate(): any { return this.form.get('endDate'); }
 
-  get subscriptionDate() { return this.form.get('subscriptionDate'); }
+  get subscriptionDate(): any { return this.form.get('subscriptionDate'); }
 
-  get status() { return this.form.get('status'); }
+  get status(): any { return this.form.get('status'); }
 
-  get provider() { return this.form.get('provider'); }
+  get provider(): any { return this.form.get('provider'); }
 
-  get tariff() { return this.form.get('tariff'); }
+  get tariff(): any { return this.form.get('tariff'); }
 
-  get amount() { return this.form.get('tariff').get('amount'); }
+  get amount(): any { return this.form.get('tariff').get('amount'); }
 
-  get tva() { return this.form.get('tariff').get('tva'); }
+  get tva(): any { return this.form.get('tariff').get('tva'); }
 
   formatter = (x: any) => x.firstname + ' ' + x.lastname;
 
