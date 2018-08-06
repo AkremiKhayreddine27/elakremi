@@ -11,4 +11,4 @@ export * from './tariff';
 export * from './user';
 export * from './price';
 export * from './currency';
-export * from './selectItem'; 
+export * from './selectItem';

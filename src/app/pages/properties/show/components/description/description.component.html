@@ -10,101 +10,111 @@
     </a>
   </nb-card-header>
   <nb-card-body [ngbCollapse]="isCollapsed" class="p-0">
-    <ngb-accordion activeIds="informations" [closeOthers]="true">
-      <ngb-panel id="informations">
-        <ng-template ngbPanelTitle>
-          <span>Informations générale</span>
-        </ng-template>
-        <ng-template ngbPanelContent>
-          <div class="row m-1 mt-0 border-bottom">
-            <div class="col-lg-4 col-6">
-              <div class="form-group">
-                <label class="d-flex align-items-center" for="">Chambres</label>
-                <app-nbr-input [(ngModel)]="property.nbr_chambre"></app-nbr-input>
+    <form [formGroup]="form">
+      <ngb-accordion activeIds="informations" [closeOthers]="true">
+        <ngb-panel id="informations">
+          <ng-template ngbPanelTitle>
+            <span>Informations générale</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div class="row m-1 mt-0 border-bottom">
+              <div class="col-lg-4 col-6">
+                <div class="form-group">
+                  <label class="d-flex align-items-center" for="">Chambres</label>
+                  <app-nbr-input formControlName="nbrRooms"></app-nbr-input>
+                </div>
+              </div>
+              <div class="col-lg-4 col-6">
+                <div class="form-group">
+                  <label class="d-flex align-items-center" for="">Cuisines</label>
+                  <app-nbr-input formControlName="nbrKitchens"></app-nbr-input>
+                </div>
+              </div>
+              <div class="col-lg-4 col-6">
+                <div class="form-group">
+                  <label class="d-flex align-items-center" for="">Salles de bain</label>
+                  <app-nbr-input formControlName="nbrBathrooms"></app-nbr-input>
+                </div>
+              </div>
+              <div class="col-lg-4 col-6">
+                <div class="form-group">
+                  <label class="d-flex align-items-center" for="">Capacité</label>
+                  <app-nbr-input formControlName="capacity"></app-nbr-input>
+                </div>
+              </div>
+              <div class="col-lg-4 col-6">
+                <div class="form-group">
+                  <label class="d-flex align-items-center" for="">Salons</label>
+                  <app-nbr-input formControlName="nbrLounges"></app-nbr-input>
+                </div>
+              </div>
+              <div class="col-lg-4 col-6">
+                <div class="form-group">
+                  <label class="d-flex align-items-center" for="">Lits</label>
+                  <app-nbr-input formControlName="nbrBeds"></app-nbr-input>
+                </div>
               </div>
             </div>
-            <div class="col-lg-4 col-6">
-              <div class="form-group">
-                <label class="d-flex align-items-center" for="">Cuisines</label>
-                <app-nbr-input [(ngModel)]="property.nbr_cuisine"></app-nbr-input>
+            <div class="row pt-2 pb-1 m-1">
+              <div class="col-4 d-flex flex-column">
+                <nb-checkbox formControlName="cellar">Cave</nb-checkbox>
+                <nb-checkbox formControlName="balkon">Balkon</nb-checkbox>
+              </div>
+              <div class="col-4 d-flex flex-column">
+                <nb-checkbox formControlName="terrace">Terrasse</nb-checkbox>
+                <nb-checkbox formControlName="garden">Jardin</nb-checkbox>
+              </div>
+              <div class="col-4 d-flex flex-column">
+                <nb-checkbox formControlName="garage">Garage</nb-checkbox>
+                <nb-checkbox formControlName="guardian">Gardien</nb-checkbox>
               </div>
             </div>
-            <div class="col-lg-4 col-6">
-              <div class="form-group">
-                <label class="d-flex align-items-center" for="">Salles de bain</label>
-                <app-nbr-input [(ngModel)]="property.nbr_salon"></app-nbr-input>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="reglement">
+          <ng-template ngbPanelTitle>
+            <span>Règlement intérieur</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div class="row pt-2 m-1">
+              <div class="col-md-4">
+                <nb-checkbox formControlName="suitableForEvents">Adapté aux événements</nb-checkbox>
+              </div>
+              <div class="col-md-4">
+                <nb-checkbox formControlName="acceptedAnimals">Animaux acceptés</nb-checkbox>
+              </div>
+              <div class="col-md-4">
+                <nb-checkbox formControlName="smokingAccommodation">Logement fumeur</nb-checkbox>
               </div>
             </div>
-            <div class="col-lg-4 col-6">
-              <div class="form-group">
-                <label class="d-flex align-items-center" for="">Capacité</label>
-                <app-nbr-input [(ngModel)]="property.nbr_salon"></app-nbr-input>
+          </ng-template>
+        </ngb-panel>
+        <ngb-panel id="langue">
+          <ng-template ngbPanelTitle>
+            <span>Langue et devise</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <div class="row p-2">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="status" class="col-form-label">Langue *</label>
+                  <ng-select class="w-100" [searchable]="false" [items]="languages | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+                    placeholder="Choisir une langue" formControlName="language">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="status" class="col-form-label">Devise *</label>
+                  <ng-select class="w-100" [searchable]="false" [items]="currencies | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+                    placeholder="Choisir une devise" formControlName="currency">
+                  </ng-select>
+                </div>
               </div>
             </div>
-            <div class="col-lg-4 col-6">
-              <div class="form-group">
-                <label class="d-flex align-items-center" for="">Salons</label>
-                <app-nbr-input [(ngModel)]="property.nbr_salon"></app-nbr-input>
-              </div>
-            </div>
-            <div class="col-lg-4 col-6">
-              <div class="form-group">
-                <label class="d-flex align-items-center" for="">Lits</label>
-                <app-nbr-input [(ngModel)]="property.nbr_salon"></app-nbr-input>
-              </div>
-            </div>
-          </div>
-          <div class="row pt-2 pb-1 m-1">
-            <div class="col-4 d-flex flex-column">
-              <nb-checkbox>Cave</nb-checkbox>
-              <nb-checkbox>Balkon</nb-checkbox>
-            </div>
-            <div class="col-4 d-flex flex-column">
-              <nb-checkbox>Terrasse</nb-checkbox>
-              <nb-checkbox>Jardin</nb-checkbox>
-            </div>
-            <div class="col-4 d-flex flex-column">
-              <nb-checkbox>Garage</nb-checkbox>
-              <nb-checkbox>Gardien</nb-checkbox>
-            </div>
-          </div>
-        </ng-template>
-      </ngb-panel>
-      <ngb-panel id="reglement">
-        <ng-template ngbPanelTitle>
-          <span>Règlement intérieur</span>
-        </ng-template>
-        <ng-template ngbPanelContent>
-          <div class="row pt-2 m-1">
-            <div class="col-md-4">
-              <nb-checkbox>Adapté aux événements</nb-checkbox>
-            </div>
-            <div class="col-md-4">
-              <nb-checkbox>Animaux acceptés</nb-checkbox>
-            </div>
-            <div class="col-md-4">
-              <nb-checkbox>Logement fumeur</nb-checkbox>
-            </div>
-          </div>
-        </ng-template>
-      </ngb-panel>
-      <ngb-panel id="langue">
-        <ng-template ngbPanelTitle>
-          <span>Langue et devise</span>
-        </ng-template>
-        <ng-template ngbPanelContent>
-          <div class="row p-2">
-            <div class="col-md-6">
-              <div class="pb-3">Langue</div>
-              <ngx-select [element]="language" [elements]="languages"></ngx-select>
-            </div>
-            <div class="col-md-6">
-              <div class="pb-3">Devise</div>
-              <ngx-select [element]="currency" class="flex" [elements]="currencies"></ngx-select>
-            </div>
-          </div>
-        </ng-template>
-      </ngb-panel>
-    </ngb-accordion>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </form>
   </nb-card-body>
 </nb-card>

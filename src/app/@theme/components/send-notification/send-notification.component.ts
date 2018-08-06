@@ -3,6 +3,8 @@ import { FormControl, FormGroup, FormBuilder, Validators, NgForm } from '@angula
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ContactsService } from '../../../@core/data/contacts.service';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'send-notification',
@@ -24,7 +26,7 @@ export class SendNotificationComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal, private contactsService: ContactsService) { }
 
   ngOnInit() {
-    this.contacts = this.contactsService.getContacts();
+    this.contacts = of(this.contactsService.all()).pipe(delay(500));
     this.form = new FormGroup({
       recipients: new FormControl(this.mail.recipients, Validators.required),
       object: new FormControl(this.mail.object, Validators.required),

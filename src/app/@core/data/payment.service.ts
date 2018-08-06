@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as faker from 'faker';
-import { DateService } from './date.service';
-import { Payment, User, SelectItem, Price, Property, Reservation, Service } from './models';
+import { Payment, User, SelectItem, Reservation, Service } from './models';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
@@ -18,7 +17,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 2,
@@ -26,7 +25,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 3,
@@ -34,7 +33,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 4,
@@ -42,7 +41,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 5,
@@ -50,7 +49,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: true,
-            service: true
+            service: true,
         },
         {
             id: 6,
@@ -58,7 +57,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 7,
@@ -66,7 +65,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 8,
@@ -74,7 +73,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: true,
-            service: false
+            service: false,
         },
         {
             id: 9,
@@ -82,7 +81,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: true,
-            service: true
+            service: true,
         },
         {
             id: 10,
@@ -90,7 +89,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: false,
-            service: true
+            service: true,
         },
         {
             id: 11,
@@ -98,7 +97,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: false,
-            service: true
+            service: true,
         },
         {
             id: 12,
@@ -106,7 +105,7 @@ export class PaymentService extends DataService {
             isIncome: false,
             isOutgo: true,
             reservation: true,
-            service: true
+            service: true,
         },
         {
             id: 13,
@@ -114,7 +113,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: false,
-            service: true
+            service: true,
         },
         {
             id: 14,
@@ -122,7 +121,7 @@ export class PaymentService extends DataService {
             isIncome: true,
             isOutgo: false,
             reservation: true,
-            service: true
+            service: true,
         },
     ];
 
@@ -130,54 +129,54 @@ export class PaymentService extends DataService {
         {
             id: 1,
             value: 'Reglé',
-            cssClass: 'badge-success'
+            cssClass: 'badge-success',
         },
         {
             id: 2,
             value: 'En attente',
-            cssClass: 'badge-primary'
+            cssClass: 'badge-primary',
         },
         {
             id: 3,
             value: 'En retard',
-            cssClass: 'badge-danger'
+            cssClass: 'badge-danger',
         },
         {
             id: 4,
             value: 'Annulé',
-            cssClass: 'badge-danger'
+            cssClass: 'badge-danger',
         },
         {
             id: 5,
             value: 'En litige',
-            cssClass: 'badge-warning'
-        }
+            cssClass: 'badge-warning',
+        },
     ];
 
     public methods: SelectItem[] = [
         {
             id: 1,
-            value: 'Carte de crédit'
+            value: 'Carte de crédit',
         },
         {
             id: 2,
-            value: 'Espèces'
+            value: 'Espèces',
         },
         {
             id: 3,
-            value: 'Chèque'
+            value: 'Chèque',
         },
         {
             id: 4,
-            value: 'Prélèvement'
+            value: 'Prélèvement',
         },
         {
             id: 5,
-            value: 'Virement'
+            value: 'Virement',
         }
     ];
 
-    constructor(private dateService: DateService) {
+    constructor() {
         super();
     }
 
@@ -232,18 +231,18 @@ export class PaymentService extends DataService {
     }
 
     createTimetablePayments(start: Date, end: Date, frequency: number, nomenclature: Service): Payment[] {
-        let payments: Payment[] = [];
+        const payments: Payment[] = [];
         for (let date = start; dateFns.isBefore(date, end); date = dateFns.addMonths(date, frequency)) {
-            let payment = this.generate({ type: this.getType(8), status: this.getStatus(2), nomenclature: nomenclature, nomenclatureType: 'Service', price: nomenclature.price.value, deadlineDate: date });
+            const payment = this.generate({ type: this.getType(8), status: this.getStatus(2), nomenclature: nomenclature, nomenclatureType: 'Service', price: nomenclature.price.value, deadlineDate: date });
             payments.push(payment);
         }
         return payments;
     }
 
     createSojournPayments(reservation: Reservation, forNew: boolean = false): Payment[] {
-        let payments: Payment[] = [];
+        const payments: Payment[] = [];
         let price = (reservation.price.value * reservation.deposit) / 100;
-        let status = forNew ? this.statuses[1] : this.statuses[0];
+        const status = forNew ? this.statuses[1] : this.statuses[0];
         if (reservation.deposit > 0) {
             payments.push(this.createDepositPayment(price, reservation, status));
         }
@@ -273,7 +272,7 @@ export class PaymentService extends DataService {
     }
 
     generate(args) {
-        let payment: Payment = {
+        const payment: Payment = {
             id: faker.random.number(),
             description: faker.lorem.paragraph(),
             price: {
@@ -299,16 +298,16 @@ export class PaymentService extends DataService {
     }
 
     createPayments(nbr: number, reservation: Reservation): Payment[] {
-        let payments: Payment[] = [];
+        const payments: Payment[] = [];
         for (let n = 3; n < nbr + 3; n++) {
-            let price = Number.parseInt(faker.finance.amount());
+            const price = Number.parseInt(faker.finance.amount());
             payments.push(this.generate({ type: this.types[n], status: faker.random.arrayElement(this.statuses), nomenclature: reservation, price: price }));
         }
         return payments;
     }
 
     getNomenclatures(data: any[], type = null) {
-        let nomenclatures: any[] = [];
+        const nomenclatures: any[] = [];
         if (type === 'Réservation' || !type) {
             data.map(reservation => {
                 nomenclatures.push({ id: reservation.id, type: 'Réservation' });
@@ -329,30 +328,30 @@ export class PaymentService extends DataService {
     }
 
     getPayers(toPay: any, mode): Observable<User[]> {
-        let payers: User[] = [mode === 'Dépense' ? toPay.property.owner : toPay.lodger ? toPay.lodger : toPay.provider];
+        const payers: User[] = [mode === 'Dépense' ? toPay.property.owner : toPay.lodger ? toPay.lodger : toPay.provider];
         return of(payers).pipe(delay(500));
     }
 
     getFiltredType(type, nomenclature = null): SelectItem[] {
         let types = [];
         if (nomenclature && nomenclature.type === 'Réservation') {
-            types = this.types.filter(type => {
-                return type.reservation;
+            types = this.types.filter(t => {
+                return t.reservation;
             });
         } else if (nomenclature && nomenclature.type === 'Service') {
-            types = this.types.filter(type => {
-                return type.service;
+            types = this.types.filter(t => {
+                return t.service;
             });
         } else {
             types = this.types;
         }
         if (type === 'Dépense') {
-            return types.filter(type => {
-                return type.isOutgo;
+            return types.filter(t => {
+                return t.isOutgo;
             });
         } else {
-            return types.filter(type => {
-                return type.isIncome;
+            return types.filter(t => {
+                return t.isIncome;
             });
         }
     }

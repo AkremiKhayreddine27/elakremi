@@ -4,13 +4,13 @@
       <i class="fa fa-ellipsis-v"></i>
     </h2>
     <ul class="dropdown-menu dropdown-top-right" ngbDropdownMenu>
-      <li class="dropdown-item d-flex align-items-center justify-content-end pt-1 pb-1 pr-0">
+      <li (click)="save()" class="dropdown-item d-flex align-items-center justify-content-end pt-1 pb-1 pr-0">
         <span class="d-flex align-items-center bg-white">Sauvegrader</span>
         <span class="bg-success btn-icon text-white ml-2">
           <i class="fa fa-save"></i>
         </span>
       </li>
-      <li class="dropdown-item align-items-center d-flex justify-content-end pt-1 pb-1 pr-0">
+      <li (click)="cancel()" class="dropdown-item align-items-center d-flex justify-content-end pt-1 pb-1 pr-0">
         <span class="d-flex align-items-center bg-white">Annuler</span>
         <span class="bg-danger btn-icon text-white ml-2">
           <i class="nb-close"></i>

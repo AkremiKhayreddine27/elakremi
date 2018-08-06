@@ -27,6 +27,7 @@ export class LinksComponent implements OnInit {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: false,
     },
+    hideSubHeader: true,
     columns: {
       titre: {
         title: 'titre',

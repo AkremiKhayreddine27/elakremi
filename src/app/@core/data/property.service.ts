@@ -18,9 +18,10 @@ import * as faker from 'faker';
 import { TariffsService } from './tariffs.service';
 import { SeasonalTariffService } from './seasonal-tariff.service';
 import { ContactsService } from './contacts.service';
+import { DataService } from './data.abstract';
 
 @Injectable()
-export class PropertyService {
+export class PropertyService extends DataService {
 
   statuses = [
     { id: 1, value: 'réservé' },
@@ -28,6 +29,12 @@ export class PropertyService {
     { id: 3, value: 'indisponible' }
   ];
 
+  getStatus(id: number) {
+    return this.statuses.find(status => {
+      return status.id === id;
+    });
+  }
+  
   platforms = [
     { id: 1, value: 'Airbnb' },
     { id: 2, value: 'Abritel' },
@@ -65,6 +72,21 @@ export class PropertyService {
     { id: 27, value: 'Villa' },
     { id: 28, value: 'Village Vacances Tout Compris' },
     { id: 29, value: 'Yacht' },
+  ];
+
+  languages = [
+    { id: 1, value: 'Arabe' },
+    { id: 2, value: 'Espagnol' },
+    { id: 3, value: 'Français' },
+    { id: 4, value: 'Italien' },
+    { id: 5, value: 'Portugais' },
+    { id: 6, value: 'Anglais' }
+  ];
+
+  currencies = [
+    { id: 1, value: 'Euro' },
+    { id: 2, value: 'Bitcoin' },
+    { id: 3, value: 'Dollar' }
   ];
 
   refresh: Subject<any> = new Subject();
@@ -108,7 +130,9 @@ export class PropertyService {
     private tariffService: TariffsService,
     private seasonalTariffService: SeasonalTariffService,
     private contactService: ContactsService
-  ) { }
+  ) {
+    super();
+  }
 
   getStatuses(): Observable<SelectItem[]> {
     return of(this.statuses).pipe(delay(500));
@@ -141,9 +165,10 @@ export class PropertyService {
       'Amboise Troglodyte'
     ];
     for (let i = 1; i <= nbr; i++) {
-      let property = {
+      let property: Property = {
         id: i,
         title: titles[i - 1],
+        description: faker.lorem.paragraph(),
         images: [
           faker.random.arrayElement(images),
           faker.random.arrayElement(images),
@@ -151,10 +176,15 @@ export class PropertyService {
         ],
         status: faker.random.arrayElement(this.statuses),
         type: faker.random.arrayElement(this.types),
-        nbr_chambre: 3,
-        nbr_cuisine: 1,
-        nbr_salon: 2,
-        platforms: [faker.random.arrayElement(this.platforms)],
+        language: faker.random.arrayElement(this.languages),
+        currency: faker.random.arrayElement(this.currencies),
+        nbrRooms: 3,
+        nbrKitchens: 1,
+        nbrLounges: 2,
+        terrace: true,
+        garden: true,
+        suitableForEvents: true,
+        platform: faker.random.arrayElement(this.platforms),
         owner: this.owner,
         location: {
           userLocation: {
@@ -436,20 +466,9 @@ export class PropertyService {
       this.documentsService.generateDocuments(2, 1, property, '/pages/properties/' + property.id);
       this.servicesService.generateServices(15, property)
       this.reservationsService.generateReservations(15, this.tariffService.findActiveTariff().price, this.owner, property);
-      properties.push(property);
+      this.store(property);
     }
     return properties;
-  }
-
-  all() {
-    this.source.load(this.properties);
-    return this.source;
-  }
-
-  find(id: number): Property {
-    return this.properties.filter(property => {
-      return property.id === id;
-    })[0];
   }
 
   setCurrentProperty(property: Property) {
@@ -460,23 +479,6 @@ export class PropertyService {
   addCalendar(calendar: Calendar, property: Property) {
     property.calendars.push(calendar);
     this.refreshPropertyCalendars.next(property);
-  }
-
-  remove(property: Property) {
-    this.properties = this.properties.filter(p => {
-      return p.id !== property.id;
-    });
-    if ((this.currentProperty && this.currentProperty.id === property.id) || this.properties.length === 0) {
-      this.currentProperty = null;
-      this.refreshCurrentProperty.next(null);
-    }
-    this.refresh.next(this.properties);
-  }
-
-  add(property: Property) {
-    this.properties.push(property);
-    this.setCurrentProperty(property);
-    this.refresh.next(this.properties);
   }
 
   getNearby(bounds: LatLngBounds, property: Property) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DialogNewSeasonComponent } from '../dialog-new-season/dialog-new-season.component';
 import { PropertyService } from '../../../@core/data/property.service';
 import { TariffsService } from '../../../@core/data/tariffs.service';
@@ -11,7 +11,7 @@ import { EventTariffService } from '../../../@core/data/event-tariff.service';
 @Component({
   selector: 'tarif-saison',
   templateUrl: './tarif-saison.component.html',
-  styleUrls: ['./tarif-saison.component.scss']
+  styleUrls: ['./tarif-saison.component.scss'],
 })
 export class TarifSaisonComponent implements OnInit, AfterViewInit {
 
@@ -26,7 +26,7 @@ export class TarifSaisonComponent implements OnInit, AfterViewInit {
 
   currentPeriod = '';
 
-  constructor( 
+  constructor(
     public modalService: NgbModal,
     public cdr: ChangeDetectorRef,
     public propertyService: PropertyService,
@@ -64,7 +64,7 @@ export class TarifSaisonComponent implements OnInit, AfterViewInit {
 
   tabChange(tab) {
     if (tab.active) {
-      let period = this.seasonalTariffService.findPeriodBy('value', tab.tabTitle);
+      const period = this.seasonalTariffService.findPeriodBy('value', tab.tabTitle);
       this.seasonalTariffs = this.seasonalTariffs.map(season => {
         if (season.period.active) {
           season.period.active = false;

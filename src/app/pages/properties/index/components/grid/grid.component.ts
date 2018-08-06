@@ -82,7 +82,7 @@ export class GridComponent implements OnInit {
     modalRef.componentInstance.title = property.title;
     modalRef.result.then(confirmed => {
       if (confirmed) {
-        this.service.remove(property);
+        this.service.delete(property);
       }
     }, (reason) => {
 

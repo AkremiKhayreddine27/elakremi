@@ -122,13 +122,13 @@ export class IndexComponent implements OnInit {
       }
     ];
 
-    this.source = this.propertyService.all();
+    this.source.load(this.propertyService.all());
     this.source.setFilter([]);
     this.source.onChanged().subscribe(value => {
       this.properties = of(value.elements).pipe(delay(500));
     });
     this.propertyService.refresh.subscribe(properties => {
-      this.source = this.propertyService.all();
+      this.source.load(this.propertyService.all());
       this.properties = of(properties).pipe(delay(500));
     });
   }

@@ -11,67 +11,65 @@
       </a>
     </nb-card-header>
     <nb-card-body [ngbCollapse]="isCollapsed" class="p-0">
-      <form [class.disabled]="location.isMapAddress">
-        <div class="row m-0 pr-2 pl-2 pt-3">
-          <div class="col-md-12 p-0">
-            <div class="form-group ml-0 mr-0 row">
-              <label for="address" class="col-sm-4 col-form-label">Addresse</label>
-              <div class="input-group input-group-sm col-sm-8">
-                <input id="address" type="text" class="form-control" [(ngModel)]="userLocation.address" #address="ngModel" name="address"
-                  placeholder="Addresse" [disabled]="location.isMapAddress">
+      <form [formGroup]="form" [class.disabled]="location.isMapAddress">
+        <div [formGroup]="formUserLocation">
+          <div class="row m-0 pr-2 pl-2 pt-3">
+            <div class="col-md-12 p-0">
+              <div class="form-group ml-0 mr-0 row">
+                <label for="address" class="col-sm-4 col-form-label">Addresse</label>
+                <div class="input-group input-group-sm col-sm-8">
+                  <input id="address" type="text" class="form-control" formControlName="address" name="address" placeholder="Addresse">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row m-0 pl-2 pr-2">
-          <div class="col-12 p-0">
-            <div class="form-group ml-0 mr-0 row">
-              <label for="postcode" class="col-sm-4 col-form-label">Code Postal</label>
-              <div class="input-group col-sm-8 input-group-sm">
-                <input id="postcode" type="text" [(ngModel)]="userLocation.postcode" #postcode="ngModel" name="postCode" class="form-control"
-                  placeholder="Code postal" [disabled]="location.isMapAddress">
+          <div class="row m-0 pl-2 pr-2">
+            <div class="col-12 p-0">
+              <div class="form-group ml-0 mr-0 row">
+                <label for="postcode" class="col-sm-4 col-form-label">Code Postal</label>
+                <div class="input-group col-sm-8 input-group-sm">
+                  <input id="postcode" type="text" formControlName="postcode" name="postCode" class="form-control" placeholder="Code postal">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row m-0 pl-2 pr-2">
-          <div class="col-12 p-0">
-            <div class="form-group ml-0 mr-0 row">
-              <label for="city" class="col-sm-4 col-form-label">Ville</label>
-              <div class="input-group col-sm-8 input-group-sm">
-                <input id="city" type="text" [(ngModel)]="userLocation.city" #city="ngModel" name="city" class="form-control" placeholder="Ville"
-                  [disabled]="location.isMapAddress">
+          <div class="row m-0 pl-2 pr-2">
+            <div class="col-12 p-0">
+              <div class="form-group ml-0 mr-0 row">
+                <label for="city" class="col-sm-4 col-form-label">Ville</label>
+                <div class="input-group col-sm-8 input-group-sm">
+                  <input id="city" type="text" formControlName="city" name="city" class="form-control" placeholder="Ville">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row m-0 pl-2 pr-2">
-          <div class="col-12 p-0">
-            <div class="form-group ml-0 mr-0 row">
-              <label for="state" class="col-sm-4 col-form-label">Etat</label>
-              <div class="input-group col-sm-8 input-group-sm">
-                <input id="state" type="text" [(ngModel)]="userLocation.state" #state="ngModel" name="state" class="form-control" placeholder="Etat"
-                  [disabled]="location.isMapAddress">
+          <div class="row m-0 pl-2 pr-2">
+            <div class="col-12 p-0">
+              <div class="form-group ml-0 mr-0 row">
+                <label for="state" class="col-sm-4 col-form-label">Etat</label>
+                <div class="input-group col-sm-8 input-group-sm">
+                  <input id="state" type="text" formControlName="state" name="state" class="form-control" placeholder="Etat">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row m-0 pl-2 pr-2">
-          <div class="col-12 p-0">
-            <div class="form-group ml-0 mr-0 row">
-              <label for="country" class="col-sm-4 col-form-label">Pays</label>
-              <div class="input-group col-sm-8 input-group-sm">
-                <input id="country" type="text" [(ngModel)]="userLocation.country" #country="ngModel" name="country" class="form-control"
-                  placeholder="Pays" [disabled]="location.isMapAddress">
+          <div class="row m-0 pl-2 pr-2">
+            <div class="col-12 p-0">
+              <div class="form-group ml-0 mr-0 row">
+                <label for="country" class="col-sm-4 col-form-label">Pays</label>
+                <div class="input-group col-sm-8 input-group-sm">
+                  <input id="country" type="text" formControlName="country" name="country" class="form-control" placeholder="Pays">
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="address.touched || city.touched || country.touched || postcode.touched || state.touched" class="row m-0 pl-2 pr-4 pb-4 d-flex justify-content-end">
-          <button [disabled]="location.isMapAddress" (click)="searchLocation()" class="btn cursor-pointer d-flex align-items-center justify-content-center btn-tn btn-success"
-            type="button">
-            <i class="nb-location"></i> Géolocaliser
-          </button>
+          <div *ngIf="userAddress.touched || userCity.touched || userCountry.touched || userPostcode.touched || userState.touched"
+            class="row m-0 pl-2 pr-4 pb-4 d-flex justify-content-end">
+            <button (click)="searchLocation()" class="btn cursor-pointer d-flex align-items-center justify-content-center btn-tn btn-success"
+              type="button">
+              <i class="nb-location"></i> Géolocaliser
+            </button>
+          </div>
         </div>
       </form>
       <div *ngIf="mapLocation.address" class="map-location-display border-top d-flex flex-column pr-4 pl-4 pt-4">
@@ -88,7 +86,7 @@
         <div class="d-flex align-items-center justify-content-end">
           <div class="dropdown" ngbDropdown>
             <h2 class="btn btn-tn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
-                <i class="nb-location"></i> {{ withNearest }} à propximité
+              <i class="nb-location"></i> {{ withNearest }} à propximité
               <i class="fa fa-caret-down pl-1"></i>
             </h2>
             <ul class="dropdown-menu" ngbDropdownMenu>
@@ -126,8 +124,7 @@
           <yaga-scale-control></yaga-scale-control>
           <yaga-marker *ngIf="secondaryMarker" [draggable]="true" (dragend)="handleEvent('dragend', $event);" [lng]="secondaryMarker.longitude"
             [lat]="secondaryMarker.latitude" [display]="secondaryMarker.display">
-            <yaga-icon [iconUrl]="greyIconUrl" [iconSize]="iconSize" [iconAnchor]="iconAnchor" [popupAnchor]="popupAnchor" [shadowUrl]="shadowUrl"
-              [shadowSize]="shadowSize" [shadowAnchor]="shadowAnchor"></yaga-icon>
+            <yaga-icon [iconUrl]="greyIconUrl" [iconSize]="iconSize" [popupAnchor]="popupAnchor" [shadowUrl]="shadowUrl" [shadowSize]="shadowSize"></yaga-icon>
             <yaga-popup #secondaryPopup (close)="closePopup($event)" [opened]="secondaryPopupStatus">
               <div class="card border-0">
                 <div class="card-body">
@@ -144,8 +141,7 @@
             </yaga-popup>
           </yaga-marker>
           <yaga-marker *ngIf="primaryMarker" [lng]="location.isMapAddress ? mapLocation.longitude : userLocation.longitude" [lat]="location.isMapAddress ? mapLocation.latitude : userLocation.latitude">
-            <yaga-icon [iconUrl]="iconUrl" [iconSize]="iconSize" [iconAnchor]="iconAnchor" [popupAnchor]="popupAnchor" [shadowUrl]="shadowUrl"
-              [shadowSize]="shadowSize" [shadowAnchor]="shadowAnchor"></yaga-icon>
+            <yaga-icon [iconUrl]="iconUrl" [iconSize]="iconSize" [shadowUrl]="shadowUrl" [shadowSize]="shadowSize"></yaga-icon>
             <yaga-popup>
               <div class="card border-0">
                 <div class="card-body">
@@ -157,8 +153,7 @@
             </yaga-popup>
           </yaga-marker>
           <yaga-marker *ngFor="let nearby of nearest" [lng]="nearby.longitude" [lat]="nearby.latitude" [display]="nearby.display">
-            <yaga-icon [iconUrl]="greenIconUrl" [iconSize]="iconSize" [iconAnchor]="iconAnchor" [popupAnchor]="greenPopupAnchor" [shadowUrl]="shadowUrl"
-              [shadowSize]="shadowSize" [shadowAnchor]="shadowAnchor"></yaga-icon>
+            <yaga-icon [iconUrl]="greenIconUrl" [iconSize]="iconSize" [popupAnchor]="greenPopupAnchor" [shadowUrl]="shadowUrl" [shadowSize]="shadowSize"></yaga-icon>
             <yaga-popup>
               <div class="card border-0">
                 <img class="card-img-top" [src]="property.images[0]" />

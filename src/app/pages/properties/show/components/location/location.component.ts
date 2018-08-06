@@ -1,4 +1,5 @@
-import { Component, OnInit, OnChanges, SimpleChanges, SimpleChange, Input, ViewChild, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, ViewChild, EventEmitter, forwardRef } from '@angular/core';
+import { FormControl, FormGroup, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Http } from '@angular/http';
 import { Property } from '../../../../../@core/data/models/property';
 import { PropertyService } from '../../../../../@core/data/property.service';
@@ -12,9 +13,18 @@ import 'style-loader!angular2-toaster/toaster.css';
 @Component({
   selector: 'app-location',
   templateUrl: './location.component.html',
-  styleUrls: ['./location.component.scss']
+  styleUrls: ['./location.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => LocationComponent),
+      multi: true
+    }
+  ]
 })
-export class LocationComponent implements OnInit, OnChanges {
+export class LocationComponent implements OnInit, OnChanges, ControlValueAccessor {
+
+  @ViewChild('form') form: FormGroup;
 
   isCollapsed: boolean = false;
 
@@ -97,6 +107,7 @@ export class LocationComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.buildForm();
     this.mapComponent.scrollWheelZoom.disable();
     this.mapComponent.dragging.disable();
     if (this.property.location.userLocation.longitude) {
@@ -127,6 +138,63 @@ export class LocationComponent implements OnInit, OnChanges {
       this.primaryMarker = null;
       this.secondaryMarker = null;
     }
+  }
+
+  buildForm() {
+    this.form = new FormGroup({
+      userLocation: new FormGroup({
+        country: new FormControl({ value: null, disabled: false }, Validators.required),
+        city: new FormControl({ value: null, disabled: false }, Validators.required),
+        state: new FormControl({ value: null, disabled: false }, Validators.required),
+        address: new FormControl({ value: null, disabled: false }, Validators.required),
+        longitude: new FormControl({ value: null, disabled: false }, Validators.required),
+        latitude: new FormControl({ value: null, disabled: false }, Validators.required),
+        postcode: new FormControl({ value: null, disabled: false }, Validators.required),
+        isValid: new FormControl({ value: null, disabled: false }, Validators.required),
+      }),
+      mapLocation: new FormGroup({
+        country: new FormControl(null, Validators.required),
+        city: new FormControl(null, Validators.required),
+        state: new FormControl(null, Validators.required),
+        address: new FormControl(null, Validators.required),
+        longitude: new FormControl(null, Validators.required),
+        latitude: new FormControl(null, Validators.required),
+        postcode: new FormControl(null, Validators.required),
+      }),
+      isMapAddress: new FormControl()
+    });
+  }
+
+  get formUserLocation(): FormGroup { return this.form.get('userLocation') as FormGroup }
+
+  get userAddress(): FormControl { return this.formUserLocation.get('address') as FormControl }
+
+  get userCity(): FormControl { return this.formUserLocation.get('city') as FormControl }
+
+  get userCountry(): FormControl { return this.formUserLocation.get('country') as FormControl }
+
+  get userPostcode(): FormControl { return this.formUserLocation.get('postcode') as FormControl }
+
+  get userState(): FormControl { return this.formUserLocation.get('state') as FormControl }
+
+  writeValue(value: any) {
+    value && this.form.setValue(value, { emitEvent: false });
+  }
+
+  registerOnChange(fn: (value: any) => void) {
+    this.form.valueChanges.subscribe(fn);
+  }
+
+  registerOnTouched(fn: () => void) {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(disabled: boolean) {
+    disabled ? this.form.disable() : this.form.enable();
+  }
+
+  onTouched() {
+
   }
 
   zoomChange(zoom) {

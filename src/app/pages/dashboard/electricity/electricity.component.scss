@@ -285,11 +285,13 @@
       padding: 0 1rem;
     }
   }
+  /*
   @include media-breakpoint-between(md, xl) {
     .consumption-table {
       display: none;
     }
   }
+  */
   @include media-breakpoint-down(md) {
     .chart-header {
       padding: 1rem;

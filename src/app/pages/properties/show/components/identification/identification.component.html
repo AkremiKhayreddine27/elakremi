@@ -1,6 +1,6 @@
 <nb-card class="border">
   <nb-card-header class="d-flex justify-content-between align-items-center">
-    <span [class.text-danger]="form.invalid && btnSaveClicked" (click)="isCollapsed = !isCollapsed" class="d-flex cursor-pointer align-items-center">
+    <span (click)="isCollapsed = !isCollapsed" class="d-flex cursor-pointer align-items-center">
       <i class="ion-ios-home-outline mr-2"></i>
       Identification
     </span>
@@ -12,55 +12,72 @@
   <nb-card-body [ngbCollapse]="isCollapsed">
     <form [formGroup]="form">
       <div class="row pb-3">
-        <div class="col-md-12 p-0">
-          <div class="form-group row ml-0 mr-0">
-            <label for="nom" class="col-sm-4 col-form-label">Nom *</label>
-            <div class="input-group input-group-sm col-sm-8">
-              <input id="nom" type="text" [class.border-danger]="form.controls.name.invalid && btnSaveClicked" formControlName="name" class="form-control"
-                placeholder="Nom">
+        <div class="col-12">
+          <div class="form-group row">
+            <label for="nom" class="col-form-label col-md-4">Nom</label>
+            <div class="input-group input-group-sm col-md-8">
+              <input id="nom" class="form-control" formControlName="title" name="title" [class.form-control-danger]="title.invalid && title.touched || title.invalid && isSubmitted">
+            </div>
+            <div class="col-md-4"></div>
+            <error-message [control]="title" *ngIf="!title.valid && title.touched || isSubmitted && !title.valid" class="col-md-8 m-0 form-text error">
+            </error-message>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group row">
+            <label for="description" class="col-form-label col-md-4">Description</label>
+            <div class="input-group input-group-sm col-md-8">
+              <textarea rows="4" id="description" class="form-control" name="description" formControlName="description">
+                              </textarea>
             </div>
           </div>
         </div>
-        <div class="col-12 p-0">
-          <div class="form-group row ml-0 mr-0">
-            <label for="description" class="col-sm-4 col-form-label">Description</label>
-            <div class="input-group input-group-sm col-sm-8">
-              <textarea id="description" rows="5" [class.border-danger]="form.controls.description.invalid && btnSaveClicked" formControlName="description"
-                placeholder="Description du bien" class="form-control"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12 p-0">
-          <div class="form-group row ml-0 mr-0">
-            <label for="pltaform" class="col-sm-4 col-form-label">Platform</label>
+        <div class="col-12">
+          <div class="row form-group">
+            <label for="status" class="col-form-label col-md-4">Type *</label>
             <div class="col-md-8">
-              <ngx-select [elements]="platforms" [element]="platform" (selectChanged)="setPlatform($event.element)"></ngx-select>
+              <ng-select [class.form-control-danger]="type.invalid && type.touched || type.invalid && isSubmitted" class="w-100" [searchable]="false"
+                [items]="types | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value" placeholder="Choisir un type"
+                formControlName="type">
+              </ng-select>
             </div>
+            <div class="col-md-4"></div>
+            <error-message [control]="type" *ngIf="!type.valid && type.touched || isSubmitted && !type.valid" class="col-md-8 m-0 form-text error">
+            </error-message>
           </div>
         </div>
-        <div class="col-md-12 p-0">
-          <div class="form-group row ml-0 mr-0">
-            <label for="type" class="col-sm-4 col-form-label">Type *</label>
+        <div class="col-12">
+          <div class="row form-group">
+            <label for="platform" class="col-form-label col-md-4">Platform *</label>
             <div class="col-md-8">
-              <ngx-select [elements]="types" [element]="type" (selectChanged)="setType($event.element)"></ngx-select>
+              <ng-select [class.form-control-danger]="platform.invalid && platform.touched || platform.invalid && isSubmitted" class="w-100"
+                [searchable]="false" [items]="platforms | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+                placeholder="Choisir un statut" formControlName="platform">
+              </ng-select>
             </div>
+            <div class="col-md-4"></div>
+            <error-message [control]="platform" *ngIf="!platform.valid && platform.touched || isSubmitted && !platform.valid" class="col-md-8 m-0 form-text error">
+            </error-message>
           </div>
         </div>
-        <div class="col-md-12 p-0">
-          <div class="form-group row ml-0 mr-0">
-            <label for="owner" class="col-sm-4 col-form-label">Propriétaire *</label>
+        <div class="col-12">
+          <div class="row form-group">
+            <label for="owner" class="col-form-label col-md-4">Propriétaire *</label>
             <div class="col-md-8">
-              <ng-select class="w-100" [items]="owners | async" [multiple]="false" [closeOnSelect]="true" bindLabel="firstname" placeholder=""
+              <ng-select [class.form-control-danger]="owner.invalid && owner.touched || owner.invalid && isSubmitted" class="w-100" [searchable]="false"
+                [items]="owners | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value" placeholder="Choisir un statut"
                 formControlName="owner">
-                <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                  <span class="ng-value-label">{{item.firstname}} {{ item.lastname }}</span>
-                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                <ng-template ng-label-tmp let-item="item">
+                  {{item.firstname}} {{item.lastname}}
                 </ng-template>
-                <ng-template ng-option-tmp let-item="item">
-                  {{item.firstname}} {{ item.lastname }}
+                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                  {{item.firstname}} {{item.lastname}}
                 </ng-template>
               </ng-select>
             </div>
+            <div class="col-md-4"></div>
+            <error-message [control]="owner" *ngIf="!owner.valid && owner.touched || isSubmitted && !owner.valid" class="col-md-8 m-0 form-text error">
+            </error-message>
           </div>
         </div>
         <div class="col-md-12 p-0">

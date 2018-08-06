@@ -1,39 +1,43 @@
-<div [ngClass]="{'bg-overlay' : hasOverlay}">
-</div>
-<div class="row m-0">
-  <div class="col-md-6 p-1">
-    <app-identification (saveData)="saveIdentificationForm($event.form)" [btnSaveClicked]="btnSaveClicked" [property]="property"></app-identification>
+<form [formGroup]="form">
+
+  <div [ngClass]="{'bg-overlay' : hasOverlay}">
   </div>
-  <div class="col-md-6 p-1">
-    <app-description [property]="property"></app-description>
+  <div class="row m-0">
+    <div class="col-md-6 p-1">
+      <app-identification formControlName="identification"></app-identification>
+    </div>
+    <div class="col-md-6 p-1">
+      <app-description formControlName="description"></app-description>
+    </div>
   </div>
-</div>
-<div class="row m-0">
-  <div class="col-12 p-1">
-    <app-location (saveData)="saveLocalisationForm($event.form)" [btnSaveClicked]="btnSaveClicked" [property]="property"></app-location>
+  <div class="row m-0">
+    <div class="col-12 p-1">
+      <app-location formControlName="location" [property]="property ? property : {}"></app-location>
+    </div>
   </div>
-</div>
-<div class="row m-0">
-  <div class="col-12 p-1">
-    <amenities></amenities>
+  <div class="row m-0">
+    <div class="col-12 p-1">
+      <amenities></amenities>
+    </div>
   </div>
-</div>
-<div class="row m-0">
-  <div class="col-12 p-1">
-    <app-equipements [equipements]="property.equipements"></app-equipements>
+  <div class="row m-0">
+    <div class="col-12 p-1">
+      <app-equipements [equipements]="property ? property.equipements : []"></app-equipements>
+    </div>
   </div>
-</div>
-<div class="row m-0">
-  <div class="col-md-12 p-1">
-    <app-links [links]="property.links"></app-links>
+  <div class="row m-0">
+    <div class="col-md-12 p-1">
+      <app-links [links]="property ? property.links : []"></app-links>
+    </div>
   </div>
-</div>
-<div class="row m-0">
-  <div class="col-md-6 p-1">
-    <app-pics [images]="property.images"></app-pics>
+  <div class="row m-0">
+    <div class="col-md-6 p-1">
+      <app-pics [images]="property ? property.images : []"></app-pics>
+    </div>
+    <div class="col-md-6 p-1">
+      <documents [documents]="property ? property.images : []"></documents>
+    </div>
   </div>
-  <div class="col-md-6 p-1">
-    <documents [documents]="property.images"></documents>
-  </div>
-</div>
-<btn-options (openChange)="optionsClicked();"></btn-options>
+  <btn-options (openChange)="optionsClicked();" (saveClicked)="save()"></btn-options>
+
+</form>

@@ -9,6 +9,10 @@ export class BtnOptionsComponent implements OnInit {
 
   @Output() openChange: EventEmitter<{}> = new EventEmitter();
 
+  @Output() saveClicked: EventEmitter<{}> = new EventEmitter();
+
+  @Output() cancelClicked: EventEmitter<{}> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
@@ -16,6 +20,14 @@ export class BtnOptionsComponent implements OnInit {
 
   optionsClicked() {
     this.openChange.emit();
+  }
+
+  save() {
+    this.saveClicked.emit();
+  }
+
+  cancel() {
+    this.cancelClicked.emit();
   }
 
 }

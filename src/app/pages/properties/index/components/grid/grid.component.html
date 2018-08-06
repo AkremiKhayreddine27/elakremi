@@ -36,20 +36,21 @@
           <span *ngSwitchCase="'2'" class="badge badge-success property-status">{{ property.status.value }}</span>
           <span *ngSwitchCase="'3'" class="badge badge-danger property-status">{{ property.status.value }}</span>
         </div>
-        <ngb-carousel *ngIf="property.images.length > 0">
+        <ngb-carousel *ngIf="property.images && property.images.length > 0">
           <ng-template *ngFor="let image of property.images" ngbSlide>
             <img [src]="image" class="card-img-bottom" [alt]="property.title">
           </ng-template>
         </ngb-carousel>
-        <img *ngIf="property.images.length === 0" class="card-img-bottom" src="assets/images/unavailable.jpg" alt="Card image cap">
+        <img *ngIf="!property.images || property.images.length === 0" class="card-img-bottom" src="assets/images/unavailable.jpg"
+          alt="Card image cap">
       </nb-card-body>
       <nb-card-footer>
-        <div class="small text-muted pb-1">
+        <div *ngIf="property.location" class="small text-muted pb-1">
           <i class="fa fa-map-marker mr-1"></i>
           {{ property.location.userLocation.address }}, {{ property.location.userLocation.city }}, {{ property.location.userLocation.state
           }}, {{ property.location.userLocation.postcode}}, {{ property.location.userLocation.country }}
         </div>
-        <div class="property-links pb-1">
+        <div *ngIf="property.links && property.links.length > 0" class="property-links pb-1">
           <a *ngFor="let link of property.links" [href]="link.href" class="card-link small">{{ link.titre }}</a>
         </div>
         <div *ngIf="property.amount" class="pb-1">

@@ -10,7 +10,7 @@ import { PropertyService } from '../../../../../@core/data/property.service';
 export class TableComponent implements OnInit {
 
   @Input() properties;
-  
+
   constructor(private service: PropertyService, private router: Router) { }
 
   ngOnInit() {
@@ -18,7 +18,7 @@ export class TableComponent implements OnInit {
   }
 
   delete(property) {
-    this.service.remove(property);
+    this.service.delete(property);
   }
 
   navigate(link, property) {

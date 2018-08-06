@@ -1,4 +1,4 @@
-import { Subject } from "../../../../node_modules/rxjs";
+import { Subject } from 'rxjs';
 
 export abstract class DataService {
 
@@ -46,8 +46,8 @@ export abstract class DataService {
 
     findByAndBy(filters) {
         return this.data.filter((item: any) => {
-            for (var key in filters) {
-                if (this.getDataFromObject(item, key) === undefined || this.getDataFromObject(item, key) != filters[key])
+            for (const key in filters) {
+                if (this.getDataFromObject(item, key) === undefined || this.getDataFromObject(item, key) !== filters[key])
                     return false;
             }
             return true;
@@ -56,8 +56,8 @@ export abstract class DataService {
 
     findFirstByAndBy(filters) {
         return this.data.find((item: any) => {
-            for (var key in filters) {
-                if (this.getDataFromObject(item, key) === undefined || this.getDataFromObject(item, key) != filters[key])
+            for (const key in filters) {
+                if (this.getDataFromObject(item, key) === undefined || this.getDataFromObject(item, key) !== filters[key])
                     return false;
             }
             return true;
@@ -103,10 +103,10 @@ export abstract class DataService {
     }
 
     getDataFromObject(object, path) {
-        let parts = path.split(".");
+        const parts = path.split('.');
         if (parts.length == 1) {
             return object[parts[0]];
         }
-        return this.getDataFromObject(object[parts[0]], parts.slice(1).join("."));
+        return this.getDataFromObject(object[parts[0]], parts.slice(1).join('.'));
     }
 }

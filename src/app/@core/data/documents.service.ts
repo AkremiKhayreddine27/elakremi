@@ -16,38 +16,38 @@ export class DocumentsService extends DataService {
     public types: any[] = [
         {
             id: 1,
-            value: 'facture'
+            value: 'facture',
         },
         {
             id: 2,
-            value: 'contrat'
+            value: 'contrat',
         },
         {
             id: 3,
-            value: 'paiement'
+            value: 'paiement',
         },
         {
             id: 4,
-            value: 'autre'
-        }
+            value: 'autre',
+        },
     ];
 
     public categoryTypes: any[] = [
         {
             id: 1,
             value: 'Bien',
-            cssClass: 'badge-success'
+            cssClass: 'badge-success',
         },
         {
             id: 2,
             value: 'Réservation',
-            cssClass: 'badge-danger'
+            cssClass: 'badge-danger',
         },
         {
             id: 3,
             value: 'Service',
-            cssClass: 'badge-info'
-        }
+            cssClass: 'badge-info',
+        },
     ];
 
     constructor() {
@@ -106,7 +106,7 @@ export class DocumentsService extends DataService {
                     } else {
                         return false;
                     }
-                }
+                },
             },
             {
                 name: 'type',
@@ -120,7 +120,7 @@ export class DocumentsService extends DataService {
                     } else {
                         return false;
                     }
-                }
+                },
             },
             {
                 name: 'nomenclature',
@@ -134,9 +134,11 @@ export class DocumentsService extends DataService {
                     } else {
                         return false;
                     }
-                }
+                },
             },
-            { type: 'datepicker' }
+            {
+                type: 'datepicker',
+            },
         ];
     }
 
