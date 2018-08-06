@@ -17,6 +17,10 @@ import { DateService } from './date.service';
 import { CalendarService } from './calendar.service';
 import { CalendarSettingsService } from './calendar-settings.service';
 import { TariffsService } from './tariffs.service';
+import { SeasonalTariffService } from './seasonal-tariff.service';
+import { SeasonService } from './season.service';
+import { EventService } from './event.service';
+import { EventTariffService } from './event-tariff.service';
 import { FinancesService } from './finances.service';
 import { NotificationService } from './notification.service';
 import { AppUserService } from './app-user.service';
@@ -40,7 +44,11 @@ const SERVICES = [
   TariffsService,
   FinancesService,
   NotificationService,
-  AppUserService
+  AppUserService,
+  SeasonalTariffService,
+  SeasonService,
+  EventService,
+  EventTariffService
 ];
 
 @NgModule({

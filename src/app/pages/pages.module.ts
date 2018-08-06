@@ -14,7 +14,6 @@ import { DialogNewCalendarComponent } from './calendar/dialog-new-calendar/dialo
 import { DialogExportCalendarComponent } from './calendar/dialog-export-calendar/dialog-export-calendar.component';
 import { DialogShowDayEventsComponent } from './calendar/dialog-show-day-events/dialog-show-day-events.component';
 import { CalendarSettingsComponent } from './calendar/calendar-settings/calendar-settings.component';
-import { DialogNewServiceComponent } from './services/dialog-new-service/dialog-new-service.component';
 import { DialogNewSeasonComponent } from './tariff/dialog-new-season/dialog-new-season.component';
 import { DialogNewEventComponent as DialogNewTariffEventComponent } from './tariff/dialog-new-event/dialog-new-event.component';
 import { DialogNewContactComponent } from './contact/contact-form/contact-form.component';
@@ -42,7 +41,6 @@ const PAGES_COMPONENTS = [
     DialogExportCalendarComponent,
     DialogShowDayEventsComponent,
     CalendarSettingsComponent,
-    DialogNewServiceComponent,
     DialogNewSeasonComponent,
     DialogNewTariffEventComponent,
     DialogNewContactComponent,
@@ -57,7 +55,6 @@ const PAGES_COMPONENTS = [
     DialogExportCalendarComponent,
     DialogShowDayEventsComponent,
     CalendarSettingsComponent,
-    DialogNewServiceComponent,
     DialogNewSeasonComponent,
     DialogNewTariffEventComponent,
     DialogNewContactComponent,

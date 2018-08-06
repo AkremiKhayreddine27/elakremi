@@ -1,0 +1,32 @@
+@import '../../styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+
+@include nb-install-component() {
+    .items {
+        padding: 0;
+        margin: 0;
+        .item {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-family: Exo;
+            width: 100%;
+            cursor: pointer !important;
+            text-transform: capitalize !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .divider {
+            height: 0;
+            margin: 0.5rem 0;
+            overflow: hidden;
+            border-top: 1px solid #e9ecef;
+        }
+    }
+    .ion {
+        font-size: 1.2rem;
+    }
+    .nb-email {
+        font-size: 1.3rem;
+    }
+}

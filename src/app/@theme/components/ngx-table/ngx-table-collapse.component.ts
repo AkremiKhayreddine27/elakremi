@@ -9,6 +9,8 @@ export class NgxCollapseTableComponent implements OnInit, OnChanges {
 
     @Input() data;
 
+    @Input() nomenclature;
+
     @Input() component;
 
     @ViewChild('collapse', {
@@ -22,8 +24,8 @@ export class NgxCollapseTableComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes.component.firstChange) {
-            this.service.addDynamicComponent(this.viewContainerRef, this.component, this.data, this.data.payments);
+        if (changes.component && !changes.component.firstChange) {
+            this.service.addDynamicComponent(this.viewContainerRef, this.component, this.data, this.nomenclature);
         }
     }
 

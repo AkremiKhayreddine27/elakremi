@@ -12,7 +12,6 @@ import { PicsComponent } from './show/components/pics/pics.component';
 import { EquipementsComponent } from './show/components/equipements/equipements.component';
 import { LinksComponent } from './show/components/links/links.component';
 import { EquipementComponent } from './show/components/equipements/equipement/equipement.component';
-import { FiltersComponent } from './index/components/filters/filters.component';
 import { LinkDirective } from './show/components/links/link-form-group.directive';
 import { LinkComponent } from './show/components/links/link-form-group.component';
 import { GridComponent } from './index/components/grid/grid.component';
@@ -39,7 +38,6 @@ import { TableComponent } from './index/components/table/table.component';
     EquipementsComponent,
     LinksComponent,
     EquipementComponent,
-    FiltersComponent,
     LinkDirective,
     LinkComponent,
     GridComponent,

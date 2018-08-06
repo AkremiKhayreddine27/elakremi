@@ -1,4 +1,4 @@
-<div class="row d-none d-md-flex">
+<div *ngIf="withAdd" class="row d-none d-md-flex">
   <div class="col-12 d-flex justify-content-between align-items-center p-0 pt-2 pb-2 pl-3">
     <h2 (click)="openNewPayment()" class="btn btn-sm btn-success btn-square">
       <i class="fa fa-plus"></i>
@@ -8,13 +8,14 @@
     </h2>
   </div>
 </div>
-<div *ngIf="payments.length > 0" class="row d-none d-md-flex border-bottom p-3">
-  <header class="col-12 border-left border-right bg-grey"></header>
-  <payment class="col-12 border-left border-right bg-grey" *ngFor="let payment of payments" [payment]="payment" [toPay]="toPay"></payment>
+<div *ngIf="data.length > 0" class="row d-none d-md-flex m-0">
+  <header [class.border-left]="withBorders" [class.border-right]="withBorders" [class.bg-grey]="isBgGrey" class="col-12"></header>
+  <payment [class.border-left]="withBorders" [class.border-right]="withBorders" [class.bg-grey]="isBgGrey" class="col-12" *ngFor="let payment of data"
+    [payment]="payment"></payment>
 </div>
 
 <div class="row d-flex d-md-none d-lg-none d-xl-none">
-  <div class="col-12 d-flex justify-content-between align-items-center p-0 pt-2 pb-2 pl-3">
+  <div *ngIf="withAdd" class="col-12 d-flex justify-content-between align-items-center p-0 pt-2 pb-2 pl-3">
     <h2 (click)="openNewPayment()" class="btn btn-sm btn-success btn-square">
       <i class="fa fa-plus"></i>
     </h2>
@@ -23,13 +24,14 @@
     </h2>
   </div>
 </div>
-<div *ngIf="payments.length > 0" class="row d-flex d-md-none d-lg-none d-xl-none border-bottom ">
-  <mobile-header class="col-12"></mobile-header>
-  <mobile-payment class="col-12" *ngFor="let payment of payments" [payment]="payment" [toPay]="toPay"></mobile-payment>
+<div *ngIf="data.length > 0" class="row d-flex d-md-none d-lg-none d-xl-none ">
+  <mobile-header [class.border-left]="withBorders" [class.border-right]="withBorders" [class.bg-grey]="isBgGrey" class="col-12"></mobile-header>
+  <mobile-payment [class.border-left]="withBorders" [class.border-right]="withBorders" [class.bg-grey]="isBgGrey" class="col-12"
+    *ngFor="let payment of data" [payment]="payment"></mobile-payment>
 </div>
 
 
-<div *ngIf="payments.length === 0" class="row border-bottom p-3">
+<div *ngIf="data.length === 0" class="row border-bottom m-0">
   <div class="col-12 bg-grey">
     <div class="alert text-danger" role="alert">no payments</div>
   </div>

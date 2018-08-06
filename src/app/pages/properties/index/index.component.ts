@@ -3,6 +3,9 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { Property } from '../../../@core/data/models/property';
 import { PropertyService } from '../../../@core/data/property.service';
 import { Router } from '@angular/router';
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'index',
@@ -17,7 +20,7 @@ export class IndexComponent implements OnInit {
 
   isGridView = true;
 
-  properties: Property[] = [];
+  properties;
 
   headerActions = [
     { title: 'Chercher', type: 'link', icon: 'fa fa-search', clickAction: 'search', displayInMobile: true },
@@ -70,24 +73,68 @@ export class IndexComponent implements OnInit {
   total;
   paging;
 
+  filters = [];
+
   constructor(public propertyService: PropertyService, public router: Router) { }
 
   ngOnInit() {
+    this.filters = [
+      {
+        name: 'type',
+        type: 'select',
+        field: 'type',
+        placeholder: 'Choisir un type',
+        elements: this.propertyService.getTypes(),
+        callback: function (cell: any, search: any) {
+          if (cell.id.toString() === search) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+      },
+      {
+        name: 'platforms',
+        type: 'select',
+        field: 'platforms',
+        placeholder: 'Choisir une platform',
+        elements: this.propertyService.getPlatforms(),
+        callback: function (cell: any, search: any) {
+          const exist = cell.find(c => {
+            return c.id.toString() === search;
+          });
+          return exist;
+        }
+      },
+      {
+        name: 'status',
+        type: 'select',
+        placeholder: 'Choisir un statut',
+        field: 'status',
+        callback: function (cell: any, search: any) {
+          if (cell.id.toString() === search) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        elements: this.propertyService.getStatuses(),
+      }
+    ];
+
     this.source = this.propertyService.all();
     this.source.setFilter([]);
-    this.source.setPaging(1, 9);
-    this.source.setPage(1);
     this.source.onChanged().subscribe(value => {
-      if (value.action === 'load') {
-        this.total = value.elements.length;
-      }
-      this.paging = value.paging;
-      this.properties = value.elements;
+      this.properties = of(value.elements).pipe(delay(500));
     });
     this.propertyService.refresh.subscribe(properties => {
       this.source = this.propertyService.all();
-      this.properties = properties;
+      this.properties = of(properties).pipe(delay(500));
     });
+  }
+
+  handleFilter(action, data) {
+    this[action](data);
   }
 
   handleHeaderEvent(event) {

@@ -1,28 +1,29 @@
 <div class="row border-bottom pb-3 pt-3">
-  <div class="col">
+  <div class="col d-flex align-items-center">
     <span class="small">{{ payment.deadlineDate | date:'dd MMM yyyy'}}</span>
   </div>
-  <div class="col">
-    <span class="small">{{ payment.payer.firstname }} {{ payment.payer.lastname }}</span>
-  </div>
   <div class="col d-flex align-items-center">
-    <span class="text-success payment-type font-weight-bold mr-1" *ngIf="payment.type.isIncome">+</span>
-    <span class="text-danger payment-type font-weight-bold mr-1" *ngIf="payment.type.isOutgo">-</span>
-    <span [class.text-success]="payment.type.isIncome" [class.text-danger]="payment.type.isOutgo" class="small">
-      {{ payment.amount }}$
+    <span class="small">De {{ payment.payer.firstname }} {{ payment.payer.lastname }} à {{ payment.payee.firstname }} {{ payment.payee.lastname
+      }}
     </span>
   </div>
-  <div class="col">
-    <span class="small">{{ payment.type.label }}</span>
+  <div class="col d-flex align-items-center">
+    <span class="small">
+      <span class="text-success payment-type small" *ngIf="payment.type.isIncome">+</span>
+      <span class="text-danger payment-type small" *ngIf="payment.type.isOutgo">-</span>
+      {{ payment.price.value }} {{ payment.price.currency.symbol }}
+    </span>
   </div>
-  <div class="col" [ngSwitch]="payment.status">
-    <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status }}</span>
-    <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status }}</span>
-    <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status }}</span>
-    <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status }}</span>
+  <div class="col d-flex align-items-center">
+    <span [class]="'badge p-1 ' + payment.status.cssClass">{{ payment.status.value }}</span>
   </div>
-  <div class="col">
-    <span class="small">{{ payment.method }}</span>
+  <div class="col d-flex flex-column">
+    <span class="text-success small mr-1" *ngIf="payment.type.isIncome">Revenue</span>
+    <span class="text-danger small mr-1" *ngIf="payment.type.isOutgo">Dépense</span>
+    <span class="small">{{ payment.type.value }}</span>
+  </div>
+  <div class="col d-flex align-items-center">
+    <span class="small">{{ payment.method.value }}</span>
   </div>
   <div class="col d-flex justify-content-end">
     <div class="dropdown" ngbDropdown>
@@ -43,7 +44,7 @@
           Document
         </li>
         <div class="dropdown-divider"></div>
-        <li (click)="openEditPayment(payment)" class="dropdown-item">
+        <li (click)="edit(payment)" class="dropdown-item">
           <i class="fa fa-edit mr-1"></i>éditer</li>
         <li (click)="delete(payment)" class="dropdown-item">
           <i class="fa fa-trash mr-1"></i>supprimer</li>

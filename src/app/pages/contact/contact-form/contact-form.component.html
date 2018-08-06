@@ -147,7 +147,7 @@
           <label class="col-form-label small col-md-4">Disponibilité</label>
           <div class="col-md-8">
             <label *ngFor="let a of availabilities" class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input" [(ngModel)]="newContact.availability" name="availability"  [value]="a">
+              <input type="radio" class="custom-control-input" [(ngModel)]="newContact.availability" name="availability" [value]="a">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description small">{{ a }}</span>
             </label>
@@ -157,6 +157,10 @@
     </div>
   </div>
   <div class="modal-footer">
+    <button (click)="close()" class="btn btn-sm btn-danger">
+      <i class="fa fa-close mr-1"></i>
+      <span i18n>Annuler</span>
+    </button>
     <button [disabled]="submitted || !form.valid" (click)="save()" type="submit" class="btn btn-sm btn-success">
       <i class="fa fa-save mr-1"></i>
       <span i18n>Sauvegarder</span>

@@ -1,0 +1,18 @@
+<div *ngIf="data | async as providers; else loading">
+  <div *ngIf="providers.length > 0; else noItems">
+    <contact *ngFor="let lodger of providers" [contact]="lodger"></contact>
+  </div>
+  <ng-template #noItems>
+    <div class="row m-0">
+      <div class="col-12 p-4">
+        <ngx-alert message="Pas de locataires"></ngx-alert>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<ng-template #loading>
+  <div class="d-flex p-4 justify-content-center align-items-center">
+    <div class="loading-spinner"></div>
+  </div>
+</ng-template>
+<ngx-pagination [source]="source"></ngx-pagination>

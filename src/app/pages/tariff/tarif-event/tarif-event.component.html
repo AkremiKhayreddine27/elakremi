@@ -7,16 +7,17 @@
   <nb-card-body class="p-0">
     <div class="consumption-table p-0">
       <nb-tabset fullWidth>
-        <nb-tab *ngFor="let tariff of tariffEvent" [tabTitle]="tariff.title" [active]="tariff.active">
-          <div class="stats-month" *ngFor="let season of tariff.seasons">
+        <nb-tab tabTitle="Evènnement">
+          <div class="stats-month" [class.active]="isActiveEvent(event)" *ngFor="let event of eventTariffs">
             <div class="d-flex flex-column">
-              <span class="month">{{ season.title }}</span>
-              <span class="small">{{ season.startDate | date:'dd MMM' }} à {{ season.endDate | date:'dd MMM yyyy' }}</span>
-              <span class="small">{{ season.minDuration }} nuits durée min</span>
+              <span class="month">{{ event.event.value }}</span>
+              <span class="small">{{ event.event.start | date:'dd MMM' }} à {{ event.event.end | date:'dd MMM yyyy' }}</span>
+              <span class="min small">{{ event.event.duration }} nuits durée min</span>
             </div>
             <div class="results d-flex align-items-center">
-              <b>{{ season.amount }}</b> $ / nuit
-              <span (click)="edit(season)" class="action ml-2">
+              <b>{{ event.price }}
+              </b> $ / nuit
+              <span (click)="edit(event)" class="action ml-2">
                 <i class="nb-compose"></i>
               </span>
             </div>

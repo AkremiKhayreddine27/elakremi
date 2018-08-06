@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { DialogNewEventComponent } from './../dialog-new-event/dialog-new-event.component';
+import { DialogNewEventComponent } from '../dialog-new-event/dialog-new-event.component';
+import { TariffsService } from '../../../@core/data/tariffs.service';
+import * as dateFns from 'date-fns';
+import { EventTariffService } from '../../../@core/data/event-tariff.service';
+import { EventService } from '../../../@core/data/event.service';
 import { PropertyService } from '../../../@core/data/property.service';
 
 @Component({
@@ -8,20 +12,38 @@ import { PropertyService } from '../../../@core/data/property.service';
   templateUrl: './tarif-event.component.html',
   styleUrls: ['./tarif-event.component.scss']
 })
-export class TarifEventComponent implements OnInit {
+export class TarifEventComponent implements OnInit, AfterViewInit {
 
 
   headerActions = [
     { title: 'add', type: 'link', icon: 'fa fa-plus', clickAction: 'create', displayInMobile: true },
   ];
 
-  public tariffEvent = [];
+  public tariff;
+  public eventTariffs;
 
 
-  constructor(public modalService: NgbModal, public propertyService: PropertyService) { }
+  constructor(public modalService: NgbModal,
+    public cdr: ChangeDetectorRef,
+    public propertyService: PropertyService,
+    public eventTariffService: EventTariffService,
+    public eventService: EventService,
+    public tariffsService: TariffsService) { }
 
   ngOnInit() {
-    this.tariffEvent = this.propertyService.currentProperty.tariff.events;
+    this.tariff = this.tariffsService.findFirstBy('property.id', this.propertyService.currentProperty.id);
+    this.eventTariffs = this.eventTariffService.findBy('tariff.id', this.tariff.id);
+    this.eventTariffService.onChanged().subscribe(eventTariff => {
+      this.eventTariffs = this.eventTariffService.findBy('tariff.id', this.tariff.id);
+    });
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
+
+  isActiveEvent(event) {
+    return dateFns.isWithinRange(new Date(), event.event.start, event.event.end);
   }
 
   handleHeaderEvent(event) {
@@ -34,7 +56,7 @@ export class TarifEventComponent implements OnInit {
 
   edit(event) {
     const modalRef = this.modalService.open(DialogNewEventComponent, { size: 'lg', container: 'nb-layout' });
-    modalRef.componentInstance.event = event;
+    modalRef.componentInstance.eventTariff = event;
   }
 
 }

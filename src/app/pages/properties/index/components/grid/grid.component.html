@@ -3,8 +3,8 @@
     <nb-card class="property-card">
       <nb-card-header class="property-header d-flex flex-column">
         <div class="d-flex flex-row align-items-center justify-content-between">
-          <span class="text-secondary d-flex align-items-center property-type small">{{ property.type }}</span>
-          <div class="dropdown" ngbDropdown>
+          <span class="text-secondary d-flex align-items-center property-type small">{{ property.type.value }}</span>
+          <div class="dropdown d-none d-md-flex" ngbDropdown>
             <a class="action" ngbDropdownToggle>
               <i class="fa fa-ellipsis-h"></i>
             </a>
@@ -24,14 +24,17 @@
                 <i class="fa fa-trash mr-1"></i>supprimer</li>
             </ul>
           </div>
+          <a (click)="showDropdown(property)" class="action d-flex d-md-none d-lg-none d-xl-none">
+            <i class="fa fa-ellipsis-h"></i>
+          </a>
         </div>
         <h6 [routerLink]="property.id" class="card-title pt-2">{{ property.title }}</h6>
       </nb-card-header>
       <nb-card-body class="p-2">
-        <div [ngSwitch]="property.status">
-          <span *ngSwitchCase="'réservé'" class="badge badge-info property-status">{{ property.status }}</span>
-          <span *ngSwitchCase="'disponible'" class="badge badge-success property-status">{{ property.status }}</span>
-          <span *ngSwitchCase="'indisponible'" class="badge badge-danger property-status">{{ property.status }}</span>
+        <div [ngSwitch]="property.status.id">
+          <span *ngSwitchCase="'1'" class="badge badge-info property-status">{{ property.status.value }}</span>
+          <span *ngSwitchCase="'2'" class="badge badge-success property-status">{{ property.status.value }}</span>
+          <span *ngSwitchCase="'3'" class="badge badge-danger property-status">{{ property.status.value }}</span>
         </div>
         <ngb-carousel *ngIf="property.images.length > 0">
           <ng-template *ngFor="let image of property.images" ngbSlide>
@@ -68,4 +71,4 @@
       </nb-card-footer>
     </nb-card>
   </div>
-</div> 
+</div>

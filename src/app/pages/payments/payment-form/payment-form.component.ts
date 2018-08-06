@@ -1,9 +1,20 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
+import { FormControl, FormGroup, Validators, NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dateFns from 'date-fns';
-import { PaymentService, Payment } from '../../../@core/data/payment.service';
+import { PaymentService } from '../../../@core/data/payment.service';
+import { Payment } from '../../../@core/data/models/payment';
+import { ContactsService } from '../../../@core/data/contacts.service';
 import { DateService } from '../../../@core/data/date.service';
+import { ReservationsService } from '../../../@core/data/reservations.service';
+import { PropertyService } from '../../../@core/data/property.service';
+import * as faker from 'faker';
+import { Observable } from 'rxjs/Observable';
+import { SelectItem, User, Reservation } from '../../../@core/data/models';
+import { filter, find } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
+import { ServicesService } from '../../../@core/data/services.service';
 
 @Component({
   selector: 'payment-form',
@@ -12,9 +23,11 @@ import { DateService } from '../../../@core/data/date.service';
 })
 export class PaymentFormComponent implements OnInit {
 
-  @Input() toPay;
+  @Input() payment: Payment;
 
-  @Input() payment;
+  @Input() nomenclatureType: any;
+
+  service;
 
   public title;
 
@@ -22,74 +35,100 @@ export class PaymentFormComponent implements OnInit {
 
   mode: string = 'Dépense';
 
-  public types: any[];
+  public types: Observable<SelectItem[]>;
 
-  public type: any;
+  public statuses: Observable<SelectItem[]>;
 
-  public statuses: any[];
+  public methods: Observable<SelectItem[]>;
 
-  public status: any;
-
-  public methods: any[];
-
-  public method: any;
-
-  public tvas: any[];
-
-  public tva: any;
-
-  public payers = [];
-
-  public payer: any;
+  public payers: Observable<User[]>;
 
   public contact;
 
   public contactType;
 
-  public newPayment: Payment;
-
   public filtredTypes;
+
+  public nomenclatures: Observable<any[]>;
+
+  isSubmitted = false;
 
   constructor(
     public activeModal: NgbActiveModal,
     public paymentService: PaymentService,
+    public contactsService: ContactsService,
+    public reservationsService: ReservationsService,
+    public servicesService: ServicesService,
+    public propertyService: PropertyService,
     public dateService: DateService) { }
 
   ngOnInit() {
+    let nomenclature = this.nomenclatureType ? this.nomenclatureType.type : this.payment ? this.payment.nomenclature.type : null;
+    this.service = nomenclature === 'Réservation' ? this.reservationsService : this.servicesService;
     this.title = this.payment ? 'Modifier le paiement ' + this.payment.id : 'Ajouter un paiement';
-    this.newPayment = this.payment ? this.paymentService.setPayment(this.payment) : this.paymentService.payment;
 
-    this.types = this.paymentService.types;
-    this.type = this.payment ? { label: this.payment.type.label, value: this.payment.type.label } : this.paymentService.defaultType;
+    this.methods = this.paymentService.getMethods();
 
-    this.methods = this.paymentService.methods;
-    this.method = this.payment ? { label: this.payment.method, value: this.payment.method } : this.paymentService.defaultMethod;
+    this.statuses = this.paymentService.getStatuses();
 
-    this.statuses = this.paymentService.statuses;
-    this.status = this.payment ? { label: this.payment.status, value: this.payment.status } : this.paymentService.defaultStatus;
+    this.mode = this.payment && this.payment.type ? this.payment.type.isOutgo ? 'Dépense' : 'Revenue' : 'Dépense';
 
-    this.tvas = this.paymentService.tvas;
-    this.tva = this.payment ? { label: this.payment.tva, value: this.payment.tva } : this.paymentService.defaultTva;
+    this.types = of(this.paymentService.getFiltredType(this.mode, this.nomenclatureType)).pipe(delay(500));
 
-    this.payers = this.paymentService.getPayers(this.toPay);
-    this.payer = this.paymentService.getDefaultPayer(this.toPay, this.newPayment);
+    this.nomenclatures = of(this.paymentService.getNomenclatures(this.service.findBy('property.id', this.propertyService.currentProperty.id), this.nomenclatureType ? this.nomenclatureType.type : this.payment && this.payment.nomenclature.type ? this.payment.nomenclature.type : null)).pipe(delay(500));
 
-    this.filtredTypes = this.paymentService.getFiltredType(this.mode, this.newPayment);
 
-    this.mode = this.newPayment.type ? this.newPayment.type.isOutgo ? 'Dépense' : 'Revenue' : 'Dépense';
+    this.payers = of(this.contactsService.all()).pipe(delay(500));
 
+
+    this.buildForm();
+  }
+
+  buildForm() {
     this.form = new FormGroup({
-      description: new FormControl(this.newPayment.description),
-      paymentDate: new FormControl(this.newPayment.paymentDate, Validators.required),
-      deadlineDate: new FormControl(this.newPayment.deadlineDate, Validators.required),
-      status: new FormControl(this.newPayment.status, Validators.required),
-      payer: new FormControl(this.newPayment.payer ? this.newPayment.payer : null, Validators.required),
-      type: new FormControl(this.newPayment.type ? this.newPayment.type : null, Validators.required),
-      amount: new FormControl(this.newPayment.amount, Validators.required),
-      tva: new FormControl(this.newPayment.tva, Validators.required),
-      method: new FormControl(this.newPayment.method, Validators.required),
+      id: new FormControl(this.payment && this.payment.id ? this.payment.id : faker.random.number()),
+      description: new FormControl(this.payment ? this.payment.description : null),
+      price: new FormGroup({
+        value: new FormControl(this.payment && this.payment.price ? this.payment.price.value : null, Validators.required),
+        currency: new FormControl(this.payment && this.payment.price ? this.payment.price.currency : {
+          symbol: '€',
+          code: 'EUR'
+        })
+      }),
+      tva: new FormControl(this.payment && this.payment.tva ? this.payment.tva : null, Validators.required),
+      status: new FormControl(this.payment && this.payment.status ? this.payment.status : null, Validators.required),
+      method: new FormControl(this.payment && this.payment.method ? this.payment.method : null, Validators.required),
+      type: new FormControl(this.payment && this.payment.type ? this.payment.type : null, Validators.required),
+      paymentDate: new FormControl(this.payment && this.payment.paymentDate ? {
+        year: this.payment.paymentDate.getFullYear(),
+        month: dateFns.getMonth(this.payment.paymentDate) + 1,
+        day: this.payment.paymentDate.getDate()
+      } : null),
+      deadlineDate: new FormControl(this.payment && this.payment.deadlineDate ? {
+        year: this.payment.deadlineDate.getFullYear(),
+        month: dateFns.getMonth(this.payment.deadlineDate) + 1,
+        day: this.payment.deadlineDate.getDate()
+      } : null, Validators.required),
+      payer: new FormControl(this.payment && this.payment.payer ? this.payment.payer : null, Validators.required),
+      payee: new FormControl(this.payment && this.payment.payee ? this.payment.payee : null),
+      nomenclature: new FormControl(this.payment && this.payment.nomenclature ? this.payment.nomenclature : this.nomenclatureType ? this.nomenclatureType : null),
+      propertyId: new FormControl(this.payment && this.payment.propertyId ? this.payment.propertyId : null)
     });
   }
+
+  get nomenclature(): any { return this.form.get('nomenclature'); }
+
+  get payer(): any { return this.form.get('payer'); }
+
+  get payee(): any { return this.form.get('payee'); }
+
+  get status(): any { return this.form.get('status'); }
+
+  get type(): any { return this.form.get('type'); }
+
+  get method(): any { return this.form.get('method'); }
+
+  get tva(): any { return this.form.get('tva'); }
 
   get description(): any { return this.form.get('description'); }
 
@@ -97,27 +136,9 @@ export class PaymentFormComponent implements OnInit {
 
   get deadlineDate(): any { return this.form.get('deadlineDate'); }
 
-  get amount(): any { return this.form.get('amount'); }
+  get price(): any { return this.form.get('price'); }
 
-  setStatus(status) {
-    this.form.patchValue({ status: status.element.value });
-  }
-
-  setPayer(payer) {
-    this.form.patchValue({ payer: payer.element.slug });
-  }
-
-  setType(type) {
-    this.form.patchValue({ type: type.element });
-  }
-
-  setTva(tva) {
-    this.form.patchValue({ tva: tva.element.value });
-  }
-
-  setMethod(method) {
-    this.form.patchValue({ method: method.element.value });
-  }
+  get priceValue(): any { return this.price.get('value'); }
 
   currentMode() {
     return this.mode === 'Dépense';
@@ -126,26 +147,26 @@ export class PaymentFormComponent implements OnInit {
   toggleMode(checked) {
     if (checked) {
       this.mode = 'Revenu';
-      this.filtredTypes = this.types.filter(type => {
-        return type.isIncome;
-      });
+      this.types = of(this.paymentService.getFiltredType(this.mode, this.nomenclatureType)).pipe(delay(500));
     } else {
       this.mode = 'Dépense';
-      this.filtredTypes = this.types.filter(type => {
-        return type.isOutgo;
-      });
+      this.types = of(this.paymentService.getFiltredType(this.mode, this.nomenclatureType)).pipe(delay(500));
     }
   }
 
   submit() {
-    this.form.patchValue({ paymentDate: dateFns.parse(this.paymentDate.value.year + '-' + this.paymentDate.value.month + '-' + this.paymentDate.value.day) });
-    this.form.patchValue({ deadlineDate: dateFns.parse(this.deadlineDate.value.year + '-' + this.deadlineDate.value.month + '-' + this.deadlineDate.value.day) });
-    if (!this.payment) {
-      this.paymentService.add(this.form.value, this.toPay);
-    } else {
-      this.paymentService.update(this.payment.id, this.form.value, this.toPay)
+    this.isSubmitted = true;
+    if (this.form.valid) {
+      this.form.patchValue({ paymentDate: dateFns.parse(this.paymentDate.value.year + '-' + this.paymentDate.value.month + '-' + this.paymentDate.value.day) });
+      this.form.patchValue({ deadlineDate: dateFns.parse(this.deadlineDate.value.year + '-' + this.deadlineDate.value.month + '-' + this.deadlineDate.value.day) });
+      this.form.patchValue({ propertyId: this.paymentService.getNomenclature(this.service.findBy('property.id', this.propertyService.currentProperty.id), this.nomenclature.value.id).property.id });
+      if (this.payment) {
+        this.paymentService.update(this.payment, this.form.value);
+      } else {
+        this.paymentService.store(this.form.value);
+      }
+      this.activeModal.dismiss();
     }
-    this.activeModal.dismiss();
   }
 
   close() {

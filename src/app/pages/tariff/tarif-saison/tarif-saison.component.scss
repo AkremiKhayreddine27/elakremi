@@ -4,163 +4,148 @@
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/bootstrap/breakpoints';
 @include nb-install-component() {
-  nb-card-header {
-    height: 62px;
-    span {
-        i {
-            font-size: 2rem;
-            text-align: center;
+    nb-card-header {
+        height: 62px;
+        span {
+            i {
+                font-size: 2rem;
+                text-align: center;
+            }
+            .lnr {
+                font-size: 1.5rem !important;
+            }
         }
-        .lnr {
-            font-size: 1.5rem !important;
+    }
+    .consumption-table {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .table-header {
+        @include nb-card-header();
+        font-size: 1.25rem;
+    }
+    nb-tabset /deep/ {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        ul {
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        ul li a {
+            font-size: 1rem;
+            font-weight: nb-theme(font-weight-bolder);
+            padding: 1.3rem 1.5rem;
+        }
+        ul li.active {
+            position: relative;
+            background-color: nb-theme(color-bg-active);
+            border-radius: nb-theme(radius) nb-theme(radius) 0 0;
+            &::before {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 5px;
+                border-radius: 2.5px;
+                bottom: 0;
+                left: 0;
+                background: nb-theme(color-success);
+            }
+            a::before {
+                display: none;
+            }
+        }
+        nb-tab {
+            flex: 1;
+            overflow-y: auto;
         }
     }
-}
-.consumption-table {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-  .table-header {
-    @include nb-card-header();
-    font-size: 1.25rem;
-  }
-
-  nb-tabset /deep/ {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-
-    ul {
-      padding: 0;
-      display: flex;
-      justify-content: space-between
-    }
-
-    ul li a {
-      font-size: 1rem;
-      font-weight: nb-theme(font-weight-bolder);
-      padding: 1.3rem 1.5rem;
-    }
-
-    ul li.active {
-      position: relative;
-      background-color: nb-theme(color-bg-active);
-      border-radius: nb-theme(radius) nb-theme(radius) 0 0;
-
-      &::before {
-        position: absolute;
-        content: '';
-        width: 100%;
-        height: 5px;
-        border-radius: 2.5px;
-        bottom: 0;
-        left: 0;
-        background: nb-theme(color-success);
-      }
-
-      a::before {
-        display: none;
-      }
-    }
-
-    nb-tab {
-      flex: 1;
-      overflow-y: auto;
-    }
-  }
-
-  .stats-month {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: nb-theme(padding);
-    color: nb-theme(color-fg);
-
-    &:not(:first-child) {
-      border-top: 1px solid nb-theme(separator);
-    }
-
-    .month {
-      font-family: nb-theme(font-secondary);
-      font-size: 1.1rem;
-      font-weight: nb-theme(font-weight-bolder);
-      color: nb-theme(color-fg-heading);
-    }
-
-    .delta {
-      position: relative;
-      display: inline-block;
-      padding-left: 1rem;
-      font-size: 0.75rem;
-
-      color: text-danger();
-
-      &::before {
-        position: absolute;
-        content: '';
-        bottom: 3px;
-        left: 2px;
-
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-bottom: 8px solid text-danger();
-      }
-
-      &.down {
-        color: text-success();
-
-        &::before {
-          top: 3px;
-          border-top: 8px solid text-success();
-          border-bottom: none;
-        }
-      }
-    }
-
-    .results {
-      font-size: 0.875rem;
-      font-weight: nb-theme(font-weight-light);
-
-      b {
-        font-family: nb-theme(font-secondary);
-        font-size: 1rem;
-        font-weight: nb-theme(font-weight-bolder);
-        color: nb-theme(color-fg-heading);
-      }
-      .action { 
+    .stats-month {
         display: flex;
         align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 1.5rem;
-      }
-      .action:hover {
-        color: nb-theme(color-success);
-      }
+        justify-content: space-between;
+        padding: nb-theme(padding);
+        color: nb-theme(color-fg);
+        &:not(:first-child) {
+            border-top: 1px solid nb-theme(separator);
+        }
+        .month {
+            font-family: nb-theme(font-secondary);
+            font-size: 1.1rem;
+            font-weight: nb-theme(font-weight-bolder);
+            color: nb-theme(color-fg-heading);
+        }
+        .delta {
+            position: relative;
+            display: inline-block;
+            padding-left: 1rem;
+            font-size: 0.75rem;
+            color: text-danger();
+            &::before {
+                position: absolute;
+                content: '';
+                bottom: 3px;
+                left: 2px;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-bottom: 8px solid text-danger();
+            }
+            &.down {
+                color: text-success();
+                &::before {
+                    top: 3px;
+                    border-top: 8px solid text-success();
+                    border-bottom: none;
+                }
+            }
+        }
+        .results {
+            font-size: 0.875rem;
+            font-weight: nb-theme(font-weight-light);
+            b {
+                font-family: nb-theme(font-secondary);
+                font-size: 1rem;
+                font-weight: nb-theme(font-weight-bolder);
+                color: nb-theme(color-fg-heading);
+            }
+            .action {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                font-size: 1.5rem;
+            }
+            .action:hover {
+                color: nb-theme(color-success);
+            }
+        }
     }
-  }
-  @include media-breakpoint-down(sm) { 
-    nb-tabset /deep/ {
-      ul li a {
-        padding: 1.3rem 1.2rem;
-      }
+    .stats-month.active {
+        background-color: nb-theme(color-bg-active) !important;
     }
-  }
-  @include media-breakpoint-down(xs) { 
-    nb-tabset /deep/ {
-      ul li a {
-        font-size: 0.8rem;
-        padding: 1.3rem 1rem;
-      }
+    @include media-breakpoint-down(sm) {
+        nb-tabset /deep/ {
+            ul li a {
+                padding: 1.3rem 1.2rem;
+            }
+        }
     }
-    .month {
-      font-size: 1rem;
+    @include media-breakpoint-down(xs) {
+        nb-tabset /deep/ {
+            ul li a {
+                font-size: 0.8rem;
+                padding: 1.3rem 1rem;
+            }
+        }
+        .month {
+            font-size: 1rem;
+        }
+        .date,
+        .min {
+            font-size: 0.8rem;
+        }
     }
-    .date, .min {
-      font-size: 0.8rem;
-    }
-  }
-}  
+}

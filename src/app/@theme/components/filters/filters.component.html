@@ -1,0 +1,40 @@
+<!--
+<div class="m-0 row p-2 pt-4">
+  <div *ngFor="let filter of filters" class="col-md-4">
+    <ngx-select *ngIf="filter.type === 'groupSelect' && !filter.action && filter.elements.length > 0" [elements]="filter.elements"
+      [id]="filter.name" [element]="filter.element" [refresh]="refreshSelect" [placeholder]="filter.placeholder" groupedSelect="true"
+      (selectChanged)="setFilter(filter.field, filter.callback, $event.element, filter.name)" (groupSelectChanged)="setFilter(filter.field, filter.groupCallback, $event.element, filter.name)"></ngx-select>
+    <ngx-select *ngIf="filter.type === 'select' && filter.action && !filter.field && filter.elements.length > 0" [elements]="filter.elements"
+      [id]="filter.name" [element]="filter.element" [refresh]="refreshSelect" [placeholder]="filter.placeholder" (selectChanged)="callAction(filter.action, $event.element.value)"></ngx-select>
+    <ngx-select *ngIf="filter.type === 'select' && filter.action && filter.field && filter.elements.length > 0" [elements]="filter.elements"
+      [id]="filter.name" [element]="filter.element" [refresh]="refreshSelect" [placeholder]="filter.placeholder" (selectChanged)="callActionAndSetFilter(filter.field, filter.callback, filter.action, $event.element, filter.name)"></ngx-select>
+    <ngx-select *ngIf="filter.type === 'select' && !filter.action  && filter.elements.length > 0" [refresh]="refreshSelect" [elements]="filter.elements"
+      [id]="filter.name" [element]="filter.element" [placeholder]="filter.placeholder" (selectChanged)="setFilter(filter.field, filter.callback, $event.element, filter.name)"></ngx-select>
+    <ngx-datepicker-dropdown *ngIf="filter.type === 'datepicker'" #ngxDateDrop (dateChanged)="dateChanged($event.from, $event.to)"></ngx-datepicker-dropdown>
+  </div>
+</div>
+<div class="d-flex justify-content-end p-2 pt-4">
+  <button class="btn cursor-pointer btn-tn btn-danger" (click)="reset()">Supprimer les filtres</button>
+</div>
+-->
+<div class="m-0 row p-2 pt-4">
+  <div *ngFor="let filter of filters" class="form-group col-md-4">
+    <ng-select *ngIf="filter.type === 'select' && filter.action && !filter.field" class="w-100" [searchable]="false" [items]="filter.elements | async"
+      [multiple]="false" [(ngModel)]="filter.element" [closeOnSelect]="true" (clear)="onClear(filter)" (change)="callAction(filter.action, $event)"
+      [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'" [placeholder]="filter.placeholder">
+    </ng-select>
+    <ng-select *ngIf="filter.type === 'select' && filter.action && filter.field" class="w-100" [searchable]="false" [items]="filter.elements | async"
+      [multiple]="false" [(ngModel)]="filter.element" [closeOnSelect]="true" (clear)="onClear(filter)" (change)="callActionAndSetFilter(filter.field, filter.callback, filter.action, $event, filter.name)"
+      [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'" [placeholder]="filter.placeholder">
+    </ng-select>
+    <ng-select *ngIf="filter.type === 'select' && !filter.action" class="w-100" [searchable]="false" [items]="filter.elements | async"
+      [multiple]="false" [(ngModel)]="filter.element" [closeOnSelect]="true" (clear)="onClear(filter)" (change)="setFilter(filter.field, filter.callback, $event, filter.name)"
+      [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'" [placeholder]="filter.placeholder">
+    </ng-select>
+    <ng-select *ngIf="filter.type === 'selectGroup'" [items]="filter.elements | async" [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'"
+      [groupBy]="filter.groupBy" [selectableGroup]="true" [(ngModel)]="filter.element" [closeOnSelect]="true" [searchable]="false"
+      (clear)="onClear(filter)" [placeholder]="filter.placeholder" (change)="setGroupFilter(filter.field, filter.callback, $event, filter.name)">
+    </ng-select>
+    <ngx-datepicker-dropdown *ngIf="filter.type === 'datepicker'" #ngxDateDrop (dateChanged)="dateChanged($event.from, $event.to)"></ngx-datepicker-dropdown>
+  </div>
+</div>

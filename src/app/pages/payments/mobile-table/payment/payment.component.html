@@ -1,50 +1,35 @@
-<div class="row border-bottom pb-3 pt-3 border-left border-right bg-grey">
-  <div class="col-3">
-    <span class="small">{{ payment.payer.firstname }} {{ payment.payer.lastname }}</span>
-  </div>
+<div class="row border-bottom pb-3 pt-3">
   <div class="col-4">
+    <span class="small">De {{ payment.payer.firstname }} {{ payment.payer.lastname }} à {{ payment.payee.firstname }} {{ payment.payee.lastname
+      }}
+    </span> 
+  </div>
+  <div class="col-3">
     <div>
       <span class="small">{{ payment.paymentDate | date:'dd/MM/yyyy'}}</span>
     </div>
-    <div class="mt-1 mb-1" [ngSwitch]="payment.status">
-      <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status }}</span>
-      <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status }}</span>
-      <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status }}</span>
-      <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status }}</span>
+    <div class="mt-1 mb-1" [ngSwitch]="payment.status.value">
+      <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status.value }}</span>
+      <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status.value }}</span>
+      <span *ngSwitchCase="'annulé'" class="badge badge-danger p-1">{{ payment.status.value }}</span>
+      <span *ngSwitchCase="'litige'" class="badge badge-warning p-1">{{ payment.status.value }}</span>
+      <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status.value }}</span>
+      <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status.value }}</span>
     </div>
     <div>
-      <span class="small">{{ payment.amount }}$</span>
+      <span class="small">
+        {{ payment.price.value }} {{ payment.price.currency.symbol }}
+      </span>
     </div>
   </div>
   <div class="col-3">
-    <span class="small">{{ payment.type.label }}</span>
+    <span class="small">{{ payment.type.value }}</span>
     <br/>
-    <span class="small">{{ payment.method }}</span>
+    <span class="small">{{ payment.method.value }}</span>
   </div>
-  <div class="col-2 d-flex justify-content-end">
-    <div class="dropdown" ngbDropdown>
-      <a class="action" ngbDropdownToggle>
-        <i class="fa fa-ellipsis-v"></i>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-        <li (click)="sendNotification(payment)" class="dropdown-item">
-          <i class="fa fa-bell mr-1"></i>
-          Envoyer un rappel
-        </li>
-        <li class="dropdown-item">
-          <i class="fa fa-hourglass-half mr-1"></i>
-          Envoyer l'avis d'échéance
-        </li>
-        <li class="dropdown-item">
-          <i class="fa fa-upload mr-1"></i>
-          Document
-        </li>
-        <div class="dropdown-divider"></div>
-        <li (click)="openEditPayment(payment)" class="dropdown-item">
-          <i class="fa fa-edit mr-1"></i>éditer</li>
-        <li (click)="delete(payment)" class="dropdown-item">
-          <i class="fa fa-trash mr-1"></i>supprimer</li>
-      </ul>
-    </div>
+  <div class="col-2 pl-0 d-flex justify-content-end">
+    <a (click)="showDropdown(payment)" class="action d-flex d-md-none d-lg-none d-xl-none">
+      <i class="fa fa-ellipsis-h"></i>
+    </a>
   </div>
 </div>

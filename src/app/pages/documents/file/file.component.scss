@@ -1,0 +1,9 @@
+@import '../../../@theme/styles/themes'; 
+@include nb-install-component() {
+    .bg-grey {
+        background-color: nb-theme(smart-table-bg-even);
+    }
+    .small {
+        color: #777777;
+    }
+}

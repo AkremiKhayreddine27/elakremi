@@ -1,23 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs/Subscription';
-import * as dateFns from 'date-fns';
-import { LocalDataSource } from 'ng2-smart-table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ServicesService } from '../../../@core/data/services.service';
 import { PropertyService } from '../../../@core/data/property.service';
-import { Property } from '../../../@core/data/models/property';
+import { PaymentService } from '../../../@core/data/payment.service';
+import { Property, Service } from '../../../@core/data/models';
 import { TableComponent } from '../../payments/table/table.component';
-import { DeleteConfirmationComponent } from '../../../@theme/components/delete-confirmation/delete-confirmation.component';
+import { DialogNewDocumentComponent } from '../../documents/document-form/document-form.component';
+import * as faker from 'faker';
+import { Subject } from 'rxjs/Subject';
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { LocatusAbstractComponent } from '../../../@core/utils/locatusComponent.abstract';
+import { Payment } from '../../../@core/data/models/payment';
 
 @Component({
   selector: 'show',
   templateUrl: './show.component.html',
   styleUrls: ['./show.component.scss']
 })
-export class ShowComponent implements OnInit {
+export class ShowComponent extends LocatusAbstractComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  public url: string = '/pages/categories/services';
 
   headerActions = [
     { title: 'Chercher', type: 'link', icon: 'fa fa-search', clickAction: 'search', displayInMobile: true },
@@ -82,46 +89,45 @@ export class ShowComponent implements OnInit {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'imageText', data: ['property.images', 'property.title'] }
+          { type: 'imageText', path: ['property.images', 'property.title'] }
         ]
       },
       {
         type: 'array',
         width: 'col-2',
         content: [
-          { type: 'text', data: ['provider.firstname', 'provider.lastname'] },
-          { type: 'text', data: ['provider.phone'] }
+          { type: 'text', path: ['provider.firstname', 'provider.lastname'] },
+          { type: 'text', path: ['provider.phone'] }
         ]
       },
       {
         type: 'array',
         width: 'col',
         content: [
-          { type: 'date', data: ['startDate', 'endDate'], splitData: true }
+          { type: 'date', path: ['start', 'end'], splitData: true }
         ]
       },
       {
         type: 'array',
         width: 'col',
         content: [
-          { type: 'text', data: ['type.subCategory.title'] },
-          { type: 'text', data: ['type.title'] }
+          { type: 'text', path: ['category.title'] },
+          { type: 'text', path: ['type.title'] }
         ]
       },
       {
         type: 'badge',
         width: 'col',
         content: [
-          { type: 'badge', data: ['status'] }
+          { type: 'badge', path: ['status'] }
         ]
       },
       {
         type: 'array',
         width: 'col',
         content: [
-          { type: 'amount', data: ['tariff.amount'], currency: '$' },
-          { type: 'badge', data: ['paymentStatus'] },
-          { type: 'collapse', data: ['détails'], component: TableComponent }
+          { type: 'amount', path: ['price.value'], currency: 'price.currency.symbol' },
+          { type: 'collapse', label: 'détails', nomenclature: 'Service', path: ['payments'], component: TableComponent }
         ]
       },
       {
@@ -141,25 +147,24 @@ export class ShowComponent implements OnInit {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'text', data: ['property.title'] }
+          { type: 'text', path: ['property.title'] }
         ]
       },
       {
         type: 'array',
         width: 'col-4',
         content: [
-          { type: 'date', data: ['startDate', 'endDate'], splitData: true },
-          { type: 'text', data: ['provider.firstname', 'provider.lastname'] },
-          { type: 'badge', data: ['status'] }
+          { type: 'date', path: ['start', 'end'], splitData: true },
+          { type: 'text', path: ['provider.firstname', 'provider.lastname'] },
+          { type: 'badge', path: ['status'] }
         ]
       },
       {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'amount', data: ['tariff.amount'], currency: '$' },
-          { type: 'badge', data: ['paymentStatus'] },
-          { type: 'collapse', data: ['détails'], component: TableComponent }
+          { type: 'amount', path: ['price.value'], currency: 'price.currency.symbol' },
+          { type: 'collapse', label: 'détails', nomenclature: 'Service', path: ['payments'], component: TableComponent }
         ]
       },
       {
@@ -176,181 +181,113 @@ export class ShowComponent implements OnInit {
     ]
   };
 
-  isFilterCollapsed = true;
+  public categories;
 
-  isSearching = false;
+  public category: any;
 
-  isGrid = false;
+  public subCategories = [];
 
-  refreshSubscription: Subscription;
+  public subCategory: any;
 
-  public statuses: any[] = [
-    { text: 'All', value: '' },
-    { text: 'provisional', value: 'provisional' },
-    { text: 'canceled', value: 'canceled' },
-    { text: 'confirmed', value: 'confirmed' },
-    { text: 'completed', value: 'completed' }
-  ];
+  refreshFilters: Subject<any> = new Subject();
 
-  currentStatusFilter = this.statuses[0];
+  paymentsSubscription: Subscription;
 
-  public payementStatus: string[] = [
-    'payé',
-    'rembourser',
-    'annulé',
-  ];
-
-  data: any = [];
-
-  source: LocalDataSource = new LocalDataSource();
-
-  withFilters = false;
-
-  constructor(private router: Router, private servicesService: ServicesService, private route: ActivatedRoute, private modalService: NgbModal, public propertyService: PropertyService) { }
+  constructor(
+    public cdRef: ChangeDetectorRef,
+    public router: Router,
+    public dataService: ServicesService,
+    public route: ActivatedRoute,
+    public modalService: NgbModal,
+    public cdr: ChangeDetectorRef,
+    public paymentService: PaymentService,
+    public propertyService: PropertyService) {
+    super(router, modalService, cdr, dataService);
+  }
 
   ngOnInit() {
-    if (this.propertyService.currentProperty) {
-      this.source = this.servicesService.getAllPropertyServices(this.propertyService.currentProperty);
-    }
-    this.source.setFilter([]);
-    this.source.onChanged().subscribe(value => {
-      this.data = [];
-      value.elements.map((service) => {
-        service.property = {};
-        service.property = this.propertyService.currentProperty;
-        this.data.push(service);
-      });
-    });
-    this.servicesService.refresh.subscribe(services => {
-      this.source.refresh();
-      this.source.getElements().then(data => {
-        this.data = data;
-      });
-    });
+    this.filters = this.dataService.initFilters(this.propertyService);
+    this.source.load(this.dataService.all());
+    this.dataService.initSort(this.source);
+    this.detectSourceChanges();
+    this.detectPaymentsChanges();
+    this.detectPropertyChanges();
+  }
 
-    this.servicesService.serviceCreated.subscribe(service => {
-      service.isNew = true;
-      this.source.refresh();
-      console.log(this.source);
-      this.data.push(service);
-      console.log(this.data);
-    });
+  ngOnDestroy() {
+    this.dataService.setCurrentType(null);
+    this.dataService.setCurrentCategory(null);
+  }
 
-    this.propertyService.refresh.subscribe(value => {
-      this.source.refresh();
-      this.source.getElements().then(data => {
-        this.data = data;
-      });
+  detectSourceChanges() {
+    this.sourceSubscription = this.source.onChanged().subscribe(value => {
+      this.data = of(value.elements.map((service: Service) => {
+        service.payments = this.paymentService.findByAndBy({ 'nomenclature.id': service.id, 'nomenclature.type': 'Service' }).sort((a: Payment, b: Payment) => {
+          return b.deadlineDate - a.deadlineDate;
+        });
+        return service;
+      })).pipe(delay(5));
     });
+  }
 
+  detectPaymentsChanges() {
+    this.paymentsSubscription = this.paymentService.onChanged().subscribe((payment: Payment) => {
+      this.source.load(this.dataService.all());
+    })
+  }
+
+  detectPropertyChanges() {
     this.propertyService.refreshCurrentProperty.subscribe(property => {
-      if (property) {
-        this.source = this.servicesService.getAllPropertyServices(this.propertyService.currentProperty);
+      if (property !== null) {
+        this.filters = this.filters.map(filter => {
+          if (filter.name === 'property') {
+            filter.element = { id: property.id, value: property.title };
+          }
+          return filter;
+        });
+        this.refreshFilters.next(this.filters);
+      } else {
+        this.source.load([]);
       }
     });
   }
 
-  handleHeaderEvent(event) {
-    this[event.action]();
-  }
-
-  handleServiceEvent(event) {
-    this[event.action](event.attribute);
-  }
-
-  edit(service) {
-    this.router.navigateByUrl('/pages/categories/services/' + service.id + '/edit');
+  onCategoryChange(category) {
+    this.filters = this.filters.map(filter => {
+      if (filter.name === 'type') {
+        filter.element = null;
+        if (category) {
+          filter.elements = of(this.dataService.getTypes(category.id)).pipe(delay(500));
+        } else {
+          filter.elements = of([]).pipe(delay(500));
+        }
+      }
+      return filter;
+    });
+    this.refreshFilters.next(this.filters);
   }
 
   documents(service) {
-    this.router.navigateByUrl('/pages/documents/services/' + service.id + '/documents');
-  }
-
-  delete(service) {
-    const modalRef = this.modalService.open(DeleteConfirmationComponent, { size: 'lg', container: 'nb-layout' });
-    modalRef.componentInstance.type = 'reservation';
-    modalRef.componentInstance.title = service.title;
-    modalRef.result.then(confirmed => {
-      if (confirmed) {
-        this.servicesService.remove(service, this.propertyService.currentProperty);
+    const modalRef = this.modalService.open(DialogNewDocumentComponent, { size: 'lg', container: 'nb-layout' });
+    modalRef.componentInstance.document = {
+      id: faker.random.number(),
+      title: null,
+      description: null,
+      type: null,
+      createdAt: new Date(),
+      file: null,
+      owner: {
+        type: 'Service',
+        id: service.id,
+        title: service.title,
+        serviceCategory: service.type.subCategory,
+        serviceType: service.type.slug,
+        link: '/pages/categories/services/' + service.id + '/edit'
       }
-    }, (reason) => {
-
-    });
+    };
   }
 
-  search() {
-    this.isSearching = !this.isSearching;
-    this.isFilterCollapsed = true;
-  }
-
-  filter() {
-    this.isFilterCollapsed = !this.isFilterCollapsed;
-    this.isSearching = false;
-  }
-
-  openDialog(action) {
-    this[action]();
-  }
-
-  import() {
-    console.log('import');
-  }
-
-  create() {
-    this.router.navigateByUrl('/pages/categories/create');
-  }
-
-  onSearch(query: string = '') {
-    if (query !== '') {
-      this.source.setFilter([
-        {
-          field: 'property',
-          search: query
-        },
-        {
-          field: 'startDate',
-          search: query
-        },
-        {
-          field: 'endDate',
-          search: query
-        },
-        {
-          field: 'lodger',
-          search: query,
-          filter: (cell: any, search: string) => {
-            if (cell.firstname.toLowerCase().indexOf(search) !== -1 ||
-              cell.lastname.toLowerCase().indexOf(search) !== -1 ||
-              cell.email.toLowerCase().indexOf(search) !== -1 ||
-              cell.phone.toLowerCase().indexOf(search) !== -1) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-        },
-        {
-          field: 'status',
-          search: this.currentStatusFilter === '' ? this.currentStatusFilter : query,
-          filter: (cell: any, search: string) => {
-            if (cell.indexOf(search) !== -1) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-        }
-      ], false);
-    } else {
-      this.source.setFilter([]);
-    }
-  }
-
-  hasFilters(filters) {
-    const w = filters.filter(f => {
-      return f.search !== '';
-    });
-    this.withFilters = w.length === 0 ? false : true;
+  ngAfterViewInit() {
+    this.cdRef.detectChanges();
   }
 }

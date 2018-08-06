@@ -1,25 +1,23 @@
-@import '../../../../@theme/styles/themes'; 
+@import '../../../../@theme/styles/themes';
 @include nb-install-component() {
-    .small {
-        
-    }
     .badge {
         color: white !important;
     }
     .payment-type {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        font-weight: bolder;
     }
     .bg-grey {
         background-color: nb-theme(smart-table-bg-even);
     }
-    a, .btn {
+    a,
+    .btn {
         cursor: pointer;
     }
-
     .action {
         width: 30px;
         height: 30px;
-        border:1px solid nb-theme(separator);
+        border: 1px solid nb-theme(separator);
         border-radius: 50%;
         display: flex;
         align-items: center;

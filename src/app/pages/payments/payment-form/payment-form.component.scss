@@ -5,6 +5,14 @@
 /deep/ .btn-select {
     padding: 0.65rem 1.125rem;
 }
+.form-btn-danger {
+  border-color: nb-theme(color-danger) !important;
+  background-color: nb-theme(color-danger) !important;
+  color: white !important;
+  i {
+      color: white !important;
+  }
+}
 .modal-header .close {
     font-size: 2rem;
     width: 35px !important;

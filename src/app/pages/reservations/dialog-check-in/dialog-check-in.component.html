@@ -28,8 +28,8 @@
           <label for="contact" class="col-form-label col-md-4">Prestataire *</label>
           <div class="form-group col-md-8">
             <div class="input-group input-group-sm">
-              <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" [(ngModel)]="checkin.provider" name="provider" #provider="ngModel"
-                [ngbTypeahead]="search" (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);"
+              <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" [(ngModel)]="checkin.provider" name="provider"
+                #provider="ngModel" [ngbTypeahead]="search" (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);"
                 (selectItem)="assignContact($event)" #instance="ngbTypeahead" [resultTemplate]="rt" />
               <span class="input-group-btn">
                 <h2 class="btn btn-secondary border-left-0 p-2" (click)="newContact()">
@@ -43,6 +43,10 @@
     </div>
   </div>
   <div class="modal-footer">
+    <button (click)="close()" class="btn btn-sm btn-danger">
+      <i class="fa fa-close mr-1"></i>
+      <span i18n>Annuler</span>
+    </button>
     <button type="submit" class="btn btn-sm btn-success">
       <i class="fa fa-save mr-1"></i>
       <span i18n>Sauvegarder</span>

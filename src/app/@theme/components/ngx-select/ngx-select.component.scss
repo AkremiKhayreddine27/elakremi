@@ -1,25 +1,40 @@
-.dropdown .dropdown-menu {
-    max-height: 300px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    width: 100% !important;
-    z-index: 1000 !important;
-    .dropdown-item {
-        width: 100%;
-        overflow: hidden;
-        cursor: pointer;
-        text-overflow: ellipsis;
-    }
-} 
-.btn-select {
-    padding: 0.65rem 1.125rem !important;
-}
-.current-element {
-    overflow: hidden;
-    text-overflow: ellipsis; 
-    padding: 0 !important;
-}
+@import '../../styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
 
-.text-secondary {
-    color: lighten(#6c757d, 20%) !important;
+@include nb-install-component() {
+
+    @include media-breakpoint-down(sm) {
+
+    }
+
+    .bg-grey {
+        background-color: nb-theme(smart-table-bg-even);
+    }
+
+    .dropdown .dropdown-menu {
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100% !important;
+        z-index: 1000 !important;
+        .dropdown-item {
+            width: 100%;
+            overflow: hidden;
+            cursor: pointer;
+            text-overflow: ellipsis;
+        }
+    }
+    .btn-select {
+        padding: 0.65rem 1.125rem !important;
+    }
+    .current-element {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 !important;
+    }
+
+    .text-secondary {
+        color: lighten(#6c757d, 20%) !important;
+    }
 }

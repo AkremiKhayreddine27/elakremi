@@ -1,0 +1,18 @@
+<div class="form-group row">
+  <label for="title" class="col-form-label col-md-4">{{ label }} *</label>
+  <div class="input-group input-group-sm col-md-8">
+    <input id="title" class="form-control" [type]="type" (input)="onChange($event.target.value)" (blur)="onTouched()" [disabled]="disabled"
+      #input [class.form-control-danger]="controlDir && !controlDir.control.valid && controlDir.control.touched || isFormSubmitted && controlDir && !controlDir.control.valid"
+    />
+    <span *ngIf="addons" class="input-group-btn">
+      <h2 [class.form-btn-danger]="controlDir && !controlDir.control.valid && controlDir.control.touched || isFormSubmitted && controlDir && !controlDir.control.valid"
+        class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+        <i [class]="addons"></i>
+      </h2>
+    </span>
+  </div>
+  <div class="col-md-4"></div>
+  <error-message [control]="controlDir.control" *ngIf="controlDir && !controlDir.control.valid && controlDir.control.touched || isFormSubmitted && controlDir && !controlDir.control.valid"
+    class="col-md-8 m-0 form-text error">
+  </error-message>
+</div>

@@ -1,28 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { LocalDataSource } from 'ng2-smart-table';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PropertyService } from '../../../@core/data/property.service';
 import { ReservationsService } from '../../../@core/data/reservations.service';
-import { Property } from '../../../@core/data/models/property';
-import { Subject } from 'rxjs/Subject';
-import { Router, NavigationEnd } from '@angular/router';
-import * as dateFns from 'date-fns';
+import { Router } from '@angular/router';
 import { DialogCheckInComponent } from '../dialog-check-in/dialog-check-in.component';
 import { DeleteConfirmationComponent } from '../../../@theme/components/delete-confirmation/delete-confirmation.component';
 import { TableComponent } from '../../payments/table/table.component';
+import { Property, Reservation } from '../../../@core/data/models';
+import { DialogNewDocumentComponent } from '../../documents/document-form/document-form.component';
+import * as faker from 'faker';
+import { PaymentService } from '../../../@core/data/payment.service';
+import { of } from 'rxjs/observable/of';
+import { delay, map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
+import { Payment } from '../../../@core/data/models/payment';
+import { LocatusAbstractComponent } from '../../../@core/utils/locatusComponent.abstract';
 
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent extends LocatusAbstractComponent implements OnInit, OnDestroy {
 
-  isSearching = false;
-
-  isFilterCollapsed = true;
-
-  isGridView = false;
+  url: string = '/pages/reservations';
 
   config = {
     header: [
@@ -30,13 +33,13 @@ export class IndexComponent implements OnInit {
       { title: 'Locataire', width: 'col' },
       { title: 'Durée', width: 'col' },
       { title: 'Statut', width: 'col' },
-      { title: 'Montant', width: 'col' },
+      { title: 'Paiements', width: 'col' },
       { title: '', width: 'col-1' }
     ],
     mobileHeader: [
       { title: 'Bien', width: 'col-3' },
-      { title: 'Réservation', width: 'col-4' },
-      { title: 'Montant', width: 'col-3' },
+      { title: 'Réservation', width: 'col-3' },
+      { title: 'Paiements', width: 'col-4' },
       { title: '', width: 'col-2' }
     ],
     rows: [
@@ -44,40 +47,40 @@ export class IndexComponent implements OnInit {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'imageText', data: ['property.images', 'property.title'] }
+          { type: 'imageText', path: ['property.images', 'property.title'] }
         ]
       },
       {
         type: 'array',
         width: 'col',
         content: [
-          { type: 'text', data: ['lodger.firstname', 'lodger.lastname'] },
-          { type: 'text', data: ['lodger.phone'] },
-          { type: 'iconText', data: ['fa fa-users', 'nbrAdultes'] },
+          { type: 'text', path: ['lodger.firstname', 'lodger.lastname'] },
+          { type: 'text', path: ['lodger.phone'] },
+          { type: 'iconText', path: ['fa fa-users', 'nbrAdultes'] },
         ]
       },
       {
         type: 'array',
         width: 'col',
         content: [
-          { type: 'date', data: ['startDate', 'endDate'], splitData: true },
-          { type: 'text', data: ['nbrNight'] }
+          { type: 'date', path: ['start', 'end'], splitData: true },
+          { type: 'text', path: ['nbrNight'] }
         ]
       },
       {
         type: 'badge',
         width: 'col',
         content: [
-          { type: 'badge', data: ['status'] }
+          { type: 'badge', path: ['status'] }
         ]
       },
       {
         type: 'array',
         width: 'col',
         content: [
-          { type: 'amount', data: ['amount'], currency: '$' },
-          { type: 'badge', data: ['paymentStatus'] },
-          { type: 'collapse', data: ['détails'], component: TableComponent }
+          { type: 'amount', label: 'Solde', path: ['balance.value'], currency: 'balance.currency.symbol' },
+          { type: 'amount', label: 'Réglé', path: ['adjusted.value'], currency: 'adjusted.currency.symbol' },
+          { type: 'collapse', label: 'détails', nomenclature: 'Réservation', path: ['payments'], component: TableComponent }
         ]
       },
       {
@@ -101,25 +104,25 @@ export class IndexComponent implements OnInit {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'text', data: ['property.title'] }
-        ]
-      },
-      {
-        type: 'array',
-        width: 'col-4',
-        content: [
-          { type: 'text', data: ['nbrNight'] },
-          { type: 'badge', data: ['status'] },
-          { type: 'iconText', data: ['fa fa-users', 'nbrAdultes'] },
+          { type: 'text', path: ['property.title'] }
         ]
       },
       {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'amount', data: ['amount'], currency: '$' },
-          { type: 'badge', data: ['paymentStatus'] },
-          { type: 'collapse', data: ['détails'], component: TableComponent }
+          { type: 'text', path: ['nbrNight'] },
+          { type: 'badge', path: ['status'] },
+          { type: 'iconText', path: ['fa fa-users', 'nbrAdultes'] },
+        ]
+      },
+      {
+        type: 'array',
+        width: 'col-4',
+        content: [
+          { type: 'amount', label: 'Solde', path: ['balance.value'], currency: 'balance.currency.symbol' },
+          { type: 'amount', label: 'Réglé', path: ['adjusted.value'], currency: 'adjusted.currency.symbol' },
+          { type: 'collapse', label: 'détails', nomenclature: 'Réservation', path: ['payments'], component: TableComponent }
         ]
       },
       {
@@ -154,13 +157,19 @@ export class IndexComponent implements OnInit {
         {
           title: 'Montant',
           action: 'sort',
-          value: 'amount',
+          value: 'price',
+          direction: 'asc',
+        },
+        {
+          title: 'Solde',
+          action: 'sort',
+          value: 'balance',
           direction: 'asc',
         },
         {
           title: 'Date',
           action: 'sort',
-          value: 'startDate',
+          value: 'start',
           direction: 'asc',
         },
       ]
@@ -191,122 +200,98 @@ export class IndexComponent implements OnInit {
     }
   ];
 
-  currentProperty = this.propertyService.currentProperty;
+  paymentsSubscription: Subscription;
 
-  data: any = [];
+  searchFields: string[] = ['status.value', 'lodger', 'price.value', 'balance.value'];
 
-  source: LocalDataSource = new LocalDataSource();
+  refreshFilters: Subject<any> = new Subject<any>();
 
-  searchFields = ['status', 'lodger.firstname', 'lodger.lastname'];
-
-  withFilters = false;
-
-  constructor(private router: Router, private modalService: NgbModal, private reservationsService: ReservationsService, public propertyService: PropertyService) { }
+  constructor(
+    public router: Router,
+    public modalService: NgbModal,
+    public dataService: ReservationsService,
+    public propertyService: PropertyService,
+    public paymentService: PaymentService,
+    public cdr: ChangeDetectorRef
+  ) {
+    super(router, modalService, cdr, dataService);
+  }
 
   ngOnInit() {
-    if (this.currentProperty !== null) {
-      this.source = this.reservationsService.getPropertyReservations(this.currentProperty);
-    }
-    this.source.setFilter([]);
-    this.source.onChanged().subscribe(value => {
-      this.data = [];
-      value.elements.map((reservation) => {
-        reservation.property = this.currentProperty;
-        reservation.nbrNight = dateFns.differenceInDays(reservation.endDate, reservation.startDate) + ' nuitées';
-        this.data.push(reservation);
-      });
+    this.filters = this.dataService.initFilters(this.propertyService);
+    this.setUpData();
+    this.detectPropertyChanges();
+    this.detectPaymentsChanges();
+    this.detectSourceChanges();
+  }
+
+  ngOnDestroy() {
+    this.sourceSubscription.unsubscribe();
+    this.paymentsSubscription.unsubscribe();
+  }
+
+  setUpData() {
+    this.source.load(this.dataService.all());
+    this.dataService.initSort(this.source);
+  }
+
+  detectSourceChanges() {
+    this.sourceSubscription = this.source.onChanged().subscribe(value => {
+      this.data = of(value.elements.map((reservation: Reservation) => {
+        reservation.payments = this.paymentService.findByAndBy({ 'nomenclature.id': reservation.id, 'nomenclature.type': 'Réservation' }).sort((a: Payment, b: Payment) => {
+          return b.deadlineDate - a.deadlineDate;
+        });
+        return reservation;
+      })).pipe(delay(5));
     });
+  }
+
+  detectPaymentsChanges() {
+    this.paymentsSubscription = this.paymentService.onChanged().subscribe((payment: Payment) => {
+      this.source.load(this.dataService.all());
+    })
+  }
+
+  detectPropertyChanges() {
     this.propertyService.refreshCurrentProperty.subscribe(property => {
       if (property !== null) {
-        this.currentProperty = property;
-        this.source.load(this.currentProperty.reservations);
+        this.filters = this.filters.map(filter => {
+          if (filter.name === 'property') {
+            filter.element = { id: property.id, value: property.title };
+          }
+          return filter;
+        });
+        this.refreshFilters.next(this.filters);
       } else {
         this.source.load([]);
       }
     });
-    this.reservationsService.refresh.subscribe(source => {
-      this.source = source;
-    });
-  }
-
-  handleHeaderEvent(event) {
-    this[event.action]();
-  }
-
-  handleReservationEvent(event) {
-    this[event.action](event.attribute);
   }
 
   checkin(reservation) {
     const modalRef = this.modalService.open(DialogCheckInComponent, { size: 'lg', container: 'nb-layout' });
   }
 
-  edit(reservation) {
-    this.router.navigateByUrl('/pages/reservations/' + reservation.id + '/edit');
-  }
-
   documents(reservation) {
-    this.router.navigateByUrl('/pages/documents/reservations/' + reservation.id + '/documents');
-  }
-
-  delete(reservation) {
-    const modalRef = this.modalService.open(DeleteConfirmationComponent, { size: 'lg', container: 'nb-layout' });
-    modalRef.componentInstance.type = 'reservation';
-    modalRef.componentInstance.title = reservation.title;
-    modalRef.result.then(confirmed => {
-      if (confirmed) {
-        this.reservationsService.remove(reservation, this.propertyService.currentProperty);
+    const modalRef = this.modalService.open(DialogNewDocumentComponent, { size: 'lg', container: 'nb-layout' });
+    modalRef.componentInstance.document = {
+      id: faker.random.number(),
+      title: null,
+      description: null,
+      type: null,
+      createdAt: new Date(),
+      file: null,
+      owner: {
+        type: 'Réservation',
+        id: reservation.id,
+        title: reservation.title,
+        link: '/pages/reservations/' + reservation.id + '/edit'
       }
-    }, (reason) => {
-
-    });
+    };
   }
 
-  handleDropdownEvent(event) {
-    this[event.item.action](event.item);
-  }
-
-  toggleDisplay() {
-    this.isGridView = !this.isGridView;
-  }
-
-  sort(element) {
-    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
-    this.source.setSort([
-      {
-        field: element.value,
-        direction: element.direction
-      }
-    ]);
-  }
-
-  search() {
-    this.isSearching = !this.isSearching;
-    this.isFilterCollapsed = true;
-  }
-
-  filter() {
-    this.isFilterCollapsed = !this.isFilterCollapsed;
-    this.isSearching = false;
-  }
-
-  openDialog(action) {
-    this[action]();
-  }
-
-  import() {
-    console.log('import');
-  }
-
-  create() {
-    this.router.navigateByUrl('/pages/reservations/create');
-  }
-
-  hasFilters(filters) {
-    const w = filters.filter(f => {
-      return f.search !== '';
-    });
-    this.withFilters = w.length === 0 ? false : true;
+  settings(event) {
+    console.log(event);
   }
 
 }

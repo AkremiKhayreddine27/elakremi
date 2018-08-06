@@ -9,8 +9,8 @@ export interface Property {
     id: number,
     title: string,
     description?: string,
-    status: string,
-    type: string,
+    status: any,
+    type: any,
     nbr_chambre: number,
     nbr_cuisine: number,
     nbr_salon: number,
@@ -23,9 +23,9 @@ export interface Property {
     amount?: number,
     links: any[],
     equipements: Equipement[],
-    calendars: Calendar[],
-    services: Service[],
-    reservations: Reservation[],
+    calendars?: Calendar[],
+    services?: Service[],
+    reservations?: Reservation[],
     documents?: Document[],
     tariff?: Tariff
-}
+} 

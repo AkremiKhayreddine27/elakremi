@@ -1,292 +1,381 @@
 import { Injectable } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
-import { Subject } from 'rxjs/Subject';
 import * as faker from 'faker';
 import { DateService } from './date.service';
-
-export interface Payment {
-    id: number,
-    type: {
-        label: string,
-        value: string,
-        isIncome: boolean,
-        isOutgo: boolean
-    },
-    description: string,
-    paymentDate: any,
-    deadlineDate: any,
-    amount: number,
-    tva: string,
-    status: string,
-    method: string,
-    payer: {
-        firstname: string,
-        lastname: string
-    }
-}
+import { Payment, User, SelectItem, Price, Property, Reservation, Service } from './models';
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { DataService } from './data.abstract';
+import * as dateFns from 'date-fns';
 
 @Injectable()
-export class PaymentService {
+export class PaymentService extends DataService {
 
-    refresh: Subject<any> = new Subject();
-
-    source: LocalDataSource = new LocalDataSource();
-
-    public types: any[] = [
+    public types: SelectItem[] = [
         {
-            label: 'Acompte',
-            value: 'Acompte',
+            id: 1,
+            value: 'Acompte Séjour',
             isIncome: true,
-            isOutgo: false
+            isOutgo: false,
+            reservation: true,
+            service: false
         },
         {
-            label: 'Caution',
+            id: 2,
+            value: 'Solde Séjour',
+            isIncome: true,
+            isOutgo: false,
+            reservation: true,
+            service: false
+        },
+        {
+            id: 3,
             value: 'Caution',
             isIncome: true,
-            isOutgo: false
+            isOutgo: false,
+            reservation: true,
+            service: false
         },
         {
-            label: 'Frais séjour',
-            value: 'Frais séjour',
-            isIncome: false,
-            isOutgo: true
-        },
-        {
-            label: 'Taxe séjour',
-            value: 'Taxe séjour',
+            id: 4,
+            value: 'Frais Séjour',
             isIncome: true,
-            isOutgo: false
+            isOutgo: false,
+            reservation: true,
+            service: false
         },
         {
-            label: 'Séjour',
-            value: 'Séjour',
-            isIncome: true,
-            isOutgo: false
-        },
-        {
-            label: 'Frais de service',
-            value: 'Frais de service',
-            isIncome: false,
-            isOutgo: true
-        },
-        {
-            label: 'Frais de retard',
-            value: 'Frais de retard',
-            isIncome: false,
-            isOutgo: true
-        },
-        {
-            label: 'Remise',
-            value: 'Remise',
-            isIncome: false,
-            isOutgo: true
-        },
-        {
-            label: 'Remboursement',
+            id: 5,
             value: 'Remboursement',
             isIncome: true,
-            isOutgo: false
+            isOutgo: false,
+            reservation: true,
+            service: true
         },
         {
-            label: 'Régulation de charge',
-            value: 'Régulation de charge',
-            isIncome: true,
-            isOutgo: false
-        },
-        {
-            label: 'Autre revenu',
-            value: 'Autre revenu',
-            isIncome: true,
-            isOutgo: false
-        },
-        {
-            label: 'Service',
-            value: 'Service',
+            id: 6,
+            value: 'Taxe Séjour',
             isIncome: false,
-            isOutgo: true
+            isOutgo: true,
+            reservation: true,
+            service: false
         },
         {
-            label: 'Autre dépense',
+            id: 7,
+            value: 'Remise Séjour',
+            isIncome: false,
+            isOutgo: true,
+            reservation: true,
+            service: false
+        },
+        {
+            id: 8,
+            value: 'Frais Service',
+            isIncome: false,
+            isOutgo: true,
+            reservation: true,
+            service: false
+        },
+        {
+            id: 9,
+            value: 'Remboursement',
+            isIncome: false,
+            isOutgo: true,
+            reservation: true,
+            service: true
+        },
+        {
+            id: 10,
+            value: 'Charge déductible',
+            isIncome: false,
+            isOutgo: true,
+            reservation: false,
+            service: true
+        },
+        {
+            id: 11,
+            value: 'Charge non déductible',
+            isIncome: false,
+            isOutgo: true,
+            reservation: false,
+            service: true
+        },
+        {
+            id: 12,
             value: 'Autre dépense',
             isIncome: false,
-            isOutgo: true
+            isOutgo: true,
+            reservation: true,
+            service: true
+        },
+        {
+            id: 13,
+            value: 'Régularisation de charges',
+            isIncome: true,
+            isOutgo: false,
+            reservation: false,
+            service: true
+        },
+        {
+            id: 14,
+            value: 'Autre revenue',
+            isIncome: true,
+            isOutgo: false,
+            reservation: true,
+            service: true
+        },
+    ];
+
+    public statuses: SelectItem[] = [
+        {
+            id: 1,
+            value: 'Reglé',
+            cssClass: 'badge-success'
+        },
+        {
+            id: 2,
+            value: 'En attente',
+            cssClass: 'badge-primary'
+        },
+        {
+            id: 3,
+            value: 'En retard',
+            cssClass: 'badge-danger'
+        },
+        {
+            id: 4,
+            value: 'Annulé',
+            cssClass: 'badge-danger'
+        },
+        {
+            id: 5,
+            value: 'En litige',
+            cssClass: 'badge-warning'
         }
     ];
 
-    public defaultType = { label: 'Choisir un Type', value: 'Choisir un Type' };
-
-    public statuses = [
+    public methods: SelectItem[] = [
         {
-            label: 'payé',
-            value: 'payé'
-        },
-        {
-            label: 'à payer',
-            value: 'à payer'
-        },
-        {
-            label: 'partiel',
-            value: 'partiel'
-        },
-        {
-            label: 'en retard',
-            value: 'en retard'
-        }
-    ];
-
-    public defaultStatus = { label: 'Choisir une statut', value: 'Choisir une statut' };
-
-    public methods = [
-        {
-            label: 'Carte de crédit',
+            id: 1,
             value: 'Carte de crédit'
         },
         {
-            label: 'Espèces',
+            id: 2,
             value: 'Espèces'
         },
         {
-            label: 'Chèque',
+            id: 3,
             value: 'Chèque'
         },
         {
-            label: 'Prélèvement',
+            id: 4,
             value: 'Prélèvement'
         },
         {
-            label: 'Virement',
+            id: 5,
             value: 'Virement'
         }
     ];
 
-    public defaultMethod = { label: 'Choisir le mode de paiement', value: 'Choisir le mode de paiement' };
-
-    public tvas = [
-        {
-            label: '3%',
-            value: '3%'
-        },
-        {
-            label: '4%',
-            value: '4%'
-        },
-        {
-            label: '5%',
-            value: '5%'
-        },
-        {
-            label: '6%',
-            value: '6%'
-        }
-    ];
-
-    public defaultTva = this.tvas[0];
-
-    public defaultPayer = {
-        label: 'Choisir le payeur',
-        value: 'Choisir le payeur'
-    };
-
-    public payment: Payment = {
-        id: faker.random.number(),
-        type: null,
-        description: null,
-        paymentDate: null,
-        deadlineDate: null,
-        amount: null,
-        tva: null,
-        status: null,
-        method: null,
-        payer: null
-    }
-
     constructor(private dateService: DateService) {
-
+        super();
     }
 
-    public setPayment(payment: Payment) {
-        let newPayment = { ...payment };
-        newPayment.paymentDate = this.dateService.convertDate(newPayment.paymentDate);
-        newPayment.deadlineDate = this.dateService.convertDate(newPayment.deadlineDate);
-        return newPayment;
+    getStatuses(): Observable<SelectItem[]> {
+        return of(this.statuses).pipe(delay(500));
     }
 
-    getPayers(toPay: any) {
-        let payers = [];
-        let contact = toPay.lodger ? toPay.lodger : toPay.provider;
-        let contactType = toPay.lodger ? 'Locataire' : 'Prestataire de service';
-        payers.push({ label: contact.firstname + ' ' + contact.lastname + ' ( ' + contactType + ' )', value: contact.firstname + ' ' + contact.lastname + ' ( ' + contactType + ' )', slug: contact });
-        payers.push({ label: toPay.property.owner.firstname + ' ' + toPay.property.owner.lastname + ' ( Propriétaire )', value: toPay.property.owner.firstname + ' ' + toPay.property.owner.lastname + ' ( Propriétaire )', slug: toPay.property.owner });
-        return payers;
-    }
-
-    getDefaultPayer(toPay: any, payment: Payment) {
-        let payer = {};
-        let contact = toPay.lodger ? toPay.lodger : toPay.provider;
-        let contactType = toPay.lodger ? 'Locataire' : 'Prestataire de service';
-        if (payment.payer) {
-            if (contact.firstname === payment.payer.firstname && contact.lastname === payment.payer.lastname) {
-                payer = {
-                    label: contact.firstname + ' ' + contact.lastname + ' ( ' + contactType + ' )',
-                    value: contact.firstname + ' ' + contact.lastname + ' ( ' + contactType + ' )'
-                };
-            } else {
-                payer = {
-                    label: toPay.property.owner.firstname + ' ' + toPay.property.owner.lastname + ' ( Propriétaire )',
-                    value: toPay.property.owner.firstname + ' ' + toPay.property.owner.lastname + ' ( Propriétaire )',
-                };
-            }
-        } else {
-            payer = this.defaultPayer;
-        }
-
-        return payer;
-    }
-
-    getFiltredType(type, payment: Payment) {
-        if (payment.type) {
-            if (payment.type.isOutgo) {
-                return this.types.filter(type => {
-                    return type.isOutgo;
-                });
-            } else {
-                return this.types.filter(type => {
-                    return type.isIncome;
-                });
-            }
-        } else {
-            if (type === 'Dépense') {
-                return this.types.filter(type => {
-                    return type.isOutgo;
-                });
-            } else {
-                return this.types.filter(type => {
-                    return type.isIncome;
-                });
-            }
-        }
-    }
-
-    add(payment: Payment, toPay) {
-        payment.id = faker.random.number();
-        toPay.payments.push(payment);
-    }
-
-    update(id, payment, toPay) {
-        toPay.payments = toPay.payments.map(p => {
-            if (p.id === id) {
-                payment.id = id;
-                p = payment;
-            }
-            return p;
+    getStatus(id: number): SelectItem {
+        return this.statuses.find(status => {
+            return status.id === id;
         });
-        this.refresh.next(toPay.payments);
     }
 
-    remove(payment, toPay) {
-        toPay.payments = toPay.payments.filter(p => {
-            return p.id !== payment.id;
-        });
-        this.refresh.next(toPay.payments);
+    getTypes(): Observable<SelectItem[]> {
+        return of(this.types).pipe(delay(500));
     }
+
+    getMethods(): Observable<SelectItem[]> {
+        return of(this.methods).pipe(delay(500));
+    }
+
+
+    getType(id: number): SelectItem {
+        return this.types.find(type => {
+            return type.id === id;
+        });
+    }
+
+    createServicePayments(service: Service): Payment[] {
+        let payments: Payment[];
+        switch (service.frequency.id) {
+            case 1:
+                payments = [];
+                break;
+            case 2:
+                payments = this.createTimetablePayments(service.deadline, service.end, 1, service);
+                break;
+            case 3:
+                payments = this.createTimetablePayments(service.deadline, service.end, 2, service);
+                break;
+            case 4:
+                payments = this.createTimetablePayments(service.deadline, service.end, 3, service);
+                break;
+            case 5:
+                payments = this.createTimetablePayments(service.deadline, service.end, 6, service);
+                break;
+            case 6:
+                payments = this.createTimetablePayments(service.deadline, service.end, 12, service);
+                break;
+        }
+        return payments;
+    }
+
+    createTimetablePayments(start: Date, end: Date, frequency: number, nomenclature: Service): Payment[] {
+        let payments: Payment[] = [];
+        for (let date = start; dateFns.isBefore(date, end); date = dateFns.addMonths(date, frequency)) {
+            let payment = this.generate({ type: this.getType(8), status: this.getStatus(2), nomenclature: nomenclature, nomenclatureType: 'Service', price: nomenclature.price.value, deadlineDate: date });
+            payments.push(payment);
+        }
+        return payments;
+    }
+
+    createSojournPayments(reservation: Reservation, forNew: boolean = false): Payment[] {
+        let payments: Payment[] = [];
+        let price = (reservation.price.value * reservation.deposit) / 100;
+        let status = forNew ? this.statuses[1] : this.statuses[0];
+        if (reservation.deposit > 0) {
+            payments.push(this.createDepositPayment(price, reservation, status));
+        }
+        price = reservation.price.value - price;
+        payments.push(this.createSoldePayment(price, reservation, status));
+        if (reservation.bail.value > 0) {
+            payments.push(this.createBailPayment(reservation.bail.value, reservation, status));
+            payments.push(this.createRefundPayment(reservation.bail.value, reservation, status));
+        }
+        return payments;
+    }
+
+    createSoldePayment(price: number, reservation: Reservation, status: SelectItem) {
+        return this.generate({ type: this.getType(2), nomenclatureType: 'Réservation', status: status, nomenclature: reservation, price: price });
+    }
+
+    createDepositPayment(price: number, reservation: Reservation, status: SelectItem) {
+        return this.generate({ type: this.getType(1), nomenclatureType: 'Réservation', status: status, nomenclature: reservation, price: price });
+    }
+
+    createBailPayment(price: number, reservation: Reservation, status: SelectItem) {
+        return this.generate({ type: this.getType(3), nomenclatureType: 'Réservation', status: status, nomenclature: reservation, price: price });
+    }
+
+    createRefundPayment(price: number, reservation: Reservation, status: SelectItem) {
+        return this.generate({ type: this.getType(9), nomenclatureType: 'Réservation', status: status, nomenclature: reservation, price: price });
+    }
+
+    generate(args) {
+        let payment: Payment = {
+            id: faker.random.number(),
+            description: faker.lorem.paragraph(),
+            price: {
+                value: args.price,
+                currency: {
+                    symbol: '€',
+                    code: 'EUR'
+                }
+            },
+            tva: faker.random.number(20),
+            status: args.status,
+            method: faker.random.arrayElement(this.methods),
+            type: args.type,
+            paymentDate: args.status.id === 1 ? dateFns.isAfter(args.nomenclature.start, new Date()) ? new Date() : args.nomenclature.start : null,
+            deadlineDate: args.deadlineDate ? args.deadlineDate : args.nomenclature.start,
+            payer: args.type.isOutgo ? args.nomenclature.property.owner : args.nomenclature.lodger ? args.nomenclature.lodger : args.nomenclature.provider,
+            payee: args.type.isIncome ? args.nomenclature.property.owner : args.nomenclature.lodger ? args.nomenclature.lodger : args.nomenclature.provider,
+            nomenclature: { type: args.nomenclatureType, id: args.nomenclature.id },
+            propertyId: args.nomenclature.property.id
+        };
+        this.data.push(payment);
+        return payment;
+    }
+
+    createPayments(nbr: number, reservation: Reservation): Payment[] {
+        let payments: Payment[] = [];
+        for (let n = 3; n < nbr + 3; n++) {
+            let price = Number.parseInt(faker.finance.amount());
+            payments.push(this.generate({ type: this.types[n], status: faker.random.arrayElement(this.statuses), nomenclature: reservation, price: price }));
+        }
+        return payments;
+    }
+
+    getNomenclatures(data: any[], type = null) {
+        let nomenclatures: any[] = [];
+        if (type === 'Réservation' || !type) {
+            data.map(reservation => {
+                nomenclatures.push({ id: reservation.id, type: 'Réservation' });
+            });
+        }
+        if (type === 'Service' || !type) {
+            data.map((service: any) => {
+                nomenclatures.push({ id: service.id, type: 'Service' });
+            });
+        }
+        return nomenclatures;
+    }
+
+    getNomenclature(data: any[], id) {
+        return data.find((item: any) => {
+            return item.id === id;
+        });
+    }
+
+    getPayers(toPay: any, mode): Observable<User[]> {
+        let payers: User[] = [mode === 'Dépense' ? toPay.property.owner : toPay.lodger ? toPay.lodger : toPay.provider];
+        return of(payers).pipe(delay(500));
+    }
+
+    getFiltredType(type, nomenclature = null): SelectItem[] {
+        let types = [];
+        if (nomenclature && nomenclature.type === 'Réservation') {
+            types = this.types.filter(type => {
+                return type.reservation;
+            });
+        } else if (nomenclature && nomenclature.type === 'Service') {
+            types = this.types.filter(type => {
+                return type.service;
+            });
+        } else {
+            types = this.types;
+        }
+        if (type === 'Dépense') {
+            return types.filter(type => {
+                return type.isOutgo;
+            });
+        } else {
+            return types.filter(type => {
+                return type.isIncome;
+            });
+        }
+    }
+
+    calculateRevenues(payment: Payment): number {
+        let revenue = 0;
+        if (payment.type.isIncome) {
+            if (payment.status.id === 1) {
+                revenue = revenue + payment.price.value;
+            }
+
+        }
+        return revenue;
+    }
+
+    calculateExpenses(payment: Payment): number {
+        let expenses = 0;
+        if (payment.type.isOutgo) {
+            if (payment.status.id === 1) {
+                expenses = expenses + payment.price.value;
+            }
+        }
+        return expenses;
+    }
+
 }

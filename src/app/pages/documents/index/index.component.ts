@@ -1,31 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LocalDataSource } from 'ng2-smart-table';
 import { PropertyService } from '../../../@core/data/property.service';
 import { ReservationsService } from '../../../@core/data/reservations.service';
 import { DocumentsService } from '../../../@core/data/documents.service';
 import { DialogNewDocumentComponent } from '../document-form/document-form.component';
+import { SendNotificationComponent } from '../../../@theme/components';
+import { FileComponent } from '../file/file.component';
+import { of } from 'rxjs/observable/of';
+import { delay } from 'rxjs/operators';
+import { LocatusAbstractComponent } from '../../../@core/utils/locatusComponent.abstract';
 
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexComponent implements OnInit {
-
-  isSearching = false;
-
-  isFilterCollapsed = true;
-
-  data: LocalDataSource = new LocalDataSource();
-  documents = [];
-  total;
-  paging;
-
-  private id;
-
-  private reservation;
+export class IndexComponent extends LocatusAbstractComponent implements OnInit {
 
   config = {
     header: [
@@ -46,29 +37,30 @@ export class IndexComponent implements OnInit {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'iconImageText', data: ['format', 'title'] },
+          { type: 'iconImageText', path: ['file.type', 'title'] },
+          { type: 'collapse', label: 'file.name', path: ['file'], component: FileComponent }
         ]
       },
       {
         type: 'array',
         width: 'col-2',
         content: [
-          { type: 'text', data: ['type'] }
+          { type: 'text', path: ['type.value'] }
         ]
       },
       {
         type: 'array',
         width: 'col-2',
         content: [
-          { type: 'date', data: ['createdAt'] }
+          { type: 'date', path: ['createdAt'] }
         ]
       },
       {
         type: 'array',
         width: 'col-4',
         content: [
-          { type: 'text', data: ['owner.title'] },
-          { type: 'badge', data: ['owner.type'] }
+          { type: 'link', path: ['nomenclature.title'], link: 'nomenclatureLink' },
+          { type: 'badge', path: ['nomenclatureType'] }
         ]
       },
       {
@@ -76,6 +68,7 @@ export class IndexComponent implements OnInit {
         width: 'col-1',
         content: [
           { type: 'option', title: 'Télécharger', icon: 'fa fa-download mr-1', clickAction: 'download' },
+          { type: 'option', title: 'Partager', icon: 'fa fa-share mr-1', clickAction: 'share' },
           { type: 'option', title: 'éditer', icon: 'fa fa-edit mr-1', clickAction: 'edit' },
           { type: 'option', title: 'supprimer', icon: 'fa fa-trash mr-1', clickAction: 'delete' }
         ]
@@ -86,29 +79,31 @@ export class IndexComponent implements OnInit {
         type: 'array',
         width: 'col-4',
         content: [
-          { type: 'iconImageText', data: ['format', 'title'] },
+          { type: 'iconImageText', path: ['file.type', 'title'] },
+          { type: 'collapse', label: 'file.name', path: ['file'], component: FileComponent }
         ]
       },
       {
         type: 'array',
         width: 'col-3',
         content: [
-          { type: 'text', data: ['type'] },
-          { type: 'badge', data: ['owner.type'] },
+          { type: 'text', path: ['type.value'] },
+          { type: 'badge', path: ['nomenclatureType'] },
         ]
       },
       {
         type: 'array',
         width: 'col-4',
         content: [
-          { type: 'text', data: ['owner.title'] }
+          { type: 'text', path: ['nomenclature.title'] }
         ]
       },
       {
         type: 'options',
         width: 'col-1',
         content: [
-          { type: 'option', title: 'Document', icon: 'fa fa-upload mr-1', clickAction: 'documents' },
+          { type: 'option', title: 'Télécharger', icon: 'fa fa-download mr-1', clickAction: 'download' },
+          { type: 'option', title: 'Partager', icon: 'fa fa-share mr-1', clickAction: 'share' },
           { type: 'option', title: 'éditer', icon: 'fa fa-edit mr-1', clickAction: 'edit' },
           { type: 'option', title: 'supprimer', icon: 'fa fa-trash mr-1', clickAction: 'delete' }
         ]
@@ -132,6 +127,18 @@ export class IndexComponent implements OnInit {
           action: 'sort',
           value: 'type',
           direction: 'asc',
+        },
+        {
+          title: 'Date',
+          action: 'sort',
+          value: 'createdAt',
+          direction: 'asc',
+        },
+        {
+          title: 'Catégory',
+          action: 'sort',
+          value: 'owner.title',
+          direction: 'asc',
         }
       ]
     },
@@ -152,68 +159,49 @@ export class IndexComponent implements OnInit {
     }
   ];
 
-  searchFields = ['title', 'description', 'type'];
+
+  searchFields = ['title', 'description', 'owner.title', 'file.name'];
+
+  properties;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private modalService: NgbModal,
-    private documentsService: DocumentsService,
+    public route: ActivatedRoute,
+    public router: Router,
+    public modalService: NgbModal,
+    public dataService: DocumentsService,
     private propertyService: PropertyService,
-    private reservationsService: ReservationsService
-  ) { }
+    private reservationsService: ReservationsService,
+    public cdr: ChangeDetectorRef
+  ) {
+    super(router, modalService, cdr, dataService);
+  }
 
   ngOnInit() {
-    this.id = this.route.snapshot.params.reservation;
-    if (this.id) {
-      this.reservation = this.reservationsService.getReservation(this.propertyService.currentProperty, this.id);
-      this.documents = this.reservation.documents;
-    } else {
-      this.data.load(this.documentsService.getPropertyDocuments(this.propertyService.currentProperty));
-      this.data.setPaging(1, 12);
-      this.data.setPage(1);
-      this.data.onChanged().subscribe(value => {
-        if (value.action === 'load') {
-          this.total = value.elements.length;
-        }
-        this.paging = value.paging;
-        this.documents = [];
-        value.elements.map((reservation) => {
-          this.documents.push(reservation);
-        });
-      });
-      this.propertyService.refreshCurrentProperty.subscribe(property => {
-        this.data.load(this.documentsService.getPropertyDocuments(property));
-      });
-    }
+    this.source.load(this.dataService.all());
+    this.detectSourceChanges();
+    this.filters = this.dataService.initFilters(this.propertyService);
+    this.dataService.initSort(this.source);
   }
 
-
-  handleHeaderEvent(event) {
-    this[event.action]();
-  }
-
-  handleDropdownEvent(event) {
-    this[event.item.action](event.item);
-  }
-
-  search() {
-    this.isSearching = !this.isSearching;
-    this.isFilterCollapsed = true;
-  }
-
-  sort(element) {
-    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
-    this.data.setSort([
-      {
-        field: element.value,
-        direction: element.direction
-      }
-    ]);
-  }
 
   create() {
     const modalRef = this.modalService.open(DialogNewDocumentComponent, { size: 'lg', container: 'nb-layout' });
+  }
+
+  share(document) {
+    const modalRef = this.modalService.open(SendNotificationComponent, { size: 'lg', container: 'nb-layout' });
+    modalRef.componentInstance.title = 'Partager le document ' + document.title;
+    modalRef.componentInstance.mail = {
+      recipients: [],
+      object: '',
+      content: '',
+      files: [document.file]
+    };
+  }
+
+  edit(document) {
+    const modalRef = this.modalService.open(DialogNewDocumentComponent, { size: 'lg', container: 'nb-layout' });
+    modalRef.componentInstance.document = document;
   }
 
 }

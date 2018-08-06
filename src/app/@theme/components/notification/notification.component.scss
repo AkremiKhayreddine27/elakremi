@@ -1,0 +1,22 @@
+@import '../../styles/themes';
+@include nb-install-component() {
+    .notification {
+        overflow: hidden;
+    }
+    .notification_icon {
+        font-size: 2rem;
+    }
+    .notification_title {
+        text-transform: capitalize !important;
+    }
+    .notification_time {
+        font-size: 0.8rem;
+        text-transform: lowercase;
+    }
+    .notification_message p {
+        overflow-wrap: break-word;
+        white-space: normal !important;
+        text-transform: capitalize !important;
+    }
+
+}

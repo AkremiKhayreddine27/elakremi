@@ -1,0 +1,17 @@
+<ul class="items">
+  <span *ngFor="let option of options">
+    <li *ngIf="option.type ==='option'" class="item" (click)="actionClicked(option.clickAction, data)">
+      <i [class]="option.icon"></i>
+      {{ option.title }}
+    </li>
+    <li (click)="actionClicked(option.clickAction, data)" class="item" *ngIf="option.type ==='data' && !option.title.includes('+')">
+      <i [class]="option.icon"></i>
+      {{ data[option.title] }}
+    </li>
+    <li (click)="actionClicked(option.clickAction, data)" class="item" *ngIf="option.type ==='data' && option.title.includes('+')">
+      <i [class]="option.icon"></i>
+      {{ data[option.title.split('+')[0]] }} {{ data[option.title.split('+')[1]] }}
+    </li>
+    <div class="divider" *ngIf="option.type ==='divider'"></div>
+  </span>
+</ul>

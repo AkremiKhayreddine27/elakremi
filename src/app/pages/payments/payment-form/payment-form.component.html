@@ -24,14 +24,66 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <label for="nightAmount" class="col-form-label">Payeur *</label>
-        <ngx-select [element]="payer" [elements]="payers" (selectChanged)="setPayer($event)"></ngx-select>
+        <div class="row">
+          <div class="col-12">
+            <label for="nightAmount" class="col-form-label">Service / Réservation *</label>
+            <ng-select [class.form-control-danger]="nomenclature.invalid && nomenclature.touched && nomenclature.errors?.required || nomenclature.invalid && isSubmitted && nomenclature.errors?.required"
+              class="w-100" [searchable]="false" [items]="nomenclatures | async" [multiple]="false" [closeOnSelect]="true"
+              placeholder="Choisir la nomenclature de paiement" formControlName="nomenclature">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label">
+                  {{ item.type }} - {{ paymentService.getNomenclature(service.findBy('property.id',propertyService.currentProperty.id), item.id).title
+                  }}
+                </span>
+                <span class="ng-value-icon right" aria-hidden="true">×</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.type }} - {{ paymentService.getNomenclature(service.findBy('property.id',propertyService.currentProperty.id), item.id).title
+                }}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-12">
+            <label for="nightAmount" class="col-form-label">Payeur *</label>
+            <ng-select [class.form-control-danger]="payer.invalid && payer.touched && payer.errors?.required || payer.invalid && isSubmitted && payer.errors?.required"
+              class="w-100" [searchable]="false" [items]="payers | async" [multiple]="false" [closeOnSelect]="true" bindLabel="firstname"
+              placeholder="Choisir le payeur" formControlName="payer">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label">{{item.firstname}} {{ item.lastname }}</span>
+                <span class="ng-value-icon right" aria-hidden="true">×</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{item.firstname}} {{ item.lastname }} ( {{ item.role.value }} )
+              </ng-template>
+            </ng-select>
+            <small class="form-text error" *ngIf="payer.invalid && payer.touched && payer.errors?.required || payer.invalid && isSubmitted && payer.errors?.required">
+              Ce champ est requis !
+            </small>
+          </div>
+          <div class="col-12">
+            <label for="nightAmount" class="col-form-label">Bénéficiaire *</label>
+            <ng-select [class.form-control-danger]="payee.invalid && payee.touched || payee.invalid && isSubmitted" class="w-100" [searchable]="false"
+              [items]="payers | async" [multiple]="false" [closeOnSelect]="true" bindLabel="firstname" placeholder="Choisir le payeur"
+              formControlName="payee">
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label">{{item.firstname}} {{ item.lastname }}</span>
+                <span class="ng-value-icon right" aria-hidden="true">×</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{item.firstname}} {{ item.lastname }} ( {{ item.role.value }} )
+              </ng-template>
+            </ng-select>
+            <small class="form-text error" *ngIf="payee.invalid && payee.touched || payee.invalid && isSubmitted">
+              Ce champ est requis !
+            </small>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label for="description" class="col-form-label">Description</label>
           <div class="input-group input-group-sm">
-            <textarea id="description" class="form-control" name="description" formControlName="description">
+            <textarea rows="9" id="description" class="form-control" name="description" formControlName="description">
                 </textarea>
           </div>
         </div>
@@ -39,80 +91,108 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <label for="nom" class="col-form-label">Date paiement *</label>
-        <div class="form-group">
-          <div class="input-group input-group-sm">
-            <input class="form-control" formControlName="paymentDate" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #payDate="ngbDatepicker"
-              [class.form-control-danger]="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required">
-            <span class="input-group-btn">
-              <h2 [class.border-danger]="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required" class="btn btn-secondary cursor-pointer border-left-0 p-2 pl-2 pr-2"
-                (click)="payDate.toggle()">
-                <i class="fa fa-calendar"></i>
-              </h2>
-            </span>
-          </div>
-          <small class="form-text error" *ngIf="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required">
-            Ce champ est requis !
-          </small>
-        </div>
+        <label for="type" class="col-form-label">Type *</label>
+        <ng-select [class.form-control-danger]="type.invalid && type.touched && type.errors?.required || type.invalid && isSubmitted && type.errors?.required"
+          class="w-100" [searchable]="false" [items]="types | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+          placeholder="Choisir un type" formControlName="type">
+        </ng-select>
+        <small class="form-text error" *ngIf="type.invalid && type.touched && type.errors?.required || type.invalid && isSubmitted && type.errors?.required">
+          Ce champ est requis !
+        </small>
       </div>
       <div class="col-md-6">
-        <label for="nom" class="col-form-label">Date d'échéance *</label>
-        <div class="form-group">
-          <div class="input-group input-group-sm">
-            <input class="form-control" formControlName="deadlineDate" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #deadDate="ngbDatepicker"
-              [class.form-control-danger]="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required">
-            <span class="input-group-btn">
-              <h2 [class.border-danger]="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required" class="btn btn-secondary cursor-pointer border-left-0 p-2 pl-2 pr-2"
-                (click)="deadDate.toggle()">
-                <i class="fa fa-calendar"></i>
-              </h2>
-            </span>
-          </div>
-          <small class="form-text error" *ngIf="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required">
-            Ce champ est requis !
-          </small>
+        <label for="deadlineDate" class="col-form-label">Date d'échéance *</label>
+        <div class="input-group input-group-sm">
+          <input id="deadlineDate" class="form-control" formControlName="deadlineDate" placeholder="yyyy-mm-dd" name="deadlineDate"
+            ngbDatepicker #dDate="ngbDatepicker" [class.form-control-danger]="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required  || deadlineDate.invalid && isSubmitted && deadlineDate.errors?.required">
+          <span class="input-group-btn">
+            <h2 [class.form-btn-danger]="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required || deadlineDate.invalid && isSubmitted && deadlineDate.errors?.required"
+              class="btn cursor-pointer btn-secondary border-left-0 p-2 pl-3 pr-3" (click)="dDate.toggle()">
+              <i class="fa fa-calendar"></i>
+            </h2>
+          </span>
         </div>
+        <small class="form-text error" *ngIf="deadlineDate.invalid && deadlineDate.touched && deadlineDate.errors?.required || deadlineDate.invalid && isSubmitted && deadlineDate.errors?.required">
+          Ce champ est requis !
+        </small>
       </div>
     </div>
     <div class="row">
       <div class="col-md-3">
-        <div class="form-group">
-          <label for="nightAmount" class="col-form-label">Montant (TTC) *</label>
+        <div [formGroup]="price" class="form-group">
+          <label for="amount" class="col-form-label">Montant (TTC) *</label>
           <div class="input-group input-group-sm">
-            <input id="amount" type="number" class="form-control" name="amount" formControlName="amount" pattern="^((?!(0))[0-9]{1,9})$"
-              [class.form-control-danger]="amount.invalid && amount.touched">
+            <input id="amount" type="number" class="form-control" name="amount" formControlName="value" [class.form-control-danger]="priceValue.invalid && priceValue.touched || isSubmitted && !priceValue.valid">
+            <span class="input-group-btn">
+              <h2 class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+                <i class="fa fa-dollar"></i>
+              </h2>
+            </span>
           </div>
-          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.required">
-            Le Montant est requis !
-          </small>
-          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.pattern">
-            Le Montant devrait être un nombre positif > 0 !
-          </small>
+          <error-message [control]="priceValue" *ngIf="!priceValue.valid && priceValue.touched || isSubmitted && !priceValue.valid"
+            class="form-text error">
+          </error-message>
         </div>
       </div>
       <div class="col-md-3">
         <label for="nightAmount" class="col-form-label">Montant (TVA) *</label>
-        <ngx-select [elements]="tvas" [element]="tva" (selectChanged)="setTva($event)"></ngx-select>
+        <div class="input-group input-group-sm">
+          <input class="form-control" formControlName="tva" name="tva" [class.form-control-danger]="!priceValue.valid && priceValue.touched || isSubmitted && !priceValue.valid">
+          <span class="input-group-btn">
+            <h2 class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+              <i class="fa fa-percent"></i>
+            </h2>
+          </span>
+        </div>
+        <error-message [control]="tva" *ngIf="!tva.valid && tva.touched || isSubmitted && !tva.valid" class="form-text error">
+        </error-message>
       </div>
       <div class="col-md-6">
-        <label for="nightAmount" class="col-form-label">Type *</label>
-        <ngx-select [elements]="filtredTypes" [element]="type" (selectChanged)="setType($event)"></ngx-select>
+        <label for="method" class="col-form-label">Mode *</label>
+        <ng-select [class.form-control-danger]="method.invalid && method.touched && method.errors?.required || method.invalid && isSubmitted && method.errors?.required"
+          class="w-100" [searchable]="false" [items]="methods | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+          placeholder="Choisir un mode de paiement" formControlName="method">
+        </ng-select>
+        <small class="form-text error" *ngIf="method.invalid && method.touched && method.errors?.required || method.invalid && isSubmitted && method.errors?.required">
+          Ce champ est requis !
+        </small>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
-        <label for="nightAmount" class="col-form-label">Statut *</label>
-        <ngx-select [elements]="statuses" [element]="status" (selectChanged)="setStatus($event)"></ngx-select>
+        <label for="status" class="col-form-label">Statut *</label>
+        <ng-select [class.form-control-danger]="status.invalid && status.touched && status.errors?.required || status.invalid && isSubmitted && status.errors?.required"
+          class="w-100" [searchable]="false" [items]="statuses | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+          placeholder="Choisir un statut" formControlName="status">
+        </ng-select>
+        <small class="form-text error" *ngIf="status.invalid && status.touched && status.errors?.required || status.invalid && isSubmitted && status.errors?.required">
+          Ce champ est requis !
+        </small>
       </div>
-      <div class="col-md-6">
-        <label for="nightAmount" class="col-form-label">Mode *</label>
-        <ngx-select [elements]="methods" [element]="method" (selectChanged)="setMethod($event)"></ngx-select>
+      <div *ngIf="(status.value && status.value.id === 1) || paymentDate.value" class="col-md-6">
+        <label for="paymentDate" class="col-form-label">Date de paiement *</label>
+        <div class="input-group input-group-sm">
+          <input id="paymentDate" class="form-control" formControlName="paymentDate" placeholder="yyyy-mm-dd" name="paymentDate" ngbDatepicker
+            #pDate="ngbDatepicker" [class.form-control-danger]="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required  || paymentDate.invalid && isSubmitted && paymentDate.errors?.required">
+          <span class="input-group-btn">
+            <h2 [class.form-btn-danger]="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required || paymentDate.invalid && isSubmitted && paymentDate.errors?.required"
+              class="btn cursor-pointer btn-secondary border-left-0 p-2 pl-3 pr-3" (click)="pDate.toggle()">
+              <i class="fa fa-calendar"></i>
+            </h2>
+          </span>
+        </div>
+        <small class="form-text error" *ngIf="paymentDate.invalid && paymentDate.touched && paymentDate.errors?.required || paymentDate.invalid && isSubmitted && paymentDate.errors?.required">
+          Ce champ est requis !
+        </small>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <button [disabled]="!form.valid" (click)="submit()" class="btn btn-sm btn-success">
+    <button (click)="close()" type="button" class="btn btn-sm btn-danger">
+      <i class="fa fa-close mr-1"></i>
+      <span i18n>Annuler</span>
+    </button>
+    <button (click)="submit()" type="button" class="btn btn-sm btn-success">
       <i class="fa fa-save mr-1"></i>
       <span i18n>Sauvegarder</span>
     </button>

@@ -7,16 +7,19 @@
   <nb-card-body class="p-0">
     <div class="consumption-table p-0">
       <nb-tabset (changeTab)="tabChange($event)" fullWidth>
-        <nb-tab *ngFor="let tariff of tariffSaison" [tabTitle]="tariff.title" [active]="tariff.active">
-          <div class="stats-month" *ngFor="let season of tariff.seasons">
+        <nb-tab *ngFor="let period of periods" [tabTitle]="period.value" [active]="isActivePeriod(period)">
+          <div *ngFor="let season of seasons" [class.active]="isActiveSeason(season)" class="stats-month">
             <div class="d-flex flex-column">
-              <span class="month">{{ season.title }}</span>
-              <span class="date small">{{ season.startDate | date:'dd MMM' }} à {{ season.endDate | date:'dd MMM yyyy' }}</span>
-              <span class="min small">{{ season.minDuration }} nuits durée min</span>
+              <span class="month">{{ season.value }}</span>
+              <span class="date small">{{ season.start | date:'dd MMM' }} à {{ season.end | date:'dd MMM yyyy' }}</span>
+              <span class="min small">{{ period.minDuration }} nuits durée min</span>
             </div>
             <div class="results d-flex align-items-center">
-              <b>{{ season.amount }}</b> $ / nuit
-              <span (click)="edit(season)" class="action ml-2">
+              <b>{{ seasonalTariffService.findFirstByAndBy({'tariff.id': tariff.id,'season.id': season.id,'period.id': period.id}).price
+                }}
+              </b> $ / nuit
+              <span (click)="edit(seasonalTariffService.findFirstByAndBy({'tariff.id': tariff.id,'season.id': season.id,'period.id': period.id}))"
+                class="action ml-2">
                 <i class="nb-compose"></i>
               </span>
             </div>

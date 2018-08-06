@@ -8,10 +8,10 @@
   </nb-card-header>
   <nb-card-body class="p-0">
     <ngb-tabset fullWidth>
-      <ngb-tab *ngFor="let category of services" [title]="category.title">
+      <ngb-tab *ngFor="let category of categories" [title]="category.title">
         <ng-template ngbTabContent>
           <div class="row m-0 pt-4 pb-4">
-            <div *ngFor="let subCategory of category.subCategories" class="col-md-4">
+            <div *ngFor="let subCategory of servicesService.getSubcategories(category.id)" class="col-md-4">
               <category [subCategory]="subCategory"></category>
             </div>
           </div>

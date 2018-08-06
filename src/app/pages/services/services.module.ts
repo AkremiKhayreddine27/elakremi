@@ -4,7 +4,6 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { ServicesRoutingModule, routedComponents } from './services-routing.module';
 import { CategoryComponent } from './index/components/category/category.component';
-import { FiltersComponent } from './show/filters/filters.component';
 
 @NgModule({
   imports: [
@@ -15,8 +14,7 @@ import { FiltersComponent } from './show/filters/filters.component';
   ],
   declarations: [
     ...routedComponents,
-    CategoryComponent,
-    FiltersComponent
+    CategoryComponent
   ]
 })
 export class ServicesModule { }

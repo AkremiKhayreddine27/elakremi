@@ -11,12 +11,12 @@ export class NgxTableService {
     constructor(private resolver: ComponentFactoryResolver) {
     }
 
-    addDynamicComponent(viewContainerRef: any, component, toPay, payments) {
+    addDynamicComponent(viewContainerRef: any, component, data, nomenclature) {
         this.rootViewContainer = viewContainerRef;
         this.rootViewContainer.clear();
         const factory = this.resolver.resolveComponentFactory(component);
         const createdComponent = this.rootViewContainer.createComponent(factory);
-        createdComponent.instance.toPay = toPay;
-        createdComponent.instance.payments = payments;
+        createdComponent.instance.data = data;
+        createdComponent.instance.nomenclature = nomenclature;
     }
 }

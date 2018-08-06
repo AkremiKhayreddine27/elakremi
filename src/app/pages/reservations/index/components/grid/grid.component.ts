@@ -14,7 +14,7 @@ export class GridComponent implements OnInit {
 
   @Input() reservations;
 
-  constructor(private propertyService: PropertyService, private reservationService: ReservationsService, private modalService: NgbModal,) { }
+  constructor(private propertyService: PropertyService, private reservationService: ReservationsService, private modalService: NgbModal, ) { }
 
   ngOnInit() {
     this.reservations.map(reservation => {
@@ -28,7 +28,7 @@ export class GridComponent implements OnInit {
     modalRef.componentInstance.title = reservation.title;
     modalRef.result.then(confirmed => {
       if (confirmed) {
-        this.reservationService.remove(reservation, this.propertyService.currentProperty);
+        this.reservationService.delete(reservation);
       }
     }, (reason) => {
 

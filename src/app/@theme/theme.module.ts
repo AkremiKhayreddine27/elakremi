@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import {
   NbActionsModule,
@@ -33,6 +35,8 @@ import {
 
 import { PaymentFormComponent } from '../pages/payments/payment-form/payment-form.component';
 
+import { FileComponent } from '../pages/documents/file/file.component';
+
 import {
   FooterComponent,
   HeaderComponent,
@@ -50,13 +54,18 @@ import {
   NgxAlertComponent,
   NgxPaginationComponent,
   BtnOptionsComponent,
-  NbrInputComponent,
   NgxSelectComponent,
   NgxTableComponent,
   RowComponent,
   NgxCollapseTableComponent,
-  SendNotificationComponent
+  SendNotificationComponent,
+  NotificationComponent,
+  MobileDropdownComponent,
+  NgxDatepickerDropdownComponent,
+  FiltersComponent
 } from './components';
+
+import { ErrorMessageComponent, NbrInputComponent, TextFieldComponent } from './locatus/forms';
 
 import { NgxTableService } from './components/ngx-table/ngxTableService.service';
 
@@ -88,7 +97,15 @@ const NB_MODULES = [
   NbContextMenuModule,
   NgbModule,
   NbSecurityModule, // *nbIsGranted directive
-  RouterModule
+  RouterModule,
+  NgSelectModule,
+  NgxSpinnerModule
+];
+
+const LOCATUS = [
+  NbrInputComponent,
+  ErrorMessageComponent,
+  TextFieldComponent
 ];
 
 const COMPONENTS = [
@@ -124,7 +141,12 @@ const COMPONENTS = [
   MobileHeaderComponent,
   PaymentHeaderComponent,
   PaymentComponent,
-  MobilePaymentComponent
+  MobilePaymentComponent,
+  NotificationComponent,
+  FileComponent,
+  MobileDropdownComponent,
+  NgxDatepickerDropdownComponent,
+  FiltersComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -133,7 +155,9 @@ const ENTRY_COMPONENTS = [
   PaymentMobileTableComponent,
   SendNotificationComponent,
   PaymentFormComponent,
-  DeleteConfirmationComponent
+  DeleteConfirmationComponent,
+  FileComponent,
+  MobileDropdownComponent
 ];
 
 const PIPES = [
@@ -157,8 +181,8 @@ const NB_THEME_PROVIDERS = [
 
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES],
-  exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
-  declarations: [...COMPONENTS, ...PIPES],
+  exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...LOCATUS, ...PIPES],
+  declarations: [...COMPONENTS, ...LOCATUS, ...PIPES],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {

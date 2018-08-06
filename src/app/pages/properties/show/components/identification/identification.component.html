@@ -33,51 +33,33 @@
         <div class="col-md-12 p-0">
           <div class="form-group row ml-0 mr-0">
             <label for="pltaform" class="col-sm-4 col-form-label">Platform</label>
-            <div id="platform" class="dropdown d-flex col-sm-8 align-items-center" ngbDropdown>
-              <button [class.text-secondary]="form.get('platform').value === null" [class.border-danger]="form.controls.platform.invalid && btnSaveClicked"
-                class="btn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
-                {{ form.get('platform').value ? form.get('platform').value : 'Platform' }}
-                <i class="fa fa-caret-down pl-1"></i>
-              </button>
-              <ul class="dropdown-menu" ngbDropdownMenu>
-                <li *ngFor="let platform of platforms" (click)="setPlatform(platform);" class="dropdown-item">
-                  {{ platform }}
-                </li>
-              </ul>
+            <div class="col-md-8">
+              <ngx-select [elements]="platforms" [element]="platform" (selectChanged)="setPlatform($event.element)"></ngx-select>
             </div>
           </div>
         </div>
         <div class="col-md-12 p-0">
           <div class="form-group row ml-0 mr-0">
             <label for="type" class="col-sm-4 col-form-label">Type *</label>
-            <div id="type" class="dropdown d-flex col-sm-8 align-items-center" ngbDropdown>
-              <h2 [class.text-secondary]="form.get('type').value === null" [class.border-danger]="form.controls.type.invalid && btnSaveClicked"
-                class="btn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
-                {{ form.get('type').value ? form.get('type').value : 'Type' }}
-                <i class="fa fa-caret-down pl-1"></i>
-              </h2>
-              <ul class="dropdown-menu" ngbDropdownMenu>
-                <li *ngFor="let type of types" (click)="setType(type);" class="dropdown-item">
-                  {{ type }}
-                </li>
-              </ul>
+            <div class="col-md-8">
+              <ngx-select [elements]="types" [element]="type" (selectChanged)="setType($event.element)"></ngx-select>
             </div>
           </div>
         </div>
         <div class="col-md-12 p-0">
           <div class="form-group row ml-0 mr-0">
             <label for="owner" class="col-sm-4 col-form-label">Propriétaire *</label>
-            <div id="owner" class="dropdown d-flex col-sm-8 align-items-center" ngbDropdown>
-              <h2 [class.text-secondary]="form.get('owner').value === null" [class.border-danger]="form.controls.owner.invalid && btnSaveClicked"
-                class="btn btn-outline-secondary d-flex align-items-center justify-content-between" ngbDropdownToggle>
-                {{ form.get('owner').value ? form.get('owner').value : 'Propriétaire' }}
-                <i class="fa fa-caret-down pl-1"></i>
-              </h2>
-              <ul class="dropdown-menu" ngbDropdownMenu>
-                <li *ngFor="let owner of owners" (click)="setOwner(owner);" class="dropdown-item">
-                  {{ owner }}
-                </li>
-              </ul>
+            <div class="col-md-8">
+              <ng-select class="w-100" [items]="owners | async" [multiple]="false" [closeOnSelect]="true" bindLabel="firstname" placeholder=""
+                formControlName="owner">
+                <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                  <span class="ng-value-label">{{item.firstname}} {{ item.lastname }}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{item.firstname}} {{ item.lastname }}
+                </ng-template>
+              </ng-select>
             </div>
           </div>
         </div>

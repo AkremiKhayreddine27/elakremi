@@ -1,5 +1,18 @@
 @import '../../../@theme/styles/themes'; 
 @include nb-install-component() {
+    nb-card-header {
+        height: 62px;
+        span {
+            i {
+                font-size: 2rem;
+                text-align: center;
+            }
+        }
+    }
+    /deep/ ngx-select .dropdown {
+        min-width: 180px !important;
+    }
+
     .danger-card {
         background-color: nb-theme(card-header-danger-bg);
         color: white;
@@ -39,5 +52,48 @@
     }
     .badge {
         color: white !important;
+    }
+
+    /deep/ ngb-datepicker {
+        border: none !important;
+    }
+    .dropdown {
+        min-width: 156px;
+    }
+    .dropdown-menu.w-100 {
+        width: 100% !important;
+        min-width: 156px;
+        ul {
+            width: 100% !important;
+        }
+    }
+    .dropdown-menu.w-drop {
+        width: 571px !important;
+    }
+    .dropdown .dropdown-menu {
+        .dropdown-item.datepicker-item:hover {
+          background-color: transparent !important;
+          color: #777777 !important;
+        }
+        .dropdown-item:hover {
+            background-color: nb-theme(color-success) !important;
+        }
+    }
+    .custom-day {
+        text-align: center;
+        padding: 0.185rem 0.25rem;
+        display: inline-block;
+        height: 2rem;
+        width: 2rem;
+    }
+    .custom-day.focused {
+        background-color: #e6e6e6;
+    }
+    .custom-day.range, .custom-day:hover {
+      background-color: rgb(2, 117, 216);
+      color: white;
+    }
+    .custom-day.faded {
+      background-color: rgba(2, 117, 216, 0.5);
     }
 }

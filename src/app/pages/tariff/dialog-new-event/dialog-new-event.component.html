@@ -1,74 +1,91 @@
-<form #form="ngForm">
-  <div class="modal-header">
-    <h4 class="modal-title" i18n>Tarif Evénnement</h4>
-    <button type="button" (click)="close()" class="close" aria-label="Close">
-      <i class="nb-close"></i>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="name" class="col-form-label">Nom *</label>
-          <div class="input-group input-group-sm">
-            <input id="name" [(ngModel)]="newEvent.title" name="title" type="text" class="form-control" placeholder="Nom" required="true"
-              [minlength]="3" [maxlength]="20" #name="ngModel" [class.form-control-danger]="name.invalid && name.touched">
+<div class="modal-header">
+  <h4 class="modal-title" i18n>Tarif Evénnement</h4>
+  <button type="button" (click)="close()" class="close" aria-label="Close">
+    <i class="nb-close"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row m-0">
+    <div class="col-12">
+      <form [formGroup]="form">
+        <div [formGroup]="event">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="value" class="col-form-label">Nom</label>
+                <div class="input-group input-group-sm">
+                  <input id="value" class="form-control" formControlName="value" name="value" [class.form-control-danger]="eventName.invalid && eventName.touched || eventName.invalid && isSubmitted">
+                </div>
+                <error-message [control]="eventName" *ngIf="!eventName.valid && eventName.touched || isSubmitted && !eventName.valid" class="m-0 form-text error">
+                </error-message>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="date" class="col-form-label"> Début *</label>
+                <div class="input-group input-group-sm">
+                  <input id="date" class="form-control" [class.form-control-danger]="!start.valid && start.touched || isSubmitted && !start.valid"
+                    ngbDatepicker #sDate="ngbDatepicker" formControlName="start">
+                  <span class="input-group-btn">
+                    <h2 [class.form-btn-danger]="!start.valid && start.touched || isSubmitted && !start.valid" class="btn btn-secondary cursor-pointer border-left-0 p-2 pl-3 pr-3"
+                      (click)="sDate.toggle()">
+                      <i class="fa fa-calendar"></i>
+                    </h2>
+                  </span>
+                </div>
+                <error-message [control]="start" *ngIf="!start.valid && start.touched || isSubmitted && !start.valid" class="m-0 form-text error">
+                </error-message>
+              </div>
+            </div> 
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="date" class="col-form-label"> Fin *</label>
+                <div class="input-group input-group-sm">
+                  <input id="date" class="form-control" [class.form-control-danger]="!end.valid && end.touched || isSubmitted && !end.valid"
+                    ngbDatepicker #eDate="ngbDatepicker" formControlName="end">
+                  <span class="input-group-btn">
+                    <h2 [class.form-btn-danger]="!end.valid && end.touched || isSubmitted && !end.valid" class="btn btn-secondary cursor-pointer border-left-0 p-2 pl-3 pr-3"
+                      (click)="eDate.toggle()">
+                      <i class="fa fa-calendar"></i>
+                    </h2>
+                  </span>
+                </div>
+                <error-message [control]="end" *ngIf="!end.valid && end.touched || isSubmitted && !end.valid" class="m-0 form-text error">
+                </error-message>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-12">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="form-group">
-              <label for="nom" class="col-form-label">Début *</label>
+              <label class="col-form-label">Tariff *</label>
               <div class="input-group input-group-sm">
-                <input class="form-control" [(ngModel)]="newEvent.startDate" placeholder="yyyy-mm-dd" name="startDate" ngbDatepicker #startDate="ngbDatepicker"
-                  #start="ngModel" required="true" [class.form-control-danger]="start.invalid && start.touched">
+                <input type="number" class="form-control" formControlName="price" name="price" [class.form-control-danger]="!price.valid && price.touched || isSubmitted && !price.valid">
                 <span class="input-group-btn">
-                  <button class="btn btn-secondary border-left-0 p-2 pl-2 pr-2" (click)="startDate.toggle()" type="button">
-                    <i class="fa fa-calendar"></i>
-                  </button>
+                  <h2 class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+                    <i class="fa fa-dollar"></i>
+                  </h2>
                 </span>
               </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="nom" class="col-form-label">Fin *</label>
-              <div class="input-group input-group-sm">
-                <input class="form-control" [(ngModel)]="newEvent.endDate" placeholder="yyyy-mm-dd" name="endDate" ngbDatepicker #endDate="ngbDatepicker"
-                  #end="ngModel" required="true" [class.form-control-danger]="end.invalid && end.touched">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary border-left-0 p-2 pl-2 pr-2" (click)="endDate.toggle()" type="button">
-                    <i class="fa fa-calendar"></i>
-                  </button>
-                </span>
-              </div>
+              <error-message [control]="price" *ngIf="!price.valid && price.touched || isSubmitted && !price.valid" class="m-0 form-text error">
+              </error-message>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="amount" class="col-form-label">Tarif *</label>
-          <div class="input-group input-group-sm">
-            <input id="amount" type="number" class="form-control" name="amount" [(ngModel)]="newEvent.amount" #amount="ngModel" required="true"
-              pattern="^((?!(0))[0-9]{1,9})$" [class.form-control-danger]="amount.invalid && amount.touched">
-          </div>
-          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.required">
-            Le Tarif est requis !
-          </small>
-          <small class="form-text error" *ngIf="amount.invalid && amount.touched && amount.errors?.pattern">
-            Le Tarif devrait être un nombre positif > 0 !
-          </small>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
-  <div class="modal-footer">
-    <button [disabled]="submitted || !form.valid" (click)="save()" type="submit" class="btn btn-sm btn-success">
-      <i class="fa fa-save mr-1"></i>
-      <span i18n>Sauvegarder</span>
-    </button>
-  </div>
-</form>
+</div>
+<div class="modal-footer">
+  <button type="reset" (click)="reset()" class="btn mr-2 cursor-pointer btn-sm btn-danger">
+    <i class="fa fa-close mr-1"></i>
+    <span i18n>Annuler</span>
+  </button>
+  <button (click)="save()" type="submit" class="btn cursor-pointer btn-sm btn-success">
+    <i class="fa fa-save mr-1"></i>
+    <span i18n>Sauvegarder</span>
+  </button>
+</div>

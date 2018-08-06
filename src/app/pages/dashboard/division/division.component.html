@@ -1,0 +1,20 @@
+<nb-card size="large">
+  <nb-card-header>
+    Répartition par platform
+  </nb-card-header>
+  <nb-card-body class="p-0">
+    <nb-tabset (changeTab)="tabChanged($event)" fullWidth>
+
+      <nb-tab tabTitle="Nuitées">
+        <div echarts [options]="option" class="echart">
+        </div>
+      </nb-tab>
+
+      <nb-tab tabTitle="Revenues">
+        <div echarts [options]="option" class="echart">
+        </div>
+      </nb-tab>
+
+    </nb-tabset>
+  </nb-card-body>
+</nb-card>

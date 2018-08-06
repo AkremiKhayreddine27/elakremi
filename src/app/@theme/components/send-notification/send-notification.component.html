@@ -20,12 +20,19 @@
     <div class="row">
       <div class="col-md-12">
         <div class="row">
-          <label for="contact" class="col-form-label small-xs col-md-4">Destinataire *</label>
+          <label for="contact" class="col-form-label col-md-4">Destinataire *</label>
           <div class="form-group col-md-8">
             <div class="input-group input-group-sm">
-              <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" formControlName="recipient" [ngbTypeahead]="search"
-                (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);" (selectItem)="assignContact($event)"
-                #instance="ngbTypeahead" [resultTemplate]="rt" />
+              <ng-select class="w-100" [items]="contacts | async" [multiple]="true" [closeOnSelect]="true" bindLabel="firstname" placeholder=""
+                formControlName="recipients">
+                <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                  <span class="ng-value-label">{{item.firstname}} {{ item.lastname }}</span>
+                  <span class="ng-value-icon right" aria-hidden="true">×</span>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{item.firstname}} {{ item.lastname }}
+                </ng-template>
+              </ng-select>
             </div>
           </div>
         </div>
@@ -34,12 +41,13 @@
     <div class="row">
       <div class="col-12">
         <div class="form-group row">
-          <label for="object" class="col-form-label small-xs col-md-4">Objet *</label>
+          <label for="object" class="col-form-label col-md-4">Objet *</label>
           <div class="input-group input-group-sm col-md-8">
             <input id="object" class="form-control" [class.form-control-danger]="object.invalid && object.touched && object.errors?.required"
               formControlName="object" name="object">
           </div>
-          <small class="form-text error" *ngIf="object.invalid && object.touched && object.errors?.required">
+          <div class="col-md-4"></div>
+          <small class="form-text ml-0 col-md-8 error" *ngIf="object.invalid && object.touched && object.errors?.required">
             Ce champ est requis !
           </small>
         </div>
@@ -56,6 +64,19 @@
         </div>
       </div>
     </div>
+    <div *ngIf="mail.files.length > 0" class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <label for="content" class="col-form-label col-md-4"></label>
+          <ul class="col-md-8">
+            <li class="file d-flex justify-content-between align-items-center" *ngFor="let file of mail.files">
+              <span>{{ file.name }} ({{ file.size }} KO)</span>
+              <i (click)="removeFile(file)" class="nb-trash"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
   <div *ngIf="object.value.length > 0 && !edit" class="modal-body">
     <div class="small">
@@ -63,6 +84,10 @@
     </div>
   </div>
   <div class="modal-footer">
+    <button (click)="close()" class="btn btn-sm btn-danger">
+      <i class="fa fa-close mr-1"></i>
+      <span i18n>Annuler</span>
+    </button>
     <button type="submit" class="btn cursor-pointer btn-sm btn-success">
       <i class="fa fa-send mr-1"></i>
       <span i18n>Envoyer</span>

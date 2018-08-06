@@ -106,7 +106,7 @@ export class SolarComponent implements AfterViewInit, OnDestroy {
                 },
                 label: {
                   normal: {
-                    position: 'inner',
+                    show: false,
                   },
                 },
                 itemStyle: {

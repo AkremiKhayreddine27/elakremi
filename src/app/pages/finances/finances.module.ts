@@ -8,8 +8,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { IncomeComponent } from './components/income/income.component';
 import { OutgoComponent } from './components/outgo/outgo.component';
 import { ProfitsComponent } from './components/profits/profits.component';
-import { PieChartsComponent } from './components/pie-charts/pie-charts.component';
-import { OutgoChartsComponent } from './components/outgo-charts/outgo-charts.component';
+import { NetComponent } from './components/profits/net/net.component';
+import { PotentielComponent } from './components/profits/potentiel/potentiel.component';
 
 @NgModule({
   imports: [
@@ -18,6 +18,6 @@ import { OutgoChartsComponent } from './components/outgo-charts/outgo-charts.com
     NgxEchartsModule,
     FinancesRoutingModule
   ],
-  declarations: [...routedComponents, IncomeComponent, OutgoComponent, ProfitsComponent, PieChartsComponent, OutgoChartsComponent]
+  declarations: [...routedComponents, IncomeComponent, OutgoComponent, ProfitsComponent, NetComponent, PotentielComponent]
 })
 export class FinancesModule { }

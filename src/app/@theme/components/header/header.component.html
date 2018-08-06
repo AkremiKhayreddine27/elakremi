@@ -3,14 +3,13 @@
     <a (click)="toggleSidebar()" href="#" class="navigation">
       <i class="nb-menu"></i>
     </a>
-    <div class="logo" (click)="goToHome()">
+    <div class="logo cursor-pointer" (click)="goToHome()">
       <img src="assets/images/logo-default.png" />
     </div>
   </div>
 </div>
 
 <div class="header-container">
-  <ngx-layout-direction-switcher></ngx-layout-direction-switcher>
   <nb-actions size="medium" [class.right]="position === 'normal'" [class.left]="position === 'inverse'">
     <nb-action icon="nb-gear" class="toggle-layout" (click)="toggleSettings()"></nb-action>
     <nb-action>
@@ -47,7 +46,19 @@
         </ul>
       </div>
     </nb-action>
-    <nb-action class="control-item" disabled icon="nb-notifications"></nb-action>
+    <nb-action class="notifications" [badgeText]="unreadNotificationsNbr" badgeStatus="danger">
+      <div class="dropdown" ngbDropdown>
+        <a class="btn p-0 cursor-pointer btn-tn border-0 d-flex justify-content-between" ngbDropdownToggle>
+          <i class="nb-notifications"></i>
+        </a>
+        <ul class="dropdown-menu notifications-list dropdown-menu-right" ngbDropdownMenu>
+          <li class="arrow"></li>
+          <li *ngFor="let notification of notifications" [class.bg-grey]="notification.unread" class="dropdown-item">
+            <notification [notification]="notification"></notification>
+          </li>
+        </ul>
+      </div>
+    </nb-action>
     <nb-action class="control-item" icon="nb-email"></nb-action>
     <nb-action class="control-item">
       <nb-search type="rotate-layout" (click)="startSearch()"></nb-search>

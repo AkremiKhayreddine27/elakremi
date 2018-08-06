@@ -1,11 +1,27 @@
-<div class="dropdown w-100 mr-2 d-flex align-items-center" ngbDropdown>
-  <h2 [ngClass]="{ 'active': element.value !== 'Tous' && withActive }" class="btn btn-select btn-tn btn-outline-secondary d-flex justify-content-between"
+<div *ngIf="!groupedSelect" class="dropdown w-100 mr-2 d-flex align-items-center" ngbDropdown>
+  <h2 [class.border-danger]="hasErrors" class="btn btn-select cursor-pointer btn-tn btn-outline-secondary d-flex justify-content-between"
     ngbDropdownToggle>
-    <span [class.text-secondary]="element.value === 'Tous'" *ngIf="element.value" class="current-element">{{ element.label }}</span>
-    <span *ngIf="!element.value" class="current-element">{{ default }}</span>
-    <i [class.text-secondary]="element.value === 'Tous'" class="fa fa-caret-down pl-1"></i>
+    <span [class.text-secondary]="element.all" class="current-element">{{ element.value }}</span>
+    <i [class.text-secondary]="element.all" class="fa fa-caret-down pl-1"></i>
   </h2>
   <ul class="dropdown-menu" ngbDropdownMenu>
-    <li [class.font-weight-bold]="element && element.value === e.value" *ngFor="let e of elements" (click)="setElement(e);" class="dropdown-item">{{ e.value }}</li>
+    <span *ngFor="let e of elements">
+      <li *ngIf="!e.all" [class.font-weight-bold]="element && element.id === e.id" (click)="setElement(e);" class="dropdown-item">{{ e.value }}</li>
+      <li *ngIf="e.all" [class.font-weight-bold]="element && element.id === e.id" (click)="setElement(e);" class="dropdown-item text-secondary">Tous</li>
+    </span>
+  </ul>
+</div>
+
+<div *ngIf="groupedSelect" class="dropdown w-100 mr-2 d-flex align-items-center" ngbDropdown>
+  <h2 class="btn btn-select cursor-pointer btn-tn btn-outline-secondary d-flex justify-content-between" ngbDropdownToggle>
+    <span [class.text-secondary]="!element.id" class="current-element">{{ element.value }}</span>
+    <i [class.text-secondary]="!element.id" class="fa fa-caret-down pl-1"></i>
+  </h2>
+  <ul class="dropdown-menu" ngbDropdownMenu>
+    <span *ngFor="let e of elements">
+      <li [class.font-weight-bold]="element && element.id === e.id" *ngIf="!e.group && !e.id" (click)="setElement(e);" class="dropdown-item text-secondary">Tous</li>
+      <li [class.font-weight-bold]="element && element.id === e.id" *ngIf="e.group" (click)="setGroupElement(e);" class="dropdown-item bg-grey">{{ e.value }}</li>
+      <li [class.font-weight-bold]="element && element.id === e.id" *ngIf="!e.group && e.id" (click)="setElement(e);" class="dropdown-item pl-5">{{ e.value }}</li>
+    </span>
   </ul>
 </div>

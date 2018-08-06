@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AuthGuard } from './@core/utils/auth-guard.service';
 
 import { NbPasswordAuthStrategy, NbDummyAuthStrategy, NbAuthModule, NbAuthJWTToken } from '@nebular/auth';
-
+ 
 import {
   NbAuthComponent,
   NbLoginComponent,

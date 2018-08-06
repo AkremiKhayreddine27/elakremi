@@ -14,10 +14,13 @@ export * from './card-header-search/card-header-search.component';
 export * from './ngx-alert/ngx-alert.component';
 export * from './ngx-pagination/ngx-pagination.component';
 export * from './btn-options/btn-options.component';
-export * from './nbr-input/nbr-input.component';
 export * from './ngx-select/ngx-select.component';
 export * from './ngx-table/ngx-table.component';
 export * from './ngx-table/row/row.component';
 export * from './ngx-table/ngx-table-collapse.component';
 export * from './send-notification/send-notification.component';
+export * from './notification/notification.component';
+export * from './mobile-dropdown/mobile-dropdown.component';
+export * from './ngx-datepicker-dropdown/ngx-datepicker-dropdown.component';
+export * from './filters/filters.component';
 

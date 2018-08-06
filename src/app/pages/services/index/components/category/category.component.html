@@ -15,14 +15,18 @@
   <nb-card-body (mouseenter)="isCollapsed = false" (mouseleave)="isCollapsed = true" class="p-0">
     <div [ngbCollapse]="isCollapsed">
       <ul class="list-group">
-        <li *ngFor="let service of subCategory.services" class="list-group-item d-flex justify-content-between align-items-center">
-          <span (click)="setService(service);">{{ service.title }}</span>
+        <li *ngFor="let service of servicesService.getTypes(subCategory.id)" class="list-group-item cursor-not-pointer d-flex justify-content-between align-items-center">
+          <span>{{ service.title }}</span>
+          <div class="d-flex align-items-center">
+            <i (click)="navigate('create',service);" class="ion cursor-pointer ion-plus mr-2"></i>
+            <i (click)="navigate('services',service);" class="ion cursor-pointer ion-ios-eye-outline"></i>
+          </div>
         </li>
       </ul>
     </div>
   </nb-card-body>
   <nb-card-footer class="d-flex align-items-center justify-content-between">
-    <span class="badge badge-secondary mr-1">{{ subCategory.services.length }}</span>
+    <span class="badge badge-secondary mr-1">{{ servicesService.getTypes(subCategory.id).length }}</span>
     <a class="btn-add">
       <i class="fa fa-plus text-success"></i>
     </a>

@@ -1,6 +1,13 @@
 @import '../../../styles/themes'; 
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+
 @include nb-install-component() {
-    
+    .overflow-hidden {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
     .small {
         color: #777;
     }
@@ -43,5 +50,16 @@
         color: nb-theme(color-success);
         box-shadow: nb-theme(shadow);
         border: none;
+    }
+    .nb-chevron-down-outline, .nb-chevron-up-outline {
+        font-size: 1.5rem;
+        margin-top: 2px;
+    }
+    @include media-breakpoint-down(sm) {
+        .overflow-hidden {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+        }
     }
 }

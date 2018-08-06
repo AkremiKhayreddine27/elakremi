@@ -11,7 +11,7 @@ const routes: Routes = [
     component: IndexComponent,
   },
   {
-    path: 'create',
+    path: 'services/create',
     component: CreateComponent
   },
   {

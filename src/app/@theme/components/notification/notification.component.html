@@ -1,0 +1,14 @@
+<div (click)="markUsUnread()" class="notification d-flex">
+  <div class="notification_icon pr-2">
+    <i class="nb-notifications"></i>
+  </div>
+  <div class="notification_content">
+    <div class="notification_title">{{ notification.title }}</div>
+    <div class="notification_time">{{ notification.createdAt }}</div>
+    <div class="notification_message d-flex flex-wrap small pt-2">
+      <p>
+        {{ notification.content }}
+      </p>
+    </div>
+  </div>
+</div>

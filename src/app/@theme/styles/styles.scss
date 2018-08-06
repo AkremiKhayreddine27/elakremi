@@ -1,33 +1,83 @@
 // themes - our custom or/and out of the box themes
 @import 'themes';
-
 @import 'custom';
-
 // framework component themes (styles tied to theme variables)
 @import '~@nebular/theme/styles/globals';
 @import '~@nebular/auth/styles/all';
-
 // global app font size
 @import './font-size';
-
 // loading progress bar theme
 @import './pace.theme';
-
 @import './bootstrap-rtl';
-
 // install the framework and custom global styles
 @include nb-install() {
-
-  // framework global styles
-  @include nb-theme-global();
-  @include nb-auth-global();
-
-  // loading progress bar
-  @include ngx-pace-theme();
-
-  // fixed in rc.9 and can be removed after upgrade
-  .custom-control .custom-control-indicator {
-    border-radius: 50%; // TODO: quickfix for https://github.com/akveo/nebular/issues/275
-  }
-  @include bootstrap-rtl();
-};
+    // framework global styles
+    @include nb-theme-global();
+    @include nb-auth-global(); // loading progress bar
+    @include ngx-pace-theme();
+    ng-select.form-control-danger {
+        .ng-select-container {
+            border-color: nb-theme(color-danger) !important;
+        }
+    }
+    .border-danger {
+        border-color: nb-theme(color-danger) !important;
+    }
+    .badge-danger {
+        background-color: nb-theme(color-danger) !important;
+    }
+    .badge-success {
+        background-color: nb-theme(color-success) !important;
+    } // fixed in rc.9 and can be removed after upgrade
+    .custom-control .custom-control-indicator {
+        border-radius: 50%; // TODO: quickfix for https://github.com/akveo/nebular/issues/275
+    }
+    nb-card-body {
+        overflow: visible;
+    }
+    .dropdown-menu {
+        z-index: 1000 !important;
+        .dropdown-item:hover {
+            background-color: nb-theme(color-success) !important;
+            color: nb-theme(color-bg) !important;
+        }
+    }
+    .btn-secondary {
+        background-color: nb-theme(switcher-background) !important;
+        border-color: nb-theme(switcher-background) !important;
+        &:hover {
+            $color: nb-theme(switcher-background);
+            $percentage: nb-theme(switcher-background-percentage);
+            background-color: tint($color, $percentage) !important;
+        }
+        i.big {
+            font-size: 1.8rem;
+            color: nb-theme(color-success);
+        }
+        i {
+            position: relative;
+            color: #777777;
+        }
+    }
+    @include media-breakpoint-down(sm) {
+        .modal-content {
+            border-radius: 0 !important;
+            border: none !important;
+        }
+        .modal-header {
+            border-radius: 0 !important;
+        }
+        .modal-dialog {
+            position: relative;
+            width: 100% !important;
+            height: 100vh !important;
+            margin: 0;
+            pointer-events: none;
+        }
+    }
+    @include bootstrap-rtl();
+    .loading-spinner {
+        @include loading-spinner(nb-theme(color-success), $selector: '&::before', $time: 1.5s);
+        height: 40vh;
+    }
+}

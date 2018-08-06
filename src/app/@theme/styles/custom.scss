@@ -1,13 +1,69 @@
 @import '~linearicons/dist/web-font/style.css';
+@import '~@ng-select/ng-select/themes/default.theme.css';
+.modal-content {
+    border: none !important;
+}
+
+.modal.mobile-dropdown {
+    width: 100vh;
+    height: 100vh;
+    .modal-content {
+        width: 100vh;
+        bottom: 0 !important;
+        position: fixed !important;
+    }
+}
+
+/* select 2 */
+
+.ng-select .ng-select-container {
+    border-radius: 0.375rem;
+    border: 2px solid #dadfe6;
+    height: 35px !important;
+    min-height: 35px !important;
+    color: #777;
+    background-color: #ffffff;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container,
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+    font-size: 0.875rem !important;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container {
+    border-color: #40dc7e;
+    box-shadow: none;
+}
+
+.ng-select.ng-select-opened>.ng-select-container {
+    border-color: #40dc7e;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    font-size: 0.875rem !important;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #f5f7fc;
+    border-radius: 2px;
+    border: 1px solid #dee2e6;
+    color: #777;
+}
 
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+.text-underline {
+    text-decoration: underline;
+}
+
 .badge {
     font-weight: lighter;
+    color: white;
 }
 
 /* Calendar icon */
+
 .nb-theme-default nb-menu .menu-item .menu-icon.lnr {
     font-size: 1.5rem !important;
     width: 2.5rem;
@@ -16,7 +72,9 @@
     align-items: center;
     justify-content: center;
 }
+
 /* Tariff icon */
+
 .nb-theme-default nb-menu .menu-item .menu-icon.ion-ios-pricetag-outline {
     font-size: 1.6rem !important;
     width: 2.5rem;
@@ -25,7 +83,9 @@
     align-items: center;
     justify-content: center;
 }
+
 /* Documents icon */
+
 .nb-theme-default nb-menu .menu-item .menu-icon.ion-ios-folder-outline {
     font-size: 1.54rem !important;
     width: 2.5rem;
@@ -35,16 +95,13 @@
     justify-content: center;
 }
 
-
-
-
 .dropdown-menu-right {
     right: 0 !important;
     left: auto !important;
 }
 
-  
-.nb-theme-default .dropdown .dropdown-menu, .nb-theme-default .dropup .dropdown-menu {
+.nb-theme-default .dropdown .dropdown-menu,
+.nb-theme-default .dropup .dropdown-menu {
     width: auto !important;
     padding: 0 !important;
     min-width: 100px;
@@ -54,7 +111,6 @@
 .nb-theme-default .dropup:not(.btn-group) .dropdown-toggle::after {
     display: none;
 }
-
 
 .nb-theme-default .dropdown {
     border: none !important;
@@ -68,59 +124,67 @@
     }
 }
 
-
 /**
   DatePicker custom style
 */
+
 ngb-datepicker {
     border-radius: 0 !important;
-  }
-  .ngb-dp-months {
-      display: flex !important;
-      flex-wrap: wrap !important;
-  }
-  .ngb-dp-month {
-      flex: 1;
-  }
-  .ngb-dp-month-name {
+}
+
+.ngb-dp-months {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.ngb-dp-month {
+    flex: 1;
+}
+
+.ngb-dp-month-name {
     font-size: 14px !important;
-  }
-  .ngb-dp-navigation-select {
+}
+
+.ngb-dp-navigation-select {
     position: absolute;
     top: 0.25rem;
     left: 0.25rem;
     flex: 1;
     select {
-      background-color: transparent !important;
-      padding-top: 0.5rem !important;
-      padding-bottom: 0.5rem !important;
-      padding-left: 0.5rem !important;
-      padding-right: 2rem !important;
-      line-height: 1.25 !important;
-      width: auto !important;
-      border: none !important;
-      color: #8f8f8f !important;
-      -webkit-appearance: none !important;
+        background-color: transparent !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 2rem !important;
+        line-height: 1.25 !important;
+        width: auto !important;
+        border: none !important;
+        color: #8f8f8f !important;
+        -webkit-appearance: none !important;
     }
     select::-ms-expand {
-      display: none !important;
+        display: none !important;
     }
-  }
-  .ngb-dp-month {
+}
+
+.ngb-dp-month {
     width: 100%;
-  }
-  .ngb-dp-day {
+}
+
+.ngb-dp-day {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .ngb-dp-header {
+}
+
+.ngb-dp-header {
     display: flex;
     justify-content: flex-end;
     position: relative;
-  }
-  .ngb-dp-arrow-btn {
+}
+
+.ngb-dp-arrow-btn {
     width: 2rem !important;
     height: 2rem !important;
     display: flex;
@@ -128,41 +192,84 @@ ngb-datepicker {
     justify-content: center;
     border-radius: 50% !important;
     padding: 0 !important;
-  }
-  span.ngb-dp-navigation-chevron {
-    color:#8f8f8f !important;
-  }
-  .ngb-dp-arrow-btn:hover {
+}
+
+span.ngb-dp-navigation-chevron {
+    color: #8f8f8f !important;
+}
+
+.ngb-dp-arrow-btn:hover {
     background-color: #f2f2f2;
-  
-  }
-  .ngb-dp-day, .ngb-dp-weekday, .ngb-dp-week-number {
+}
+
+.ngb-dp-day,
+.ngb-dp-weekday,
+.ngb-dp-week-number {
     min-width: 2rem !important;
     min-height: 2rem !important;
-  }
-  .ngb-dp-weekday[_ngcontent-c20] {
-    color: #555555 !important;
-  }
-  .ngb-dp-month:first-child .ngb-dp-week {
-    padding-left: 0.25rem !important;
-  }
-  .ngb-dp-month:last-child .ngb-dp-week {
-     padding-right: 0.25rem !important;
 }
-  
-  .ngb-dp-header {
+
+.ngb-dp-weekday[_ngcontent-c20] {
+    color: #555555 !important;
+}
+
+.ngb-dp-month:first-child .ngb-dp-week {
+    padding-left: 0.25rem !important;
+}
+
+.ngb-dp-month:last-child .ngb-dp-week {
+    padding-right: 0.25rem !important;
+}
+
+.ngb-dp-header {
     background-color: transparent !important;
-  }
-  
-  .ngb-dp-weekdays {
+}
+
+.ngb-dp-weekdays {
     background-color: transparent !important;
     width: 100%;
-  }
-  .ngb-dp-weekday {
+}
+
+.ngb-dp-weekday {
     flex: 1;
-  }
-  .ngb-dp-arrow-btn {
+}
+
+.ngb-dp-arrow-btn {
     color: #555555 !important;
     cursor: pointer !important;
-  }
+}
 
+@mixin loading-spinner($activeColor: #EF6565, $selector: '&::before', $time: 1.5s) {
+    @keyframes spinner {
+        0% {
+            transform: translate3d(-50%, -50%, 0) rotate(0deg);
+        }
+        100% {
+            transform: translate3d(-50%, -50%, 0) rotate(360deg);
+        }
+    }
+    animation-play-state: running;
+    opacity: 1;
+    position: relative;
+    &.-paused {
+        animation-play-state: paused;
+        opacity: 0.2;
+        transition: opacity linear 0.1s;
+    }
+    #{$selector} {
+        animation: $time linear infinite spinner;
+        animation-play-state: inherit;
+        border: solid 3px #dedede;
+        border-bottom-color: #{$activeColor};
+        border-radius: 50%;
+        content: '';
+        height: 40px;
+        left: 50%;
+        opacity: inherit;
+        position: absolute;
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        width: 40px;
+        will-change: transform;
+    }
+}

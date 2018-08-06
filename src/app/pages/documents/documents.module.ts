@@ -9,6 +9,8 @@ import { DocumentsRoutingModule, routedComponents } from './documents-routing.mo
     ThemeModule,
     DocumentsRoutingModule
   ],
-  declarations: [...routedComponents]
+  declarations: [
+    ...routedComponents
+  ]
 })
 export class DocumentsModule { }

@@ -1,0 +1,50 @@
+@import '../../styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@include nb-install-component() {
+    .custom-heigth {
+        height: 36px !important;
+    }
+    .custom-day {
+        text-align: center;
+        padding: 0.185rem 0.25rem;
+        display: inline-block;
+        height: 2rem;
+        width: 2rem;
+    }
+    .custom-day.focused {
+        background-color: #e6e6e6;
+    }
+    .custom-day.range,
+    .custom-day:hover {
+        background-color: rgb(2, 117, 216);
+        color: white;
+    }
+    .custom-day.faded {
+        background-color: rgba(2, 117, 216, 0.5);
+    }
+    .btn {
+        text-transform: capitalize;
+    }
+    .uppercase {
+        text-transform: uppercase;
+    }
+    .dropdown .dropdown-menu {
+        width: 200% !important;
+        .dropdown-item {
+            padding: 0;
+        }
+        .dropdown-item:hover {
+            background-color: transparent !important;
+            color: #777777 !important;
+        }
+    }
+    .text-secondary {
+        color: lighten(#6c757d, 20%) !important;
+    }
+    @include media-breakpoint-down(sm) {
+        .dropdown .dropdown-menu {
+            width: 100% !important;
+        }
+    }
+}

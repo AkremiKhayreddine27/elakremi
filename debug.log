@@ -1,0 +1,9 @@
+[0720/225725.895:ERROR:crash_report_database_win.cc(569)] CreateDirectory C:\Users\KHAYRE~1\AppData\Local\Temp\karma-7020769\Crashpad: The system cannot find the path specified. (0x3)
+[0720/225725.972:ERROR:registration_protocol_win.cc(84)] TransactNamedPipe: The pipe has been ended. (0x6D)
+[0720/225725.974:ERROR:crash_report_database_win.cc(569)] CreateDirectory C:\Users\KHAYRE~1\AppData\Local\Temp\karma-7020769\Crashpad: The system cannot find the path specified. (0x3)
+[0721/022447.139:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0721/024803.033:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0721/025732.155:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0722/194234.976:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0722/200550.871:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0722/201519.991:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports

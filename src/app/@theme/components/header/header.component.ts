@@ -41,9 +41,9 @@ export class HeaderComponent implements OnInit {
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
-  private notifications = [];
+  public notifications = [];
 
-  private unreadNotificationsNbr = 0;
+  public unreadNotificationsNbr = 0;
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,

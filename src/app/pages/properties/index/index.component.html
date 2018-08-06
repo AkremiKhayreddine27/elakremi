@@ -12,19 +12,23 @@
   <nb-card-body class="p-0">
     <card-mobile-header-actions [actions]="headerActions" (dropdownItemEvent)="handleDropdownEvent($event)" (actionEvent)="handleHeaderEvent($event)"></card-mobile-header-actions>
     <div [ngbCollapse]="isFilterCollapsed">
-      <filters (hasFilters)="hasFilters($event.filters)"></filters>
+      <filters [source]="source" (action)="handleFilter($event.action, $event.data)" [filters]="filters" (hasFilters)="hasFilters($event.filters)"></filters>
     </div>
-    <grid *ngIf="properties.length > 0" [properties]="properties"></grid>
-    <div *ngIf="propertyService.properties.length > 0 && properties.length === 0" class="row m-0">
-      <div class="col-12 p-4">
-        <ngx-alert message="aucun bien"></ngx-alert>
+    <div *ngIf="properties | async as data; else loading">
+      <grid *ngIf="data.length > 0; else noItems" [properties]="data"></grid>
+      <ng-template #noItems>
+        <div class="row m-0">
+          <div class="col-12 p-4">
+            <ngx-alert message="aucun bien"></ngx-alert>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <ng-template #loading>
+      <div class="d-flex p-4 justify-content-center align-items-center">
+        <div class="loading-spinner"></div>
       </div>
-    </div>
-    <div *ngIf="propertyService.properties.length === 0" class="row m-0">
-      <div class="col-12 p-4">
-        <ngx-alert [actions]="[{ type: 'link', url: 'create', text: 'Créer un bien' }]" message="Vous n'avez pas encore créer un bien"></ngx-alert>
-      </div>
-    </div>
+    </ng-template>
   </nb-card-body>
   <nb-card-footer class="d-flex justify-content-end p-0">
     <ngx-pagination [source]="source"></ngx-pagination>

@@ -14,12 +14,12 @@ export class IndexComponent implements OnInit {
     { title: 'List', type: 'link', icon: 'fa fa-list', clickAction: 'show', displayInMobile: true },
   ];
 
-  public services;
+  public categories;
 
-  constructor(private router: Router, private servicesService: ServicesService, private propertyService: PropertyService) { }
+  constructor(private router: Router, public servicesService: ServicesService, private propertyService: PropertyService) { }
 
   ngOnInit() {
-    this.services = this.servicesService.all();
+    this.categories = this.servicesService.categories;
   }
 
   handleHeaderEvent(event) {

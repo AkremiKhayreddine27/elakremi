@@ -14,13 +14,13 @@
     }
     /deep/ .qq-gallery .qq-upload-list li.qq-upload-fail {
         background-color: white;
-        box-shadow: 2px 1px 2px 0px #ff6780;
+        box-shadow: 2px 1px 2px 0 #ff6780;
         border: 0;
     }
     /deep/ .qq-gallery .qq-upload-list li {
         border-radius: 0;
         box-shadow: none;
-        padding: 10px 10px;
+        padding: 10px;
     }
     /deep/ .qq-gallery .qq-upload-list li .list-item {
         display: flex;
@@ -28,12 +28,12 @@
         position: relative;
         .list-item-info {
             flex: 1;
-            max-width: 80%;
+            max-width: 100%;
         }
     }
     /deep/ .qq-gallery .qq-upload-retry {
         position: absolute;
-        top: 15px;
+        top: 5px;
         left: 50%;
     }
     /deep/ .qq-gallery .qq-thumbnail-wrapper {
@@ -46,21 +46,21 @@
         display: none;
     }
     /deep/ .qq-gallery .qq-upload-list {
-        margin: 10px 0 0 0;
+        margin: 10px 0 0;
         padding: 10px;
-    } 
+    }
 
     /deep/ .qq-gallery .qq-upload-list li {
-        max-width: 100%; 
+        max-width: 100%;
         width: 100%;
         margin: 10px 0;
         line-height: 16px;
         font-size: 13px;
         color: #424242;
-        background-color: transparent;
+        background-color: nb-theme(smart-table-bg-even);
         vertical-align: top;
         height: auto;
-        box-shadow: 2px 5px 12px 0px #dfe3eb;
+        box-shadow: 2px 5px 12px 0 #dfe3eb;
     }
 
     /deep/ .qq-gallery .qq-upload-file {
@@ -76,7 +76,7 @@
         background-color: transparent;
         color: #525252;
         font-weight: 700;
-        font-family: Arial,Helvetica,sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
         border-radius: 0;
         border: none;
         padding: 0;
@@ -85,6 +85,9 @@
         line-height: 17px;
         .nb-trash {
             font-size: 2rem;
+        }
+        .nb-trash:hover {
+            color: nb-theme(color-success);
         }
     }
     /deep/ .qq-gallery.qq-uploader {

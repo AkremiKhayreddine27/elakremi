@@ -12,6 +12,8 @@ import { AnalyticsService } from './utils/analytics.service';
 import { AuthGuard } from './utils/auth-guard.service';
 import { NotAuthGuard } from './utils/not-auth-guard.service';
 
+import { UtilitiesService } from './utils/utilities.service';
+
 const socialLinks = [
   {
     url: 'https://github.com/akveo/nebular',
@@ -76,7 +78,8 @@ export const NB_CORE_PROVIDERS: any = [
   },
   AnalyticsService,
   AuthGuard,
-  NotAuthGuard
+  NotAuthGuard,
+  UtilitiesService
 ];
 
 @NgModule({

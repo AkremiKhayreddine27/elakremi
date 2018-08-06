@@ -1,7 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dateFns from 'date-fns';
+import { PropertyService } from '../../../@core/data/property.service';
 import { TariffsService } from '../../../@core/data/tariffs.service';
+import * as faker from 'faker';
+import { EventTariffService } from '../../../@core/data/event-tariff.service';
+import { EventService } from '../../../@core/data/event.service';
 
 @Component({
   selector: 'dialog-new-event',
@@ -10,59 +15,80 @@ import { TariffsService } from '../../../@core/data/tariffs.service';
 })
 export class DialogNewEventComponent implements OnInit {
 
-  @Input() event;
 
-  public newEvent;
+  @ViewChild('form') form: FormGroup;
 
-  submitted = false;
+  @Input() eventTariff;
 
-  constructor(public activeModal: NgbActiveModal, public tariffsService: TariffsService) { }
+  isSubmitted: boolean = false;
+
+  constructor(
+    public activeModal: NgbActiveModal,
+    public propertyService: PropertyService,
+    public eventTariffService: EventTariffService,
+    public eventService: EventService,
+    public tariffsService: TariffsService) { }
 
   ngOnInit() {
-    if (!this.event) {
-      this.newEvent =
-        {
-          title: '',
-          amount: null,
-          startDate: {
-            year: new Date().getFullYear(),
-            month: dateFns.getMonth(new Date()) + 1,
-            day: new Date().getDate()
-          },
-          endDate: {
-            year: new Date().getFullYear(),
-            month: dateFns.getMonth(new Date()) + 1,
-            day: new Date().getDate()
-          },
-          minDuration: 0
-        }
-    } else {
-      this.newEvent = { ...this.event };
-      this.newEvent.startDate = {
-        year: this.newEvent.startDate.getFullYear(),
-        month: dateFns.getMonth(this.newEvent.startDate) + 1,
-        day: this.newEvent.startDate.getDate()
-      };
-      this.newEvent.endDate = {
-        year: this.newEvent.endDate.getFullYear(),
-        month: dateFns.getMonth(this.newEvent.endDate) + 1,
-        day: this.newEvent.endDate.getDate()
-      };
-    }
+    this.buildForm();
+  }
+
+  buildForm() {
+    this.form = new FormGroup({
+      id: new FormControl(this.eventTariff ? this.eventTariff.id : faker.random.number()),
+      event: new FormGroup({
+        id: new FormControl(this.eventTariff ? this.eventTariff.event.id : faker.random.number()),
+        value: new FormControl(this.eventTariff && this.eventTariff.event ? this.eventTariff.event.value : null, Validators.required),
+        start: new FormControl(this.eventTariff && this.eventTariff.event ? {
+          year: this.eventTariff.event.start.getFullYear(),
+          month: dateFns.getMonth(this.eventTariff.event.start) + 1,
+          day: this.eventTariff.event.start.getDate()
+        } : null, Validators.required),
+        end: new FormControl(this.eventTariff && this.eventTariff.event ? {
+          year: this.eventTariff.event.end.getFullYear(),
+          month: dateFns.getMonth(this.eventTariff.event.end) + 1,
+          day: this.eventTariff.event.end.getDate()
+        } : null, Validators.required),
+        duration: new FormControl(this.eventTariff && this.eventTariff.event ? this.eventTariff.event.duration : 1, Validators.required)
+      }),
+      price: new FormControl(this.eventTariff ? this.eventTariff.price : null, Validators.required),
+      tariff: new FormControl(this.eventTariff ? this.eventTariff.tariff : this.tariffsService.findFirstBy('property.id', this.propertyService.currentProperty.id))
+    });
+  }
+
+  get event(): FormGroup { return this.form.get('event') as FormGroup }
+
+  get eventName(): FormControl { return this.event.get('value') as FormControl }
+
+  get start(): FormControl { return this.event.get('start') as FormControl }
+
+  get end(): FormControl { return this.event.get('end') as FormControl }
+
+  get price(): FormControl { return this.form.get('price') as FormControl }
+
+  formatDates() {
+    this.event.patchValue({ start: dateFns.parse(this.start.value.year + '-' + this.start.value.month + '-' + this.start.value.day) });
+    this.event.patchValue({ end: dateFns.parse(this.end.value.year + '-' + this.end.value.month + '-' + this.end.value.day) });
+  }
+
+  reset() {
+    this.isSubmitted = false;
+    this.buildForm();
   }
 
   save() {
-    this.submitted = true;
-    if (!this.event) {
-      this.newEvent.startDate = dateFns.parse(this.newEvent.startDate.year + '-' + this.newEvent.startDate.month + '-' + this.newEvent.startDate.day);
-      this.newEvent.endDate = dateFns.parse(this.newEvent.endDate.year + '-' + this.newEvent.endDate.month + '-' + this.newEvent.endDate.day);
-      this.tariffsService.addTarifEvent(this.newEvent);
-    } else {
-      this.newEvent.startDate = dateFns.parse(this.newEvent.startDate.year + '-' + this.newEvent.startDate.month + '-' + this.newEvent.startDate.day);
-      this.newEvent.endDate = dateFns.parse(this.newEvent.endDate.year + '-' + this.newEvent.endDate.month + '-' + this.newEvent.endDate.day);
-      this.tariffsService.updateTarifEvent(this.newEvent);
+    this.isSubmitted = true;
+    if (this.form.valid) {
+      this.formatDates();
+      if (this.eventTariff) {
+        this.eventService.update(this.eventTariff.event, this.event.value);
+        this.eventTariffService.update(this.eventTariff, this.form.value);
+      } else {
+        this.eventService.store(this.event.value);
+        this.eventTariffService.store(this.form.value);
+      }
+      this.close();
     }
-    this.close();
   }
 
   close() {

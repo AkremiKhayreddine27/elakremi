@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentFormComponent } from '../../payment-form/payment-form.component';
 import { SendNotificationComponent } from '../../../../@theme/components';
 import { DeleteConfirmationComponent } from '../../../../@theme/components/delete-confirmation/delete-confirmation.component';
 import * as dateFns from 'date-fns';
 import { PaymentService } from '../../../../@core/data/payment.service';
+
 @Component({
   selector: 'payment',
   templateUrl: './payment.component.html',
@@ -22,7 +23,7 @@ export class PaymentComponent implements OnInit {
 
   }
 
-  openEditPayment(payment) {
+  edit(payment) {
     const modalRef = this.modalService.open(PaymentFormComponent, { size: 'lg', container: 'nb-layout' });
     modalRef.componentInstance.payment = payment;
     modalRef.componentInstance.toPay = this.toPay;
@@ -32,9 +33,10 @@ export class PaymentComponent implements OnInit {
     const modalRef = this.modalService.open(SendNotificationComponent, { size: 'lg', container: 'nb-layout' });
     modalRef.componentInstance.title = 'Envoyer un rappel';
     modalRef.componentInstance.mail = {
-      recipient: payment.payer,
+      recipients: [payment.payer],
       object: 'Relance de paiement ' + payment.id,
-      content: 'Sauf erreur de notre part, nous sommes toujours en attente de paiement de la facture n° ' + payment.id + ', datée du ' + dateFns.format(payment.deadlineDate, 'dd MMM YYYY') + ', et d’un montant de ' + payment.amount + '$.'
+      content: 'Sauf erreur de notre part, nous sommes toujours en attente de paiement de la facture n° ' + payment.id + ', datée du ' + dateFns.format(payment.deadlineDate, 'dd MMM YYYY') + ', et d’un montant de ' + payment.amount + '$.',
+      files: []
     };
   }
 
@@ -44,7 +46,7 @@ export class PaymentComponent implements OnInit {
     modalRef.componentInstance.title = payment.id;
     modalRef.result.then(confirmed => {
       if (confirmed) {
-        this.paymentService.remove(payment, this.toPay);
+        this.paymentService.delete(payment);
       }
     }, (reason) => {
 

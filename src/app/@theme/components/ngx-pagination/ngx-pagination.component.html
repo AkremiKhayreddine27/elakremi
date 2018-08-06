@@ -1,4 +1,4 @@
-<nav *ngIf="!isFiltred" class="mt-4 mr-4" aria-label="Page navigation example">
+<nav class="mt-4 mr-4" aria-label="Page navigation example">
   <ul *ngIf="paging && total > paging.perPage" class="pagination">
     <li class="page-item" [class.disabled]="paging && paging.page === 1">
       <a class="page-link" *ngIf="paging" (click)="setPage(paging.page - 1)">Précédent</a>
@@ -15,27 +15,6 @@
       <a class="page-link" *ngIf="paging && paging.page * paging.perPage <= total" (click)="setPage(paging.page + 1)">{{ paging.page + 1 }}</a>
     </li>
     <li class="page-item" [class.disabled]="paging && paging.page * paging.perPage > total">
-      <a class="page-link" *ngIf="paging" (click)="setPage(paging.page + 1)">Suivant</a>
-    </li>
-  </ul>
-</nav>
-<nav *ngIf="isFiltred" class="mt-4 mr-4" aria-label="Page navigation example">
-  <ul *ngIf="paging && filtredTotal > paging.perPage" class="pagination">
-    <li class="page-item" [class.disabled]="paging && paging.page === 1">
-      <a class="page-link" *ngIf="paging" (click)="setPage(paging.page - 1)">Précédent</a>
-    </li>
-    <li class="page-item">
-      <a class="page-link" *ngIf="paging && paging.page > 1" (click)="setPage(paging.page - 1)">{{ paging.page - 1 }}</a>
-    </li>
-    <li class="page-item active">
-      <a class="page-link" *ngIf="paging" (click)="setPage(paging.page)">{{ paging.page }}
-        <span class="sr-only">(current)</span>
-      </a>
-    </li>
-    <li class="page-item">
-      <a class="page-link" *ngIf="paging && paging.page * paging.perPage <= filtredTotal" (click)="setPage(paging.page + 1)">{{ paging.page + 1 }}</a>
-    </li>
-    <li class="page-item" [class.disabled]="paging && paging.page * paging.perPage > filtredTotal">
       <a class="page-link" *ngIf="paging" (click)="setPage(paging.page + 1)">Suivant</a>
     </li>
   </ul>

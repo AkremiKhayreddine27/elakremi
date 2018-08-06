@@ -8,49 +8,38 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-md-6">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group row">
-              <label for="title" class="col-form-label col-md-4">Titre *</label>
-              <div class="input-group input-group-sm col-md-8">
-                <input id="title" class="form-control" [class.form-control-danger]="title.invalid && title.touched && title.errors?.required"
-                  formControlName="title" name="title">
-              </div>
-              <small class="form-text error" *ngIf="title.invalid && title.touched && title.errors?.required">
-                Ce champ est requis !
-              </small>
-            </div>
+        <div class="form-group row">
+          <label for="title" class="col-form-label col-md-4">Titre *</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="title" class="form-control" [class.form-control-danger]="title.invalid && title.touched && title.errors?.required"
+              formControlName="title" name="title">
           </div>
-          <div class="col-md-12">
-            <div class="form-group row">
-              <label for="type" class="col-form-label col-md-4">Type *</label>
-              <ngx-select class="col-md-8" [element]="type" [elements]="types" (selectChanged)="setType($event)"></ngx-select>
-            </div>
-          </div>
+          <small class="form-text error" *ngIf="title.invalid && title.touched && title.errors?.required">
+            Ce champ est requis !
+          </small>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group row">
-          <label for="description" class="col-form-label col-md-4">Description</label>
-          <div class="input-group input-group-sm col-md-8">
-            <textarea rows="4" id="description" class="form-control" name="description" formControlName="description">
-                        </textarea>
-          </div>
+          <label *ngIf="properties.length > 0 || services.length > 0 || reservations.length > 0" class="col-form-label col-md-4">Bien *</label>
+          <ngx-select *ngIf="properties.length > 0" class="col-md-8" [element]="currentProperty" [elements]="properties" (selectChanged)="setProperty($event)"></ngx-select>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="form-group row">
-          <label for="type" class="col-form-label col-md-2">Associé à *</label>
-          <ngx-select [class.col-md-4]="properties.length > 0 || services.length > 0 || reservations.length > 0" [class.col-md-10]="properties.length === 0 && services.length === 0 && reservations.length === 0"
-            [element]="currentAssociation" [elements]="associations" (selectChanged)="setAssociation($event)"></ngx-select>
-          <label *ngIf="properties.length > 0 || services.length > 0 || reservations.length > 0" class="col-form-label col-md-2">Bien *</label>
-          <ngx-select *ngIf="properties.length > 0" class="col-md-4" [element]="currentProperty" [elements]="properties" (selectChanged)="setProperty($event)"></ngx-select>
-          <div class="col-md-6"></div>
-          <label *ngIf="services.length > 0 || reservations.length > 0" class="col-form-label col-md-2">{{ currentAssociation.value }} *</label>
-          <ngx-select *ngIf="services.length > 0" class="col-md-4" [element]="currentAssociationValue" [elements]="services" (selectChanged)="setOwner($event)"></ngx-select>
-          <ngx-select *ngIf="reservations.length > 0" class="col-md-4" [element]="currentAssociationValue" [elements]="reservations"
+          <label for="type" class="col-form-label col-md-4">Type *</label>
+          <ngx-select class="col-md-8" [element]="type" [elements]="types" (selectChanged)="setType($event)"></ngx-select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="type" class="col-form-label col-md-4">Associé à *</label>
+          <ngx-select class="col-md-8" [element]="currentAssociation" [elements]="associations" (selectChanged)="setAssociation($event)"></ngx-select>
+          <label *ngIf="services.length > 0 || reservations.length > 0" class="col-form-label col-md-4">{{ currentAssociation.value }} *</label>
+          <ngx-select *ngIf="services.length > 0" class="col-md-8" [element]="currentAssociationValue" [elements]="services" (selectChanged)="setOwner($event)"></ngx-select>
+          <ngx-select *ngIf="reservations.length > 0" class="col-md-8" [element]="currentAssociationValue" [elements]="reservations"
             (selectChanged)="setOwner($event)"></ngx-select>
           <small class="form-text error" *ngIf="currentAssociation.value === 'Réservation' && currentProperty.data.reservations.length === 0">
             Le bien séléctionné n'a aucune réservation !
@@ -58,6 +47,31 @@
           <small class="form-text error" *ngIf="currentAssociation.value === 'Service' && currentProperty.data.services.length === 0">
             Le bien séléctionné n'a aucun service !
           </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group row">
+          <label for="title" class="col-form-label col-md-4">Lien *</label>
+          <div class="input-group input-group-sm col-md-8">
+            <input id="title" class="form-control" [class.form-control-danger]="title.invalid && title.touched && title.errors?.required"
+              formControlName="title" name="title">
+          </div>
+          <small class="form-text error" *ngIf="title.invalid && title.touched && title.errors?.required">
+            Ce champ est requis !
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group row">
+          <label for="description" class="col-form-label col-md-2">Description</label>
+          <div class="input-group input-group-sm col-md-10">
+            <textarea rows="4" id="description" class="form-control" name="description" formControlName="description">
+                            </textarea>
+          </div>
         </div>
       </div>
     </div>
@@ -72,10 +86,13 @@
     </div>
   </div>
   <div class="modal-footer">
+    <button (click)="close()" class="btn btn-sm btn-danger">
+      <i class="fa fa-close mr-1"></i>
+      <span i18n>Annuler</span>
+    </button>
     <button (click)="save()" class="btn btn-sm btn-success">
       <i class="fa fa-save mr-1"></i>
       <span i18n>Sauvegarder</span>
     </button>
   </div>
 </form>
- 

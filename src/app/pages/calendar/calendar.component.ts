@@ -17,6 +17,7 @@ import { DialogShowDayEventsComponent } from './dialog-show-day-events/dialog-sh
 import { CalendarService } from '../../@core/data/calendar.service';
 import { CalendarSettingsService } from '../../@core/data/calendar-settings.service';
 import { PropertyService } from '../../@core/data/property.service';
+import { ReservationsService } from '../../@core/data/reservations.service';
 
 @Component({
   selector: 'app-calendar',
@@ -80,6 +81,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   constructor(
     private modalService: NgbModal,
     private calendarService: CalendarService,
+    private reservationservice: ReservationsService,
     private settings: CalendarSettingsService,
     private propertyService: PropertyService
   ) { }
@@ -87,13 +89,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setupEvents();
     if (this.propertyService.currentProperty) {
-      this.calendars = this.propertyService.currentProperty.calendars;
+      this.calendars = this.calendarService.getPropertyCalendars(this.propertyService.currentProperty, this.reservationservice.findBy('property.id', this.propertyService.currentProperty.id));
       this.calendarService.init(this.propertyService.currentProperty);
       this.observeLocalCalendars();
     }
     this.propertyService.refreshCurrentProperty.subscribe(property => {
       if (property) {
-        this.calendars = property.calendars;
+        this.calendars = this.calendarService.getPropertyCalendars(property, this.reservationservice.findBy('property.id', property.id));
         this.calendarService.init(property);
       }
     });
@@ -112,14 +114,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
    * 
   */
   observeLocalCalendars() {
-    this.refreshSubscription = this.calendarService.refresh.subscribe(
-      value => {
-        this.calendars = value.filter(calendar => {
-          return calendar.display;
-        });
-        this.refresh.next();
-      }
-    );
+    this.refreshSubscription = this.calendarService.refresh.subscribe(value => {
+      this.calendars = value.filter(calendar => {
+        return calendar.display;
+      });
+      this.refresh.next();
+    });
   }
 
   /**

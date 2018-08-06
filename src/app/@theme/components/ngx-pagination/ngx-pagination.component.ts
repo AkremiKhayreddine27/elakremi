@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'ngx-pagination',
@@ -10,36 +11,25 @@ export class NgxPaginationComponent implements OnInit {
 
   @Input() source: LocalDataSource;
 
+  @Input() refresh: Subject<any> = new Subject();
+
+  @Input() perPage = 10;
+
   paging;
 
   total;
 
-  filtredTotal;
-
-  isFiltred = false;
-
   constructor() { }
 
   ngOnInit() {
-    this.source.getAll().then(value => {
-      this.total = value.length;
-    });
-    this.source.setPaging(1, 10);
-    this.source.setPage(1);
-    this.source.onChanged().subscribe(value => {
-      if (value.action === 'filter') {
-        this.isFiltred = true;
-      }
-      let nbrFilters = 0;
-      value.filter.filters.map(f => {
-        if (f.search !== '') {
-          nbrFilters++;
-        }
-      });
-      if (nbrFilters === 0) {
-        this.isFiltred = false;
-      }
-      this.filtredTotal = value.elements.length;
+    this.init(this.source);
+  }
+
+  init(source: LocalDataSource) {
+    source.setPaging(1, this.perPage);
+    source.setPage(1);
+    source.onChanged().subscribe(value => {
+      this.total = source.count();
       this.paging = value.paging;
     });
   }

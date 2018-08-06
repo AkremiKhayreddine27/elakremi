@@ -1,0 +1,12 @@
+@import '../../../../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+
+@include nb-install-component() {
+    $padding: 1rem;
+    .echart {
+        position: absolute;
+        height: calc(100% - 2 * #{$padding});
+        width: 100%;
+    }
+}

@@ -14,7 +14,7 @@
               </li>
               <li *ngIf="d.type ==='data'" class="dropdown-item">
                 <i [class]="d.icon"></i>
-                {{ row[d.title] }}
+                {{ getDataFromObject(row, d.title) }}
               </li>
               <div *ngIf="d.type ==='divider'" class="dropdown-divider"></div>
             </span>
@@ -24,58 +24,48 @@
     </div>
     <div *ngFor="let d of col.content">
       <span class="small" *ngIf="d.type === 'iconText'">
-        <i [class]="d.data[0]" class="mr-1"></i> {{ row[d.data[1]] }}
+        <i [class]="d.path[0]" class="mr-1"></i> {{ getDataFromObject(row, d.path[1]) }}
       </span>
       <span class="d-flex align-items-center" *ngIf="d.type === 'iconImageText'">
-        <div class="mr-2" [ngSwitch]="row[d.data[0]]">
-          <img *ngSwitchCase="'pdf'" src="assets/images/icon_3_pdf_x16.png" />
-          <img *ngSwitchCase="'word'" src="assets/images/icon_1_word_x16.png" />
-          <img *ngSwitchCase="'archive'" src="assets/images/icon_2_archive_x16.png" />
-          <img *ngSwitchCase="'excel'" src="assets/images/icon_1_excel_x16.png" />
+        <div class="mr-2" [ngSwitch]="getDataFromObject(row, d.path[0])">
+          <img *ngSwitchCase="'application/pdf'" src="assets/images/icon_3_pdf_x16.png" />
+          <img *ngSwitchCase="'application/msword'" src="assets/images/icon_1_word_x16.png" />
+          <img *ngSwitchCase="'application/zip'" src="assets/images/icon_2_archive_x16.png" />
+          <img *ngSwitchCase="'application/x-zip-compressed'" src="assets/images/icon_2_archive_x16.png" />
+          <img *ngSwitchCase="'application/vnd.ms-excel'" src="assets/images/icon_1_excel_x16.png" />
         </div>
-        <span class="small">{{ row[d.data[1]] }}</span>
+        <span class="small">{{ getDataFromObject(row, d.path[1]) }}</span>
       </span>
       <span class="d-flex align-items-start" *ngIf="d.type === 'imageText'">
-        <img class="property-img mr-2" [src]="row[d.data[0].split('.')[0]][d.data[0].split('.')[1]][0]" />
-        <span class="small">{{ row[d.data[1].split('.')[0]][d.data[1].split('.')[1]] }}</span>
+        <img class="property-img mr-2" *ngIf="!isString(getDataFromObject(row, d.path[0]))" [src]="getDataFromObject(row, d.path[0])[0]"
+        />
+        <img class="property-img mr-2" *ngIf="isString(getDataFromObject(row, d.path[0]))" [src]="getDataFromObject(row, d.path[0])"
+        />
+        <span class="small">{{ getDataFromObject(row, d.path[1]) }}</span>
       </span>
       <span *ngIf="d.type !== 'iconText'" class="d-flex" [class.flex-column]="d.splitData">
-        <span class="pr-1" *ngFor="let h of d.data">
-          <span *ngIf="!h.includes('.')">
-            <span class="small cursor-pointer text-underline text-success d-flex align-items-center" *ngIf="d.type=== 'collapse'" (click)="collapse(d.component)">
-              {{ h }}
-              <i *ngIf="isCollapsed" class="fa small fa-chevron-down ml-1"></i>
-              <i *ngIf="!isCollapsed" class="fa small fa-chevron-up ml-1"></i>
-            </span>
-            <span class="small" *ngIf="d.type === 'date'">
-              {{ row[h] | date:'dd MMM yyyy' }}
-            </span>
-            <span class="small" *ngIf="d.type ==='text'">
-              {{ row[h] }}
-            </span>
-            <span class="small" *ngIf="d.type ==='amount'">
-              {{ row[h] }}{{ d.currency }}
-            </span>
-            <span [class.badge-success]="row[h] === 'validée' || row[h] === 'payé' || row[h] === 'réservation'" [class.badge-warning]="row[h] === 'provisoire' || row[h] === 'service'"
-              [class.badge-danger]="row[h] === 'annulée' || row[h] === 'à payer'" [class.badge-info]="row[h] === 'terminée' || row[h] === 'bien'"
-              class="badge mt-1 mb-1 p-1" *ngIf="d.type ==='badge'">
-              {{ row[h] }}
-            </span>
+        <span class="pr-1" *ngFor="let h of d.path">
+          <span class="small cursor-pointer text-success d-flex align-items-center" *ngIf="d.type=== 'collapse'" (click)="collapse(d)">
+            <span class="text-underline" *ngIf="!getDataFromObject(row, d.label)">{{ d.label }}</span>
+            <span class="text-underline" *ngIf="getDataFromObject(row, d.label)">{{ getDataFromObject(row, d.label) }}</span>
+            <i *ngIf="isCollapsed" class="small nb-chevron-down-outline"></i>
+            <i *ngIf="!isCollapsed" class="small nb-chevron-up-outline"></i>
           </span>
-          <span *ngIf="h.includes('.')">
-            <span class="small" *ngIf="d.type ==='text' && (h.split('.').length) === 2">
-              {{ row[h.split('.')[0]][h.split('.')[1]] }}
-            </span>
-            <span class="small" *ngIf="d.type ==='text'  && (h.split('.').length) === 3">
-              {{ row[h.split('.')[0]][h.split('.')[1]][h.split('.')[2]] }}
-            </span>
-            <span class="small" *ngIf="d.type ==='amount'">
-              {{ row[h.split('.')[0]][h.split('.')[1]] }}{{ d.currency }}
-            </span>
-            <span [class.badge-success]="row[h.split('.')[0]][h.split('.')[1]] === 'réservation'" [class.badge-warning]="row[h.split('.')[0]][h.split('.')[1]] === 'service'"
-              [class.badge-info]="row[h.split('.')[0]][h.split('.')[1]] === 'bien'" class="badge mt-1 mb-1 p-1" *ngIf="d.type ==='badge'  && (h.split('.').length) === 2">
-              {{ row[h.split('.')[0]][h.split('.')[1]] }}
-            </span>
+          <span class="small" *ngIf="d.type === 'date'">
+            {{ getDataFromObject(row, h) | date:'dd MMM yyyy' }}
+          </span>
+          <span class="small" *ngIf="d.type ==='text'">
+            {{ getDataFromObject(row, h) }}
+          </span>
+          <span [routerLink]="row[d.link]" class="small cursor-pointer" *ngIf="d.type ==='link'">
+            {{ getDataFromObject(row, h) }}
+          </span>
+          <span class="small" *ngIf="d.type ==='amount'">
+            <span *ngIf="d.label">{{ d.label }} : </span>
+            {{ getDataFromObject(row, h) }} {{ getDataFromObject(row, d.currency) }}
+          </span>
+          <span [class]="'badge mt-1 mb-1 p-1 ' + row[h].cssClass" *ngIf="d.type ==='badge'">
+            {{ getDataFromObject(row, h).value }}
           </span>
         </span>
       </span>
@@ -85,76 +75,46 @@
 
 <div class="border-bottom d-flex d-md-none d-lg-none d-xl-none m-0 pb-2 ">
   <div *ngFor="let col of config.mobileRows " [class]="col.width + ' p-1' ">
-    <div *ngIf="col.type==='options' " class="actions ">
-      <div class="position-relative ">
-        <div class="dropdown " ngbDropdown>
-          <a class="action " ngbDropdownToggle>
-            <i class="fa fa-ellipsis-v "></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-right " ngbDropdownMenu>
-            <span *ngFor="let d of col.content ">
-              <li *ngIf="d.type==='option' " (click)="actionClicked(d.clickAction, row) " class="dropdown-item ">
-                <i [class]="d.icon "></i>
-                {{ d.title }}
-              </li>
-              <li *ngIf="d.type==='data' " class="dropdown-item ">
-                <i [class]="d.icon "></i>
-                {{ row[d.title] }}
-              </li>
-              <div *ngIf="d.type==='divider' " class="dropdown-divider "></div>
-            </span>
-          </ul>
-        </div>
-      </div>
+    <div *ngIf="col.type === 'options' " class="actions ">
+      <a (click)="showDropdown(row, col.content)" class="action">
+        <i class="fa fa-ellipsis-v "></i>
+      </a>
     </div>
     <div *ngFor="let d of col.content ">
       <span class="small-xs" *ngIf="d.type==='iconText' ">
-        <i [class]="d.data[0] " class="mr-1 "></i> {{ row[d.data[1]] }}
+        <i [class]="d.path[0] " class="mr-1 "></i> {{ getDataFromObject(row, d.path[1]) }}
       </span>
       <span class="d-flex align-items-center" *ngIf="d.type === 'iconImageText'">
-        <div class="mr-2" [ngSwitch]="row[d.data[0]]">
-          <img *ngSwitchCase="'pdf'" src="assets/images/icon_3_pdf_x16.png" />
-          <img *ngSwitchCase="'word'" src="assets/images/icon_1_word_x16.png" />
-          <img *ngSwitchCase="'archive'" src="assets/images/icon_2_archive_x16.png" />
-          <img *ngSwitchCase="'excel'" src="assets/images/icon_1_excel_x16.png" />
+        <div class="mr-2" [ngSwitch]="getDataFromObject(row, d.path[0])">
+          <img *ngSwitchCase="'application/pdf'" src="assets/images/icon_3_pdf_x16.png" />
+          <img *ngSwitchCase="'application/msword'" src="assets/images/icon_1_word_x16.png" />
+          <img *ngSwitchCase="'application/zip'" src="assets/images/icon_2_archive_x16.png" />
+          <img *ngSwitchCase="'application/x-zip-compressed'" src="assets/images/icon_2_archive_x16.png" />
+          <img *ngSwitchCase="'application/vnd.ms-excel'" src="assets/images/icon_1_excel_x16.png" />
         </div>
-        <span class="small-xs">{{ row[d.data[1]] }}</span>
+        <span class="small">{{ getDataFromObject(row, d.path[1]) }}</span>
       </span>
       <span *ngIf="d.type !=='iconText' " class="d-flex " [class.flex-column]="d.splitData ">
-        <span class="pr-1 " *ngFor="let h of d.data ">
-          <span *ngIf="!h.includes( '.') ">
-            <span class="small-xs cursor-pointer text-underline text-success d-flex align-items-center " *ngIf="d.type==='collapse'
-              " (click)="collapse(d.component) ">
-              {{ h }}
-              <i *ngIf="isCollapsed " class="fa small-xs fa-chevron-down ml-1 "></i>
-              <i *ngIf="!isCollapsed " class="fa small-xs fa-chevron-up ml-1 "></i>
-            </span>
-            <span class="small-xs" *ngIf="d.type==='date' ">
-              {{ row[h] | date:'dd MMM yyyy' }}
-            </span>
-            <span class="small-xs" *ngIf="d.type==='text' ">
-              {{ row[h] }}
-            </span>
-            <span class="small-xs" *ngIf="d.type==='amount' ">
-              {{ row[h] }}{{ d.currency }}
-            </span>
-            <span [class.badge-success]="row[h]==='validée' || row[h]==='payé' " [class.badge-warning]="row[h]==='provisoire'
-              " [class.badge-danger]="row[h]==='annulée' || row[h]==='à payer' " [class.badge-info]="row[h]==='terminée' "
-              class="badge mt-1 mb-1 p-1 " *ngIf="d.type==='badge' ">
-              {{ row[h] }}
-            </span>
+        <span class="pr-1 " *ngFor="let h of d.path ">
+          <span class="small-xs cursor-pointer text-success d-flex align-items-center " *ngIf="d.type==='collapse'
+              " (click)="collapse(d) ">
+            <span class="text-underline" *ngIf="!getDataFromObject(row, d.label)">{{ d.label }}</span>
+            <span class="text-underline" *ngIf="getDataFromObject(row, d.label)">{{ getDataFromObject(row, d.label) }}</span>
+            <i *ngIf="isCollapsed " class="fa small-xs fa-chevron-down ml-1 "></i>
+            <i *ngIf="!isCollapsed " class="fa small-xs fa-chevron-up ml-1 "></i>
           </span>
-          <span *ngIf="h.includes( '.') ">
-            <span class="small-xs " *ngIf="d.type==='text' ">
-              {{ row[h.split('.')[0]][h.split('.')[1]] }}
-            </span>
-            <span class="small-xs " *ngIf="d.type==='amount' ">
-              {{ row[h.split('.')[0]][h.split('.')[1]] }}{{ d.currency }}
-            </span>
-            <span [class.badge-success]="row[h.split('.')[0]][h.split('.')[1]] === 'réservation'" [class.badge-warning]="row[h.split('.')[0]][h.split('.')[1]] === 'service'"
-              [class.badge-info]="row[h.split('.')[0]][h.split('.')[1]] === 'bien'" class="badge mt-1 mb-1 p-1" *ngIf="d.type ==='badge'  && (h.split('.').length) === 2">
-              {{ row[h.split('.')[0]][h.split('.')[1]] }}
-            </span>
+          <span class="small-xs" *ngIf="d.type==='date' ">
+            {{ getDataFromObject(row, h) | date:'dd MMM yyyy' }}
+          </span>
+          <span class="small-xs" *ngIf="d.type==='text' ">
+            {{ getDataFromObject(row, h) }}
+          </span>
+          <span class="small-xs" *ngIf="d.type==='amount' ">
+            <span *ngIf="d.label">{{ d.label }} : </span>
+            {{ getDataFromObject(row, h) }} {{ getDataFromObject(row, d.currency) }}
+          </span>
+          <span [class]="'badge mt-1 mb-1 p-1 ' +  row[h].cssClass " *ngIf="d.type==='badge' ">
+            {{ getDataFromObject(row, h).value }}
           </span>
         </span>
       </span>
@@ -163,5 +123,5 @@
 </div>
 
 <div class="p-3 " [ngbCollapse]="isCollapsed ">
-  <ngx-collapse-table [data]="row " [component]="collapsedComponent "></ngx-collapse-table>
+  <ngx-collapse-table [data]="collpaseData" [nomenclature]="collpaseNomenclature" [component]="collapsedComponent "></ngx-collapse-table>
 </div>

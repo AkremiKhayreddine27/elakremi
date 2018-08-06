@@ -1,173 +1,46 @@
-<div class="row m-0">
-  <div class="col-md-4 p-1 d-flex align-items-stretch">
-    <income class="w-100"></income>
-  </div>
-  <div class="col-md-4 p-1 d-flex align-items-stretch">
-    <outgo class="w-100"></outgo>
-  </div>
-  <div class="col-md-4 p-1 d-flex align-items-stretch">
-    <profits class="w-100"></profits>
-  </div>
-</div>
-<div class="row m-0">
-  <div class="col-md-6 p-1 d-flex align-items-stretch">
-    <pie-charts class="w-100"></pie-charts>
-  </div>
-  <div class="col-md-6 p-1 d-flex align-items-stretch">
-    <outgo-charts class="w-100"></outgo-charts>
-  </div>
-</div>
-<nb-card *ngIf="payments.length > 0">
-  <nb-card-header class="d-flex align-items-center justify-content-between">
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center flex-wrap">
     <span class="d-flex align-items-center">
       <i class="nb-bar-chart mr-2"></i>
       Finances
     </span>
+    <ngx-select [elements]="periods" [element]="period" (selectChanged)="setPeriod($event.element)"></ngx-select>
   </nb-card-header>
-  <nb-card-body class="p-0">
-    <div class="row m-0 d-none d-md-flex justify-content-end border-bottom">
-      <div class="col-12 bg-grey">
-        <div class="row payements-header border-bottom">
-          <div class="col small font-weight-bold">
-            Echéance
-          </div>
-          <div class="col small font-weight-bold">
-            Payeur
-          </div>
-          <div class="col small font-weight-bold">
-            Montant
-          </div>
-          <div class="col small font-weight-bold">
-            Type
-          </div>
-          <div class="col small font-weight-bold">
-            Statut
-          </div>
-          <div class="col small font-weight-bold">
-            Mode
-          </div>
-          <div class="col">
-
-          </div>
-        </div>
-      </div>
-      <div *ngFor="let payment of payments" class="col-12 p-0 bg-grey">
-        <div class="row m-0 border-bottom pb-3 pt-3">
-          <div class="col">
-            <span class="small">{{ payment.deadlineDate | date:'dd MMM yyyy'}}</span>
-          </div>
-          <div class="col">
-            <span class="small">{{ payment.payer.firstname }} {{ payment.payer.lastname }}</span>
-          </div>
-          <div class="col d-flex align-items-center">
-            <span class="text-success payment-type font-weight-bold mr-1" *ngIf="payment.type.isIncome">+</span>
-            <span class="text-danger payment-type font-weight-bold mr-1" *ngIf="payment.type.isOutgo">-</span>
-            <span class="small">
-              {{ payment.amount }}$
-            </span>
-          </div>
-          <div class="col">
-            <span class="small">{{ payment.type.label }}</span>
-          </div>
-          <div class="col" [ngSwitch]="payment.status">
-            <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status }}</span>
-            <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status }}</span>
-            <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status }}</span>
-            <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status }}</span>
-          </div>
-          <div class="col">
-            <span class="small">{{ payment.method }}</span>
-          </div>
-          <div class="col d-flex justify-content-end">
-            <div class="dropdown" ngbDropdown>
-              <a class="action" ngbDropdownToggle>
-                <i class="fa fa-ellipsis-v"></i>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <li class="dropdown-item">
-                  <i class="fa fa-bell mr-1"></i>
-                  Envoyer un rappel
-                </li>
-                <li class="dropdown-item">
-                  <i class="fa fa-hourglass-half mr-1"></i>
-                  Envoyer l'avis d'échéance
-                </li>
-                <li class="dropdown-item">
-                  <i class="fa fa-upload mr-1"></i>
-                  Document
-                </li>
-                <div class="dropdown-divider"></div>
-                <li (click)="openEditPayment(payment)" class="dropdown-item">
-                  <i class="fa fa-edit mr-1"></i>éditer</li>
-                <li (click)="delete()" class="dropdown-item">
-                  <i class="fa fa-trash mr-1"></i>supprimer</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row m-0 d-flex justify-content-end d-md-none d-lg-none d-xl-none">
-      <div class="col-12 border-left border-right bg-grey">
-        <div class="row payements-header border-top border-bottom">
-          <div class="col-3 small">
-            Payeur
-          </div>
-          <div class="col-4 small">
-            Paiement
-          </div>
-          <div class="col-3 small">
-            Mode
-          </div>
-          <div class="col-2">
-
-          </div>
-        </div>
-      </div>
-      <div *ngFor="let payment of payments" class="col-12 border-left border-right bg-grey">
-        <div class="row border-bottom pb-3 pt-3">
-          <div class="col-3">
-            <span class="small">{{ payment.payer.firstname }} {{ payment.payer.lastname }}</span>
-          </div>
-          <div class="col-4">
-            <div>
-              <span class="small">{{ payment.paymentDate | date:'dd/MM/yyyy'}}</span>
-            </div>
-            <div [ngSwitch]="payment.status">
-              <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status }}</span>
-              <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status }}</span>
-              <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status }}</span>
-              <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status }}</span>
-            </div>
-            <div>
-              <span class="small">{{ payment.amount }} $</span>
-            </div>
-          </div>
-          <div class="col-3">
-            <span class="small">{{ payment.type.label }}</span>
-            <br/>
-            <span class="small">{{ payment.method }}</span>
-          </div>
-          <div class="col-2 d-flex justify-content-end">
-            <div class="dropdown" ngbDropdown>
-              <a class="action" ngbDropdownToggle>
-                <i class="fa fa-ellipsis-v"></i>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <li class="dropdown-item">
-                  <i class="fa fa-edit mr-1"></i>éditer</li>
-                <li (click)="delete()" class="dropdown-item">
-                  <i class="fa fa-trash mr-1"></i>supprimer</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nb-card-body>
-</nb-card>
-<nb-card [status]="'danger'" *ngIf="payments.length === 0">
   <nb-card-body>
-    Pas de paiements
+    <div class="row">
+      <div class="col-md-4 d-flex align-items-stretch">
+        <income class="w-100"></income>
+      </div>
+      <div class="col-md-4 d-flex align-items-stretch">
+        <outgo class="w-100"></outgo>
+      </div>
+      <div class="col-md-4 d-flex align-items-stretch">
+        <profits class="w-100"></profits>
+      </div>
+    </div>
+    <nb-card>
+      <nb-card-header class="d-flex p-0 justify-content-between align-items-center flex-wrap">
+        <span *ngIf="!isSearching" class="d-flex pl-3 align-items-center">
+          Dépenses / Revenues
+        </span>
+        <card-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
+          (dropdownItemEvent)="handleDropdownEvent($event)" *ngIf="!isSearching">
+        </card-header-actions>
+        <card-header-search class="w-100" [source]="source" [fields]="searchFields" (closeSearch)="isSearching = false" [isSearching]="isSearching"
+          *ngIf="isSearching"></card-header-search>
+      </nb-card-header>
+      <nb-card-body class="p-0">
+        <card-mobile-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
+          (dropdownItemEvent)="handleDropdownEvent($event)"></card-mobile-header-actions>
+        <div class="border-bottom" [ngbCollapse]="isFilterCollapsed">
+          <filters [source]="source" (action)="handleFilter($event.action, $event.data)" [filters]="filters" (hasFilters)="hasFilters($event.filters)"></filters>
+        </div>
+        <payments-table *ngIf="data.length > 0" [withBorders]="false" [isBgGrey]="false" [withAdd]="false" [data]="data"></payments-table>
+        <ngx-alert *ngIf="data.length === 0" message="Pas de paiements"></ngx-alert>
+      </nb-card-body>
+      <nb-card-footer class="d-flex justify-content-end p-0">
+        <ngx-pagination [refresh]="refreshPagination" [source]="source"></ngx-pagination>
+      </nb-card-footer>
+    </nb-card>
   </nb-card-body>
 </nb-card>

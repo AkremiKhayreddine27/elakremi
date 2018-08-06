@@ -2,16 +2,27 @@
 @import '~@nebular/theme/styles/global/bootstrap/hero-buttons';
 
 @include nb-install-component() {
+    ul {
+        list-style: none;
+    }
+    .file {
+        color: #777;
+        padding: 10px;
+        box-shadow: 2px 5px 12px 0 #dfe3eb;
+        background-color: nb-theme(smart-table-bg-even);
+        i {
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        i:hover {
+            color: nb-theme(color-success);
+        }
+    }
     .col-form-label {
         color: #777;
     }
     .small {
-        font-size: 90% !important;
-        line-height: 1.5rem;
         color: #777;
-    }
-    .small-xs {
-        font-size: 80% !important;
     }
 /deep/ .btn-select {
     padding: 0.65rem 1.125rem;

@@ -1,0 +1,44 @@
+<div class="contact p-2 d-flex align-items-center justify-content-between">
+  <div class="user-container d-flex">
+    <div *ngIf="contact.picture" class="user-img">
+      <img [src]="contact.picture" />
+    </div>
+    <span *ngIf="!contact.picture" class="userletters">
+      {{ contact.firstname[0] }}{{ contact.lastname[0] }}
+    </span>
+    <div class="user-infos ml-2">
+      <span class="username pb-2">
+        {{ contact.firstname }} {{ contact.lastname }}
+      </span>
+      <span class="user-phone d-flex align-items-center small">
+        <i class="nb-email"></i>{{ contact.email }}
+      </span>
+      <span class="user-phone d-flex align-items-center small">
+        <i class="nb-phone"></i>{{ contact.phone }}
+      </span>
+      <span class="user-address d-none d-md-flex align-items-center small">
+        <i class="nb-location"></i>
+        {{ contact.location.address }}, {{ contact.location.city }}, {{ contact.location.state }}, {{ contact.location.postcode }},
+        {{ contact.location.country }}
+      </span>
+    </div>
+  </div>
+  <div class="dropdown d-none d-md-flex" ngbDropdown>
+    <a class="action" ngbDropdownToggle>
+      <i class="fa fa-ellipsis-h"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+      <li (click)="edit(contact);" class="dropdown-item">
+        <i class="nb-compose mr-1"></i>éditer</li>
+      <li (click)="delete(contact);" class="dropdown-item">
+        <i class="nb-trash mr-1"></i>supprimer</li>
+      <li (click)="sendInvitation(contact);" class="dropdown-item">
+        <i class="ion ion-ios-personadd-outline ml-1 mr-2"></i>inviter</li>
+      <li (click)="sendMail(contact);" class="dropdown-item">
+        <i class="nb-email mr-1"></i>envoyer un message</li>
+    </ul>
+  </div>
+  <a (click)="showDropdown(contact)" class="action d-flex d-md-none d-lg-none d-xl-none">
+    <i class="fa fa-ellipsis-h"></i>
+  </a>
+</div>

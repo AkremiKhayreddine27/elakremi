@@ -1,0 +1,11 @@
+@import '../../../styles/themes';
+@include nb-install-component() {
+    .form-btn-danger {
+        border-color: nb-theme(color-danger) !important;
+        background-color: nb-theme(color-danger) !important;
+        color: white !important;
+        i {
+            color: white !important;
+        }
+    }
+}

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogNewDocumentComponent } from './dialog-new-document.component';
+import { DialogNewDocumentComponent } from './document-form.component';
 
 describe('DialogNewDocumentComponent', () => {
   let component: DialogNewDocumentComponent;

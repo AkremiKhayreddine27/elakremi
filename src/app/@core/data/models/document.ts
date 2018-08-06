@@ -1,11 +1,13 @@
-import { User } from './user';
+//import { User } from './user';
+import { File } from './file';
 export interface Document {
     id: number,
     title: string,
-    description: string,
+    description?: string,
     type?: string,
     createdAt?: any,
-    format?: string,
     owner?: any,
-    icon?: string
+    icon?: string,
+    file?: File,
+    link?: string 
 }

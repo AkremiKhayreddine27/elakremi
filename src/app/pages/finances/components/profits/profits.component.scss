@@ -1,8 +1,72 @@
-.icon-status {
-    font-size: 1.5rem;
-}
+@import '../../../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
 
-.finances-value {
-    font-size: 1.2rem;
-    font-weight: bolder;
+@include nb-install-component() {
+
+  $padding: 1rem;
+
+  net, potentiel {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+
+  nb-card-body {
+    overflow: visible;
+    padding: $padding;
+  }
+
+  .c-height {
+    height: 160px;
+  }
+
+  .info {
+    margin-left: 45%;
+    padding-top: 1.5rem;
+    color: nb-theme(color-fg);
+  }
+
+  .value {
+    font-family: nb-theme(font-secondary);
+    font-size: 1.8rem;
+    font-weight: nb-theme(font-weight-bold);
+    span {
+        font-size: 1rem;
+        font-weight: nb-theme(font-weight-light);
+      }
+  }
+
+  .details {
+    font-size: 1.25rem;
+    font-weight: nb-theme(font-weight-bolder);
+    line-height: 1;
+    color: nb-theme(color-danger);
+    span {
+      font-size: 1rem;
+      font-weight: nb-theme(font-weight-light);
+    }
+  }
+
+  .text-hint {
+    font-size: 1rem;
+  }
+
+  @include nb-for-theme(cosmic) {
+    color: nb-theme(color-fg-heading);
+
+    .value {
+      color: nb-theme(color-fg-highlight);
+    }
+
+    .details span {
+      color: nb-theme(color-fg);
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    .value {
+      font-size: 1.75rem;
+    }
+  }
 }

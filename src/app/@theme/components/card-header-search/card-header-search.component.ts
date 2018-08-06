@@ -16,6 +16,8 @@ export class CardHeaderSearchComponent implements OnInit {
 
   @Input() fields;
 
+  filters: any[] = [];
+
   constructor() { }
 
   ngOnInit() {
@@ -27,35 +29,44 @@ export class CardHeaderSearchComponent implements OnInit {
     this.closeSearch.emit();
   }
 
+  getDataFromObject(object, path) {
+    let parts = path.split(".");
+    if (parts.length == 1) {
+      return object[parts[0]];
+    }
+    return this.getDataFromObject(object[parts[0]], parts.slice(1).join("."));
+  }
+
   onSearch(query) {
     if (query !== '') {
-      this.fields.map((field: string) => {
-        let subfield;
-        if (field.indexOf('.') !== -1) {
-          subfield = field.split('.')[1];
-          field = field.split('.')[0];
-          this.source.setFilter([
-            {
-              field: field,
-              search: query,
-              filter: (cell: any, search: string) => {
-                if (cell[subfield].toLowerCase().indexOf(search) !== -1) {
+      this.filters = [];
+      this.fields.map((f: string) => {
+        let field = f.split('.').length > 0 ? f.split('.')[0] : f;
+        let subfield = f.split('.').length > 0 ? f.split('.')[1] : null;
+        this.filters.push(
+          {
+            field: field,
+            search: query,
+            filter: (cell: any, search: any) => {
+              if (subfield) {
+                return (cell[subfield].toString().toLowerCase().includes(search));
+              }
+              if (typeof cell === 'object') {
+                let exist = Object.keys(cell).map(key => {
+                  return (cell[key].toString().toLowerCase().includes(search));
+                }).find(e => {
+                  return e;
+                });
+                if (exist) {
                   return true;
                 } else {
                   return false;
                 }
               }
             }
-          ], false);
-        } else {
-          this.source.setFilter([
-            {
-              field: field,
-              search: query,
-            }
-          ], false);
-        }
+          });
       });
+      this.source.setFilter(this.filters, false);
     } else {
       this.source.setFilter([]);
     }

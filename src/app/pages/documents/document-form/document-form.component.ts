@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl, FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { PropertyService } from '../../../@core/data/property.service';
 import { ReservationsService } from '../../../@core/data/reservations.service';
 import { ServicesService } from '../../../@core/data/services.service';
 import * as faker from 'faker';
 import { FineUploader } from 'fine-uploader';
 import { DOCUMENT } from '@angular/common';
+import { DocumentsService } from '../../../@core/data/documents.service';
 
 @Component({
   selector: 'dialog-new-document',
@@ -14,6 +15,8 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./document-form.component.scss']
 })
 export class DialogNewDocumentComponent implements OnInit {
+
+  @Input() document;
 
   public uploader;
 
@@ -49,13 +52,9 @@ export class DialogNewDocumentComponent implements OnInit {
 
   public currentAssociationValue;
 
-  document = {
-    title: null,
-    description: null,
-    type: null
-  }
-
   public owner: any;
+
+  public previousOwner: any;
 
   form: FormGroup;
 
@@ -71,7 +70,8 @@ export class DialogNewDocumentComponent implements OnInit {
     public activeModal: NgbActiveModal,
     public propertyService: PropertyService,
     public reservationsService: ReservationsService,
-    public servicesService: ServicesService) { }
+    public servicesService: ServicesService,
+    public documentsService: DocumentsService) { }
 
   ngOnInit() {
     this.uploader = new FineUploader({
@@ -82,7 +82,6 @@ export class DialogNewDocumentComponent implements OnInit {
       },
       callbacks: {
         onComplete: (id, name, responseJSON, xhr) => {
-          console.log(responseJSON);
           if (responseJSON.success) {
             this.close();
           }
@@ -90,15 +89,60 @@ export class DialogNewDocumentComponent implements OnInit {
       }
     });
     this.form = new FormGroup({
-      id: new FormControl(faker.random.number()),
-      title: new FormControl(this.document.title),
-      description: new FormControl(this.document.description),
-      type: new FormControl(this.document.type)
+      id: new FormControl(this.document ? this.document.id : faker.random.number()),
+      title: new FormControl(this.document ? this.document.title : null),
+      description: new FormControl(this.document ? this.document.description : null),
+      type: new FormControl(this.document ? this.document.type : null),
+      createdAt: new FormControl(new Date()),
+      file: new FormControl(this.document ? this.document.file : null)
     });
     this.properties = this.propertyService.properties.map(property => {
       return { label: property.title, value: property.title, data: property };
     });
     this.currentAssociationValue = { label: this.propertyService.currentProperty.title, value: this.propertyService.currentProperty.title, data: this.propertyService.currentProperty };
+    if (this.document) {
+      if (this.document.file) {
+        this.uploader.addInitialFiles([this.document.file]);
+      }
+      this.type = { label: this.document.type, value: this.document.type };
+      this.currentAssociation = { label: this.document.owner.type, value: this.document.owner.type };
+      this.currentAssociationValue = { label: this.document.owner.title, value: this.document.owner.title };
+      switch (this.document.owner.type) {
+        case 'Réservation':
+          this.services = [];
+          this.reservations = this.currentProperty.data.reservations.map(reservation => {
+            if (this.document.owner.id === reservation.id) {
+              this.owner = { label: reservation.title, value: reservation.title, data: reservation };
+              this.previousOwner = reservation;
+            }
+            return { label: reservation.title, value: reservation.title, data: reservation };
+          });
+          break;
+        case 'Service':
+          this.reservations = [];
+          this.services = this.currentProperty.data.services.map(service => {
+            if (this.document.owner.id === service.id) {
+              this.owner = { label: service.title, value: service.title, data: service };
+              this.previousOwner = service;
+            }
+            return { label: service.title, value: service.title, data: service };
+          });
+          break;
+        case 'Bien':
+          this.reservations = [];
+          this.services = [];
+          this.properties = this.propertyService.properties.map(property => {
+            if (this.document.owner.id === property.id) {
+              this.owner = { label: property.title, value: property.title, data: property };
+              this.previousOwner = property;
+            }
+            return { label: property.title, value: property.title, data: property };
+          });
+          break;
+        case 'Paiement':
+          break;
+      }
+    }
   }
 
   get description(): any { return this.form.get('description'); }
@@ -170,9 +214,14 @@ export class DialogNewDocumentComponent implements OnInit {
   }
 
   save() {
-    this.uploader.uploadStoredFiles();
-    if (this.owner) {
-      this.owner.documents.push(this.form.value);
+    if (this.document) {
+      //this.documentsService.update(this.currentProperty.data, this.previousOwner, this.owner, this.form.value);
+    } else {
+      if (this.owner) {
+        this.form.patchValue({ file: this.uploader.getUploads()[0].file });
+        this.uploader.uploadStoredFiles();
+        //this.documentsService.add(this.currentProperty.data, this.owner, this.form.value);
+      }
     }
   }
 

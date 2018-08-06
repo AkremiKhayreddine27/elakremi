@@ -7,13 +7,26 @@
     </a>
   </nb-card-header>
   <nb-card-body [ngbCollapse]="isCollapsed">
-    <div [(ngModel)]="radioModel" ngbRadioGroup class="d-flex flex-wrap justify-content-center btn-group btn-group-toggle btn-outline-toggle-group btn-toggle-radio-group">
-      <label ngbButtonLabel class="btn btn-tn btn-outline-success m-1">
-        <input ngbButton type="radio" value="left"> 100% du à la réservation
-      </label>
-      <label ngbButtonLabel class="btn btn-tn btn-outline-success m-1">
-        <input ngbButton type="radio" value="middle"> Plusieurs payements
-      </label>
+    <div class="form-group row">
+      <div [(ngModel)]="radioModel" (ngModelChange)="typeChanged($event)" ngbRadioGroup class="col-md-8 d-flex flex-wrap btn-group btn-group-toggle btn-outline-toggle-group btn-toggle-radio-group">
+        <label ngbButtonLabel class="btn btn-tn btn-outline-success">
+          <input ngbButton type="radio" value="onePayment"> 100% du à la réservation
+        </label>
+        <label ngbButtonLabel class="btn btn-tn btn-outline-success ml-1">
+          <input ngbButton type="radio" value="multiplePayments"> Plusieurs payements
+        </label>
+      </div>
+    </div>
+    <div *ngIf="radioModel === 'multiplePayments'" class="form-group row">
+      <label class="col-form-label col-md-4">Accompte *</label>
+      <div class="input-group col-md-8 input-group-sm">
+        <input class="form-control" [(ngModel)]="deposit" placeholder="TVA" name="tva">
+        <span class="input-group-btn">
+          <h2 class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+            <i class="fa fa-percent"></i>
+          </h2>
+        </span>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>

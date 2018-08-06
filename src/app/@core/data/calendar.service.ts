@@ -155,6 +155,31 @@ export class CalendarService {
     });
   }
 
+  getPropertyCalendars(property: Property, reservations: Reservation[]) {
+    let calendars = [];
+    property.calendars = property.calendars.filter(calendar => {
+      return calendar.name !== 'Réservations';
+    });
+    calendars = calendars.concat(property.calendars);
+    let reservationsCalendar = {
+      id: 6,
+      name: 'Réservations',
+      color: '#ff4c6a',
+      isLocal: true,
+      url: null,
+      display: true,
+      events: reservations.map((event: any) => {
+        event.allDay = true;
+        event.location = property.location;
+        event.color = '#ff4c6a';
+        return event;
+      })
+    };
+    property.calendars.push(reservationsCalendar);
+    calendars = calendars.concat(reservationsCalendar);
+    return calendars;
+  }
+
   /**
    * get all calendars
    */

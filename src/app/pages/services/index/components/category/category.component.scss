@@ -1,14 +1,24 @@
 @import '../../../../../@theme/styles/themes';
 @include nb-install-component() {
+    .cursor-not-pointer {
+        cursor: default !important;
+    }
 nb-card:hover {
+    .ion-plus {
+        font-size: 1.1rem;
+        font-weight: lighter;
+    }
+    .ion-ios-eye-outline {
+        font-size: 1.5rem;
+    }
     background-color: nb-theme(color-success);
     nb-card-header {
         border-bottom: nb-theme(color-white);
         span {
-            color: nb-theme(color-white) !important; 
+            color: nb-theme(color-white) !important;
         }
     }
-    nb-card-body .list-group { 
+    nb-card-body .list-group {
         .list-group-item {
             background-color: nb-theme(color-success);
             border-color: nb-theme(color-white);
@@ -21,11 +31,12 @@ nb-card:hover {
     }
     nb-card-footer {
         background-color: nb-theme(color-bg);
-        .btn-add  {
+        .btn-add {
             cursor: pointer;
         }
     }
-}    
+}
+
 nb-card-header {
     span {
         cursor: pointer;
@@ -50,7 +61,7 @@ nb-card-body .list-group {
     }
 }
 
-.btn-add  {
+.btn-add {
     cursor: pointer;
 }
 }

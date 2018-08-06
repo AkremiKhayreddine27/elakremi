@@ -1,0 +1,23 @@
+<div class="dropdown w-100 mr-2 d-flex align-items-center" ngbDropdown>
+  <h2 class="btn custom-heigth btn-select align-items-center btn-outline-secondary d-flex justify-content-between" ngbDropdownToggle>
+    <span class="text-secondary" *ngIf="!from">Choisir une date</span>
+    <span *ngIf="from && !to">{{ from | date:'dd MMM yyyy' }}</span>
+    <span *ngIf="to">De: {{ from | date:'dd MMM yyyy' }} jusqu'à: {{ to | date:'dd MMM yyyy' }}</span>
+    <i class="fa fa-caret-down pl-1"></i>
+  </h2>
+  <ul class="dropdown-menu" ngbDropdownMenu>
+    <li class="dropdown-item">
+      <ngb-datepicker class="w-100" #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t">
+      </ngb-datepicker>
+    </li>
+    <li class="dropdown-item d-flex p-1 justify-content-end">
+      <button class="btn btn-tn btn-danger" (click)="cancel()">Annuler</button>
+    </li>
+  </ul>
+</div>
+<ng-template #t let-date="date" let-focused="focused">
+  <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+    [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+    {{ date.day }}
+  </span>
+</ng-template>

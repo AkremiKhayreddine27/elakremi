@@ -1,13 +1,19 @@
 import { User } from './user';
+import { Price } from './price';
+import { SelectItem } from './selectItem';
 export interface Payment {
     id: number,
     description: string,
-    amount: number,
+    price: Price,
+    balance?: Price,
     tva: string,
-    status: string,
-    method: string,
-    type: any,
+    status: SelectItem,
+    method: SelectItem,
+    type: SelectItem,
     paymentDate: any,
     deadlineDate: any,
-    payer: User
+    payer: User,
+    payee?: User,
+    nomenclature: any;
+    propertyId: number;
 }

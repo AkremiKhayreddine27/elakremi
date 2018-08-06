@@ -12,14 +12,15 @@ export class CategoryComponent implements OnInit {
 
   isCollapsed = true;
 
-  constructor(private servicesService: ServicesService, private router: Router) { }
+  constructor(public servicesService: ServicesService, private router: Router) { }
 
   ngOnInit() {
   }
 
-  setService(service) {
-    this.servicesService.setCurrentService(service);
-    this.router.navigateByUrl('/pages/categories/create');
+  navigate(route, type) {
+    this.servicesService.setCurrentType(type);
+    this.servicesService.setCurrentCategory(this.subCategory);
+    this.router.navigateByUrl('/pages/categories/' + route);
   }
 
 }

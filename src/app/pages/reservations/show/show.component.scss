@@ -7,16 +7,27 @@
         overflow: visible;
         position: relative;
     }
-nb-card-header {
-    height: 62px;
-    span {
-        i {
-            font-size: 2rem;
-            text-align: center;
-        }
-        .lnr {
-            font-size: 1.5rem !important;
+    nb-card-header {
+        height: 62px;
+        span {
+            i {
+                font-size: 2rem;
+                text-align: center;
+            }
+            .lnr {
+                font-size: 1.5rem !important;
+            }
         }
     }
-}
+    .form-btn-danger {
+        border-color: nb-theme(color-danger) !important;
+        background-color: nb-theme(color-danger) !important;
+        color: white !important;
+        i {
+            color: white !important;
+        }
+    }
+    .flex-1 {
+        flex: 1;
+    }
 }

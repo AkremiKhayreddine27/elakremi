@@ -1,8 +1,7 @@
 <nb-card>
   <nb-card-header class="d-flex p-0 justify-content-between align-items-center flex-wrap">
     <span class="d-flex align-items-center pl-2 m-0">
-      <i (click)="back()" class="nb-arrow-thin-left mr-2 cursor-pointer"></i>
-      <i class="nb-gear mr-2"></i>
+      <i (click)="back()" class="nb-angle-double-left cursor-pointer mr-3"></i>
       {{ pageTitle }}
     </span>
   </nb-card-header>
@@ -14,32 +13,29 @@
             <div class="col-md-6">
               <div class="row">
                 <div class="col-12">
-                  <div class="row">
-                    <label for="nightAmount" class="col-form-label small col-md-4">Bien *</label>
+                  <div class="form-group row">
+                    <label for="nightAmount" class="col-form-label col-md-4">Bien *</label>
                     <div class="col-md-8">
-                      <ngx-select (selectChanged)="setProperty($event)" [element]="currentProperty" [elements]="properties"></ngx-select>
+                      <ng-select [class.form-control-danger]="property.invalid && property.touched && property.errors?.required || property.invalid && isSubmitted && property.errors?.required"
+                        class="w-100" [searchable]="false" [items]="properties | async" [multiple]="false" [closeOnSelect]="true"
+                        bindLabel="title" placeholder="Choisir un bien" formControlName="property">
+                      </ng-select>
                     </div>
+                    <div class="col-md-4"></div>
+                    <error-message [control]="property" *ngIf="!property.valid && property.touched || isSubmitted && !property.valid" class="col-md-8 m-0 form-text error">
+                    </error-message>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="form-group row">
-                    <label for="title" class="col-form-label small col-md-4">Titre *</label>
-                    <div class="input-group input-group-sm col-md-8">
-                      <input id="title" class="form-control" [class.form-control-danger]="title.invalid && title.touched && title.errors?.required"
-                        formControlName="title" name="title">
-                    </div>
-                    <small class="form-text error" *ngIf="title.invalid && title.touched && title.errors?.required">
-                      Ce champ est requis !
-                    </small>
-                  </div>
+                  <locatus-text label="Titre" formControlName="title" [isFormSubmitted]="isSubmitted"></locatus-text>
                 </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group row">
-                <label for="description" class="col-form-label small col-md-4">Description</label>
+                <label for="description" class="col-form-label col-md-4">Description</label>
                 <div class="input-group input-group-sm col-md-8">
-                  <textarea rows="3" id="description" class="form-control" name="description" formControlName="description">
+                  <textarea rows="4" id="description" class="form-control" name="description" formControlName="description">
                                   </textarea>
                 </div>
               </div>
@@ -48,47 +44,20 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group row">
-                <label for="nom" class="col-form-label small col-md-4">Début *</label>
-                <div class="input-group input-group-sm col-md-8">
-                  <input class="form-control" [class.form-control-danger]="startDate.invalid && startDate.touched && startDate.errors?.required"
-                    formControlName="startDate" placeholder="yyyy-mm-dd" name="startDate" ngbDatepicker #start="ngbDatepicker">
-                  <span class="input-group-btn">
-                    <h2 [class.border-danger]="startDate.invalid && startDate.touched && startDate.errors?.required" class="btn btn-secondary border-left-0 p-2"
-                      (click)="start.toggle()">
-                      <i class="fa fa-calendar"></i>
-                    </h2>
-                  </span>
-                </div>
-                <small class="form-text error" *ngIf="startDate.invalid && startDate.touched && startDate.errors?.required">
-                  Ce champ est requis !
-                </small>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label for="nom" class="col-form-label small col-md-4">Fin *</label>
-                <div class="input-group input-group-sm col-md-8">
-                  <input class="form-control" [class.form-control-danger]="endDate.invalid && endDate.touched && endDate.errors?.required"
-                    formControlName="endDate" placeholder="yyyy-mm-dd" name="endDate" ngbDatepicker #end="ngbDatepicker">
-                  <span class="input-group-btn">
-                    <h2 [class.border-danger]="endDate.invalid && endDate.touched && endDate.errors?.required" class="btn btn-secondary border-left-0 p-2 pl-2 pr-2"
-                      (click)="end.toggle()">
-                      <i class="fa fa-calendar"></i>
-                    </h2>
-                  </span>
-                </div>
-                <small class="form-text error" *ngIf="endDate.invalid && endDate.touched && endDate.errors?.required">
-                  Ce champ est requis !
-                </small>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label class="col-form-label small col-md-4">Priorité *</label>
+                <label for="reservation" class="col-form-label col-md-4">Réservation</label>
                 <div class="col-md-8">
-                  <div formControlName="priority" ngbRadioGroup class="d-flex flex-wrap btn-group btn-group-toggle btn-toggle-radio-group">
+                  <ng-select [class.form-control-danger]="!reservation.valid && reservation.touched || isSubmitted && !reservation.valid" class="w-100"
+                    [searchable]="false" [items]="reservations | async" [multiple]="false" [closeOnSelect]="true" bindLabel="title"
+                    placeholder="Associer à une réservation" formControlName="reservation">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-form-label col-md-4">Priorité *</label>
+                <div class="col-md-8">
+                  <div formControlName="priority" ngbRadioGroup class="d-flex flex-wrap btn-group pb-0 btn-group-toggle btn-toggle-radio-group">
                     <label ngbButtonLabel class="btn btn-tn btn-outline-secondary text-secondary">
                       <input ngbButton type="radio" value="basse"> Basse
                     </label>
@@ -100,121 +69,206 @@
                     </label>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group row">
-                <label for="nightAmount" class="col-form-label small col-md-4">Type *</label>
-                <div class="col-md-4">
-                  <ngx-select [elements]="categories" [(element)]="currentCategory" (selectChanged)="setCategory($event)"></ngx-select>
-                </div>
-                <div *ngIf="subCategories.length > 0" class="col-md-4">
-                  <ngx-select [elements]="subCategories" [element]="currentSubCategory" (selectChanged)="setSubCategory($event)"></ngx-select>
-                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="priority" *ngIf="!priority.valid && priority.touched || isSubmitted && !priority.valid" class="col-md-8 m-0 form-text error">
+                </error-message>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group row">
-                <label for="nom" class="col-form-label small col-md-4">Date de souscription</label>
+                <label for="nom" class="col-form-label col-md-4">Début *</label>
                 <div class="input-group input-group-sm col-md-8">
-                  <input class="form-control" formControlName="subscriptionDate" placeholder="yyyy-mm-dd" name="subscriptionDate" ngbDatepicker
-                    #subscriptionDate="ngbDatepicker">
+                  <input class="form-control" [class.form-control-danger]="!start.valid && start.touched || isSubmitted && !start.valid" formControlName="start"
+                    placeholder="yyyy-mm-dd" name="startDate" ngbDatepicker #sDate="ngbDatepicker">
                   <span class="input-group-btn">
-                    <h2 class="btn btn-secondary border-left-0 p-2" (click)="subscriptionDate.toggle()">
+                    <h2 [class.form-btn-danger]="!start.valid && start.touched || isSubmitted && !start.valid" class="btn btn-secondary border-left-0 p-2"
+                      (click)="sDate.toggle()">
                       <i class="fa fa-calendar"></i>
                     </h2>
                   </span>
                 </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="start" *ngIf="!start.valid && start.touched || isSubmitted && !start.valid" class="col-md-8 m-0 form-text error">
+                </error-message>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="row">
-                <label for="nightAmount" class="col-form-label small col-md-4">Echéance *</label>
-                <div class="col-md-8">
-                  <ngx-select [elements]="deadlines" [element]="currentDeadline" (selectChanged)="setDeadline($event)"></ngx-select>
+              <div class="form-group row">
+                <label for="nom" class="col-form-label col-md-4">Fin *</label>
+                <div class="input-group input-group-sm col-md-8">
+                  <input class="form-control" [class.form-control-danger]="!end.valid && end.touched || isSubmitted && !end.valid" formControlName="end"
+                    placeholder="yyyy-mm-dd" name="endDate" ngbDatepicker #eDate="ngbDatepicker">
+                  <span class="input-group-btn">
+                    <h2 [class.form-btn-danger]="!end.valid && end.touched || isSubmitted && !end.valid" class="btn btn-secondary border-left-0 p-2 pl-2 pr-2"
+                      (click)="eDate.toggle()">
+                      <i class="fa fa-calendar"></i>
+                    </h2>
+                  </span>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row">
-                <label for="nightAmount" class="col-form-label small col-md-4">Statut *</label>
-                <div class="col-md-8">
-                  <ngx-select [elements]="statuses" [element]="statusDefault" (selectChanged)="setStatus($event)"></ngx-select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <label for="contact" class="col-form-label small col-md-4">Prestataire *</label>
-                <div class="form-group col-md-8">
-                  <div class="input-group input-group-sm">
-                    <input id="contact" type="text" class="form-control" [inputFormatter]="formatter" formControlName="provider" [ngbTypeahead]="search"
-                      (focus)="focus$.next($event.target.value)" (click)="click$.next($event.target.value);" (selectItem)="assignContact($event)"
-                      #instance="ngbTypeahead" [resultTemplate]="rt" />
-                    <span class="input-group-btn">
-                      <h2 class="btn btn-secondary border-left-0 p-2" (click)="newContact()">
-                        <i class="fa fa-plus"></i>
-                      </h2>
-                    </span>
-                  </div>
-                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="end" *ngIf="!end.valid && end.touched || isSubmitted && !end.valid" class="col-md-8 m-0 form-text error">
+                </error-message>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group row">
-                <label for="numeroContrat" class="col-form-label small col-md-4">Numéro du contract</label>
-                <div class="input-group input-group-sm col-md-8">
-                  <input id="numeroContrat" class="form-control" formControlName="numeroContrat" name="numeroContrat">
+                <label for="contact" class="col-form-label col-md-4">Prestataire *</label>
+                <div class="input-group d-flex col-md-8 input-group-sm">
+                  <ng-select class="flex-1" [class.form-control-danger]="provider.invalid && provider.touched || provider.invalid && isSubmitted"
+                    [searchable]="false" [items]="providers | async" [multiple]="false" [closeOnSelect]="true" bindLabel="firstname"
+                    placeholder="Choisir un prestataire" formControlName="provider">
+                    <ng-template ng-label-tmp let-item="item">
+                      {{item.firstname}} {{item.lastname}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                      {{item.firstname}} {{item.lastname}}
+                    </ng-template>
+                  </ng-select>
+                  <span class="input-group-btn">
+                    <h2 [class.form-btn-danger]="!provider.valid && provider.touched || isSubmitted && !provider.valid" class="btn cursor-pointer btn-secondary border-left-0 p-2 pl-3 pr-3"
+                      (click)="newContact()">
+                      <i class="fa fa-plus"></i>
+                    </h2>
+                  </span>
                 </div>
-              </div>
-              <div *ngIf="reservations.length > 0" class="row">
-                <label for="nightAmount" class="col-form-label small col-md-4">Réservation</label>
-                <div class="col-md-8">
-                  <ngx-select [elements]="reservations" [element]="reservationDefault" (selectChanged)="setReservation($event)"></ngx-select>
-                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="provider" *ngIf="!provider.valid && provider.touched || isSubmitted && !provider.valid" class="col-md-8 m-0 form-text error">
+                </error-message>
               </div>
             </div>
             <div class="col-md-6">
-              <div [formGroup]="tariff" class="row">
-                <div class="col-12">
-                  <div class="form-group row">
-                    <label class="col-form-label small col-md-4">Montant *</label>
-                    <div class="col-md-8">
-                      <div class="input-group input-group-sm">
-                        <input class="form-control" formControlName="amount" placeholder="Montant" name="numeroContrat">
-                      </div>
-                    </div>
-                  </div>
+              <div class="form-group row">
+                <label for="nightAmount" class="col-form-label col-md-4">Type *</label>
+                <div class="col-md-4">
+                  <ng-select [class.form-control-danger]="!category.valid && category.touched || isSubmitted && !category.valid" class="w-100"
+                    [searchable]="false" [items]="categories | async" [multiple]="false" [closeOnSelect]="true" bindLabel="title"
+                    (change)="onCategoryChange($event)" placeholder="Choisir une categorie" formControlName="category">
+                  </ng-select>
                 </div>
-                <div class="col-12">
-                  <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                      <ngx-select [elements]="tvas" [element]="currentTva" (selectChanged)="setTva($event)"></ngx-select>
-                    </div>
-                    <div class="col-md-4">
-                      <ngx-select [elements]="frequencies" [element]="currentFrequency" (selectChanged)="setFrequency($event.element)"></ngx-select>
-                    </div>
-                  </div>
+                <div class="col-md-4">
+                  <ng-select [class.form-control-danger]="!type.valid && type.touched || isSubmitted && !type.valid" class="w-100" [searchable]="false"
+                    [items]="subCategories | async" [multiple]="false" [closeOnSelect]="true" bindLabel="title" placeholder="Choisir une sous catégorie"
+                    formControlName="type">
+                  </ng-select>
                 </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="type" *ngIf="!category.valid && category.touched || isSubmitted && !category.valid" class="col-md-4 m-0 form-text error">
+                </error-message>
+                <error-message [control]="type" *ngIf="!type.valid && type.touched || isSubmitted && !type.valid" class="col-md-4 m-0 form-text error">
+                </error-message>
               </div>
             </div>
           </div>
-          <ng-template #rt let-r="result" let-t="term">
-            {{ r.firstname }} {{ r.lastname}}
-          </ng-template>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-form-label col-md-4">Montant *</label>
+                <div [formGroup]="price" class="input-group col-md-4 input-group-sm">
+                  <input class="form-control" formControlName="value" placeholder="Montant" name="numeroContrat" [class.form-control-danger]="!priceValue.valid && priceValue.touched || isSubmitted && !priceValue.valid">
+                  <span class="input-group-btn">
+                    <h2 class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+                      <i class="fa fa-dollar"></i>
+                    </h2>
+                  </span>
+                </div>
+                <div class="input-group col-md-4 input-group-sm">
+                  <input class="form-control" formControlName="tva" placeholder="TVA" name="tva" [class.form-control-danger]="!priceValue.valid && priceValue.touched || isSubmitted && !priceValue.valid">
+                  <span class="input-group-btn">
+                    <h2 class="btn btn-secondary border-left-0 p-2 pl-3 pr-3">
+                      <i class="fa fa-percent"></i>
+                    </h2>
+                  </span>
+                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="priceValue" *ngIf="!priceValue.valid && priceValue.touched || isSubmitted && !priceValue.valid"
+                  class="col-md-4 m-0 form-text error">
+                </error-message>
+                <error-message [control]="tva" *ngIf="!tva.valid && tva.touched || isSubmitted && !tva.valid" class="col-md-4 m-0 form-text error">
+                </error-message>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label class="col-form-label col-md-4">Fréquence *</label>
+                <div class="col-md-4">
+                  <ng-select [class.form-control-danger]="frequency.invalid && frequency.touched || frequency.invalid && isSubmitted" class="w-100"
+                    [searchable]="false" [items]="frequencies | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+                    placeholder="Fréquence de paiement" formControlName="frequency">
+                  </ng-select>
+                </div>
+                <div class="input-group input-group-sm col-md-4">
+                  <input class="form-control" formControlName="deadline" [class.form-control-danger]="deadline.invalid && deadline.touched || deadline.invalid && isSubmitted"
+                    placeholder="Date d'échéance" name="deadline" ngbDatepicker #deadlineDate="ngbDatepicker">
+                  <span class="input-group-btn">
+                    <h2 [class.form-btn-danger]="!deadline.valid && deadline.touched || isSubmitted && !deadline.valid" class="btn btn-secondary border-left-0 p-2"
+                      (click)="deadlineDate.toggle()">
+                      <i class="fa fa-calendar"></i>
+                    </h2>
+                  </span>
+                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="frequency" *ngIf="!frequency.valid && frequency.touched || isSubmitted && !frequency.valid" class="col-md-4 m-0 form-text error">
+                </error-message>
+                <error-message [control]="deadline" *ngIf="!deadline.valid && deadline.touched || isSubmitted && !deadline.valid" class="col-md-4 m-0 form-text error">
+                </error-message>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row form-group">
+                <label for="status" class="col-form-label col-md-4">Statut *</label>
+                <div class="col-md-8">
+                  <ng-select [class.form-control-danger]="status.invalid && status.touched || status.invalid && isSubmitted" class="w-100"
+                    [searchable]="false" [items]="statuses | async" [multiple]="false" [closeOnSelect]="true" bindLabel="value"
+                    placeholder="Choisir un statut" formControlName="status">
+                  </ng-select>
+                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="status" *ngIf="!status.valid && status.touched || isSubmitted && !status.valid" class="col-md-8 m-0 form-text error">
+                </error-message>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label for="contractNumber" class="col-form-label col-md-4">Numéro du contrat</label>
+                <div class="input-group input-group-sm col-md-3">
+                  <input id="contractNumber" class="form-control" formControlName="contractNumber" name="contractNumber" [class.form-control-danger]="contractNumber.invalid && contractNumber.touched || contractNumber.invalid && isSubmitted">
+                </div>
+                <div class="input-group input-group-sm col-md-5">
+                  <input class="form-control" formControlName="contractDate" placeholder="Date de contrat" name="contractDate" ngbDatepicker
+                    #subscriptionDate="ngbDatepicker" [class.form-control-danger]="contractDate.invalid && contractDate.touched || contractDate.invalid && isSubmitted">
+                  <span class="input-group-btn">
+                    <h2 [class.form-btn-danger]="!contractDate.valid && contractDate.touched || isSubmitted && !contractDate.valid" class="btn btn-secondary border-left-0 p-2"
+                      (click)="subscriptionDate.toggle()">
+                      <i class="fa fa-calendar"></i>
+                    </h2>
+                  </span>
+                </div>
+                <div class="col-md-4"></div>
+                <error-message [control]="contractNumber" *ngIf="!contractNumber.valid && contractNumber.touched || isSubmitted && !contractNumber.valid"
+                  class="col-md-3 m-0 form-text error">
+                </error-message>
+                <error-message [control]="contractDate" *ngIf="!contractDate.valid && contractDate.touched || isSubmitted && !contractDate.valid"
+                  class="col-md-5 m-0 form-text error">
+                </error-message>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     </div>
   </nb-card-body>
   <nb-card-footer class="d-flex justify-content-end">
-    <button [disabled]="!form.valid" (click)="save()" type="submit" class="btn btn-sm btn-success">
+    <button type="reset" (click)="reset()" class="btn mr-2 cursor-pointer btn-sm btn-danger">
+      <i class="fa fa-close mr-1"></i>
+      <span i18n>Annuler</span>
+    </button>
+    <button [disabled]="service && form.pristine" (click)="save()" type="submit" class="btn cursor-pointer btn-sm btn-success">
       <i class="fa fa-save mr-1"></i>
       <span i18n>Sauvegarder</span>
     </button>

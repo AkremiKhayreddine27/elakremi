@@ -38,7 +38,7 @@
               "node_modules/angular-tree-component/dist/angular-tree-component.css",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss",
-              "node_modules/fine-uploader/fine-uploader/fine-uploader-gallery.min.css",
+              "node_modules/fine-uploader/fine-uploader/fine-uploader-gallery.min.css"
             ],
             "scripts": [
               "node_modules/pace-js/pace.min.js",

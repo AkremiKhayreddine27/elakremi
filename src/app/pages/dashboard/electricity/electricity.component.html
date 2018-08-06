@@ -1,19 +1,20 @@
 <nb-card size="large">
   <div class="consumption-table">
     <div class="table-header">
-      <div>Electricity</div>
-      <div class="subtitle">Consumption</div>
+      <div>Revenues</div>
     </div>
 
-    <nb-tabset fullWidth>
+    <nb-tabset (changeTab)="tabChanged($event)" fullWidth>
       <nb-tab *ngFor="let year of data" [tabTitle]="year.title" [active]="year.active">
         <div class="stats-month" *ngFor="let month of year.months">
           <div>
-            <span class="month">{{ month.month }}</span>
+            <span class="month">{{ month.name }}</span>
+            <!--
             <span class="delta" [ngClass]="{ 'down': month.down }">{{ month.delta }}</span>
+            -->
           </div>
           <div class="results">
-            <b>{{ month.kWatts }}</b> kWh / <b>{{ month.cost }}</b> USD
+            <b>{{ month.revenues }}</b> $
           </div>
         </div>
       </nb-tab>
@@ -24,35 +25,24 @@
     <div class="chart-header">
       <div class="header-stats">
         <div class="stats-block">
-          <div class="subtitle">Consumed</div>
+          <div class="subtitle">{{ type }}</div>
           <div>
-            <span class="value">816</span>
-            <span class="unit">kWh</span>
-          </div>
-        </div>
-
-        <div class="stats-block currency">
-          <div class="subtitle">Spent</div>
-          <div>
-            <span class="value">291</span>
-            <span class="unit">USD</span>
+            <span class="value"> {{ currentRevenues }}</span>
+            <span class="unit">$</span>
           </div>
         </div>
       </div>
 
-      <div class="dropdown"
-           [ngClass]="{ 'ghost-dropdown': currentTheme === 'corporate' }"
-           ngbDropdown>
-        <button type="button" ngbDropdownToggle class="btn"
-                [ngClass]="{ 'btn-outline-success': currentTheme == 'default', 'btn-primary': currentTheme != 'default'}">
+      <div class="dropdown" [ngClass]="{ 'ghost-dropdown': currentTheme === 'corporate' }" ngbDropdown>
+        <button type="button" ngbDropdownToggle class="btn" [ngClass]="{ 'btn-outline-success': true }">
           {{ type }}
         </button>
         <ul class="dropdown-menu" ngbDropdownMenu>
-          <li class="dropdown-item" *ngFor="let t of types" (click)="type = t">{{ t }}</li>
+          <li class="dropdown-item" *ngFor="let t of types" (click)="typeChanged(t)">{{ t }}</li>
         </ul>
       </div>
 
     </div>
-    <ngx-electricity-chart></ngx-electricity-chart>
+    <ngx-electricity-chart [type]="type" [year]="currentYear"></ngx-electricity-chart>
   </div>
 </nb-card>
