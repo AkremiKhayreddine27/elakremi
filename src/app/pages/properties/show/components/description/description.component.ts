@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, forwardRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ControlValueAccessor, FormGroup, FormControl, Validators, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { PropertyService } from '../../../../../@core/data/property.service';
+import { PropertyService } from '../../../../../@core/data';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 

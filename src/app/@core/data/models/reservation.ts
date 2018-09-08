@@ -5,6 +5,7 @@ import { SelectItem } from './selectItem';
 import { Price } from './price';
 import { Property } from './property';
 export interface Reservation {
+    kind?: string;
     id: number;
     title: string;
     description?: string;
@@ -28,5 +29,5 @@ export interface Reservation {
     documents?: Document[];
     property?: Property;
     nbrNight?: any;
-    platform: SelectItem;
+    platform: SelectItem; 
 }

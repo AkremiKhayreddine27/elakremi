@@ -5,4 +5,12 @@
  */
 export const environment = {
   production: true,
+  firebase: {
+    apiKey: "AIzaSyDGPtMkBLsdZbR34THXulFOV8Dn6qNUeDc",
+    authDomain: "easylocatus.firebaseapp.com",
+    databaseURL: "https://easylocatus.firebaseio.com",
+    projectId: "easylocatus",
+    storageBucket: "easylocatus.appspot.com",
+    messagingSenderId: "408182061996"
+  }
 };

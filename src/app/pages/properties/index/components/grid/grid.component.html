@@ -38,7 +38,7 @@
         </div>
         <ngb-carousel *ngIf="property.images && property.images.length > 0">
           <ng-template *ngFor="let image of property.images" ngbSlide>
-            <img [src]="image" class="card-img-bottom" [alt]="property.title">
+            <img [src]="image.url" class="card-img-bottom" [alt]="property.title">
           </ng-template>
         </ngb-carousel>
         <img *ngIf="!property.images || property.images.length === 0" class="card-img-bottom" src="assets/images/unavailable.jpg"

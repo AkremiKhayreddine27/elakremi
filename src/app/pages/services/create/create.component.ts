@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ContactsService } from '../../../@core/data/contacts.service';
-import { PropertyService } from '../../../@core/data/property.service';
-import { ServicesService } from '../../../@core/data/services.service';
+import { ContactsService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
+import { ServicesService } from '../../../@core/data';
 import { DialogNewContactComponent } from '../../contact/contact-form/contact-form.component';
 import * as dateFns from 'date-fns';
 import { Router } from '@angular/router';
@@ -13,8 +13,8 @@ import { Service } from '../../../@core/data/models/service';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { PaymentService } from '../../../@core/data/payment.service';
+import { ReservationsService } from '../../../@core/data';
+import { PaymentService } from '../../../@core/data';
 
 @Component({
   selector: 'create',

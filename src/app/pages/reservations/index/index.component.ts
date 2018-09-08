@@ -1,27 +1,34 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PropertyService } from '../../../@core/data/property.service';
-import { ReservationsService } from '../../../@core/data/reservations.service';
+import { PropertyService } from '../../../@core/data';
+import { ReservationsService } from '../../../@core/data';
 import { Router } from '@angular/router';
 import { DialogCheckInComponent } from '../dialog-check-in/dialog-check-in.component';
 import { TableComponent } from '../../payments/table/table.component';
 import { Reservation } from '../../../@core/data/models';
 import { DialogNewDocumentComponent } from '../../documents/document-form/document-form.component';
 import * as faker from 'faker';
-import { PaymentService } from '../../../@core/data/payment.service';
+import { PaymentService } from '../../../@core/data';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { Payment } from '../../../@core/data/models/payment';
 import { LocatusAbstractComponent } from '../../../@core/utils/locatusComponent.abstract';
+import { DeleteConfirmationComponent } from '../../../@theme/components/delete-confirmation/delete-confirmation.component';
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../store';
+import { Pagination, FilterConf, SortConf } from '../../../store/helpers';
 
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',
-  styleUrls: ['./index.component.scss']
+  styleUrls: ['./index.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IndexComponent extends LocatusAbstractComponent implements OnInit, OnDestroy {
+export class IndexComponent extends LocatusAbstractComponent implements OnInit {
 
   url: string = '/pages/reservations';
 
@@ -78,7 +85,15 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit, 
         content: [
           { type: 'amount', label: 'Solde', path: ['balance.value'], currency: 'balance.currency.symbol' },
           { type: 'amount', label: 'Réglé', path: ['adjusted.value'], currency: 'adjusted.currency.symbol' },
-          { type: 'collapse', label: 'détails', nomenclature: 'Réservation', path: ['payments'], component: TableComponent }
+          {
+            type: 'collapse',
+            label: 'détails',
+            path: [null],
+            getData: (id) => {
+              return this.store.select<any>(fromStore.getPaymentsByNomenclature(id, 'Réservation'));
+            },
+            component: TableComponent
+          }
         ]
       },
       {
@@ -120,7 +135,15 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit, 
         content: [
           { type: 'amount', label: 'Solde', path: ['balance.value'], currency: 'balance.currency.symbol' },
           { type: 'amount', label: 'Réglé', path: ['adjusted.value'], currency: 'adjusted.currency.symbol' },
-          { type: 'collapse', label: 'détails', nomenclature: 'Réservation', path: ['payments'], component: TableComponent }
+          {
+            type: 'collapse',
+            label: 'détails',
+            path: [null],
+            getData: (id) => {
+              return this.store.select<any>(fromStore.getPaymentsByNomenclature(id, 'Réservation'));
+            },
+            component: TableComponent
+          }
         ]
       },
       {
@@ -149,19 +172,19 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit, 
         {
           title: 'Status',
           action: 'sort',
-          value: 'status',
+          value: 'status.value',
           direction: 'asc',
         },
         {
           title: 'Montant',
           action: 'sort',
-          value: 'price',
+          value: 'price.value',
           direction: 'asc',
         },
         {
           title: 'Solde',
           action: 'sort',
-          value: 'balance',
+          value: 'balance.value',
           direction: 'asc',
         },
         {
@@ -200,9 +223,19 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit, 
 
   paymentsSubscription: Subscription;
 
+  /**
+   * to do complex object data handling 
+   * just provide object and automatic search fields
+   */
   searchFields: string[] = ['status.value', 'lodger', 'price.value', 'balance.value'];
 
   refreshFilters: Subject<any> = new Subject<any>();
+
+  filtersConf: FilterConf;
+  sortConf: SortConf[];
+  pagination$: Observable<Pagination>;
+  loaded$: Observable<boolean>;
+  total$: Observable<number>;
 
   constructor(
     public router: Router,
@@ -210,60 +243,83 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit, 
     public dataService: ReservationsService,
     public propertyService: PropertyService,
     public paymentService: PaymentService,
-    public cdr: ChangeDetectorRef
+    public cdr: ChangeDetectorRef,
+    private store: Store<fromStore.LocatusState>
   ) {
     super(router, modalService, cdr, dataService);
   }
 
   ngOnInit() {
+    this.total$ = this.store.select<any>(fromStore.getReservationsCount);
+    this.pagination$ = this.store.select<any>(fromStore.getReservationsPagination);
+    this.loaded$ = this.store.select<any>(fromStore.getReservationsLoaded);
+    this.data = this.store.select<any>(fromStore.getPaginatedSortedFiltredReservations);
+    this.resetSort();
     this.filters = this.dataService.initFilters(this.propertyService);
-    this.setUpData();
-    this.detectPropertyChanges();
-    this.detectPaymentsChanges();
-    this.detectSourceChanges();
+    this.store.dispatch(new fromStore.LoadPayments());
   }
 
-  ngOnDestroy() {
-    this.sourceSubscription.unsubscribe();
-    this.paymentsSubscription.unsubscribe();
+  paginate(pagination: Pagination) {
+    this.store.dispatch(new fromStore.LoadReservations({ ...this.filtersConf }, [...this.sortConf], { ...pagination }));
   }
 
-  setUpData() {
-    this.source.load(this.dataService.all());
-    this.dataService.initSort(this.source);
+  applyFilters(filters, config) {
+    this.filtersConf = { filters, andOperator: true };
+    this.store.dispatch(new fromStore.LoadReservations({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
   }
 
-  detectSourceChanges() {
-    this.sourceSubscription = this.source.onChanged().subscribe(value => {
-      this.data = of(value.elements.map((reservation: Reservation) => {
-        reservation.payments = this.paymentService.findByAndBy({ 'nomenclature.id': reservation.id, 'nomenclature.type': 'Réservation' }).sort((a: Payment, b: Payment) => {
-          return b.deadlineDate - a.deadlineDate;
-        });
-        return reservation;
-      })).pipe(delay(5));
-    });
+  onSearch(filters: FilterConf) {
+    this.filtersConf = filters;
+    if (filters.filters.length === 0) {
+      this.resetFilters();
+    }
+    this.store.dispatch(new fromStore.LoadReservations({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
   }
 
-  detectPaymentsChanges() {
-    this.paymentsSubscription = this.paymentService.onChanged().subscribe((payment: Payment) => {
-      this.source.load(this.dataService.all());
-    })
-  }
-
-  detectPropertyChanges() {
-    this.propertyService.refreshCurrentProperty.subscribe(property => {
-      if (property !== null) {
-        this.filters = this.filters.map(filter => {
-          if (filter.name === 'property') {
-            filter.element = { id: property.id, value: property.title };
-          }
-          return filter;
-        });
-        this.refreshFilters.next(this.filters);
-      } else {
-        this.source.load([]);
+  sort(element) {
+    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
+    this.sortConf = [
+      {
+        field: element.value,
+        direction: element.direction
       }
+    ];
+    this.store.dispatch(new fromStore.LoadReservations({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  delete(item: any) {
+    const modalRef = this.modalService.open(DeleteConfirmationComponent, { size: 'lg', container: 'nb-layout' });
+    modalRef.componentInstance.type = 'reservation';
+    modalRef.componentInstance.title = item.title;
+    modalRef.result.then(confirmed => {
+      if (confirmed) {
+        this.store.dispatch(new fromStore.DeleteReservation(item.id));
+      }
+    }, (reason) => {
+
     });
+  }
+
+  resetFilters() {
+    this.filtersConf = {
+      filters: [
+        {
+          field: 'property',
+          search: this.propertyService.currentProperty.id.toString(),
+          filter: function (cell: any, search: any) {
+            return cell.id.toString() === search
+          }
+        }
+      ],
+      andOperator: false,
+    };
+  }
+
+  resetSort() {
+    this.sortConf = [{
+      field: 'start',
+      direction: 'desc',
+    }];
   }
 
   checkin(reservation) {

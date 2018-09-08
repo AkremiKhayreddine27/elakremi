@@ -7,29 +7,31 @@
     <card-header-actions [isFilterCollapsed]="!withFilters" *ngIf="!isSearching" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
       (dropdownItemEvent)="handleDropdownEvent($event)">
     </card-header-actions>
-    <card-header-search class="w-100" [source]="source" [fields]="searchFields" (closeSearch)="isSearching = false" [isSearching]="isSearching"
-      *ngIf="isSearching"></card-header-search>
+    <locatus-card-search class="w-100" (searchChange)="onSearch($event)" [fields]="searchFields" (closeSearch)="isSearching = false"
+      [isSearching]="isSearching" *ngIf="isSearching"></locatus-card-search>
   </nb-card-header>
   <nb-card-body class="p-0">
     <card-mobile-header-actions [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)" (dropdownItemEvent)="handleDropdownEvent($event)"></card-mobile-header-actions>
     <div class="border-bottom" [ngbCollapse]="isFilterCollapsed">
-      <filters [source]="source" (action)="handleFilter($event.action, $event.data)" [filters]="filters" (hasFilters)="hasFilters($event.filters)"></filters>
+      <locatus-filters [config]="filters" (action)="handleFilter($event.action, $event.data)" (hasFilters)="applyFilters($event.filters, $event.config)"></locatus-filters>
     </div>
-    <div *ngIf="data | async as documents; else loading">
-      <div *ngIf="documents.length > 0; else noItems">
-        <div class="row m-0">
-          <div class="col-12 p-0 pt-3">
-            <ngx-table [config]="config" [data]="documents" (actionEvent)="handleRowEvent($event)"></ngx-table>
+    <div *ngIf="loaded$ | async; else loading">
+      <div *ngIf="data | async as documents">
+        <div *ngIf="(total$ | async) > 0; else noItems">
+          <div class="row m-0">
+            <div class="col-12 p-0 pt-3">
+              <ngx-table [config]="config" [data]="data | async" (actionEvent)="handleRowEvent($event)"></ngx-table>
+            </div>
           </div>
         </div>
+        <ng-template #noItems>
+          <div class="row m-0">
+            <div class="col-12 p-4">
+              <ngx-alert message="Pas de documents"></ngx-alert>
+            </div>
+          </div>
+        </ng-template>
       </div>
-      <ng-template #noItems>
-        <div class="row m-0">
-          <div class="col-12 p-4">
-            <ngx-alert message="Pas de documents"></ngx-alert>
-          </div>
-        </div>
-      </ng-template>
     </div>
     <ng-template #loading>
       <div class="d-flex p-4 justify-content-center align-items-center">
@@ -38,6 +40,6 @@
     </ng-template>
   </nb-card-body>
   <nb-card-footer class="d-flex justify-content-end p-0">
-    <ngx-pagination [source]="source"></ngx-pagination>
+    <locatus-pagination [paging]="pagination$ | async" [total]="total$ | async" (changed)="paginate($event)"></locatus-pagination>
   </nb-card-footer>
 </nb-card>

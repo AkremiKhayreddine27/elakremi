@@ -1,7 +1,8 @@
 {
-  "compileOnSave": false,
+  "compileOnSave": false, 
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "baseUrl": "./",
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",
@@ -9,6 +10,9 @@
     "experimentalDecorators": true,
     "target": "es5",
     "paths": {
+      "@core/*": [
+        "src/app/@core/*"
+      ],
       "jszip": [
         "../node_modules/jszip/dist/jszip.js"
       ]

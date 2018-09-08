@@ -1,0 +1,14 @@
+<div class="form-group row">
+  <label for="nom" class="col-form-label col-md-4">Objectif</label>
+  <div class="input-group input-group-sm col-md-8">
+    <input type="number" id="nom" class="form-control" [(ngModel)]="nightsGaol" #goal="ngModel" name="goal" [class.form-control-danger]="goal.invalid && goal.touched">
+    <span class="input-group-btn">
+      <h2 [class.form-btn-danger]="!goal.valid && goal.touched" class="btn btn-secondary border-left-0 p-2">
+        Nuitées
+      </h2>
+    </span>
+  </div>
+  <div class="col-md-4"></div>
+  <error-message [control]="goal" *ngIf="!goal.valid && goal.touched" class="col-md-8 m-0 form-text error">
+  </error-message>
+</div>

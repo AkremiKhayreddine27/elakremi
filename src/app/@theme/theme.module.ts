@@ -20,6 +20,7 @@ import {
   NbCheckboxModule,
   NbPopoverModule,
   NbContextMenuModule,
+  NbAlertModule
 } from '@nebular/theme';
 
 import { NbSecurityModule } from '@nebular/security';
@@ -65,7 +66,10 @@ import {
   FiltersComponent
 } from './components';
 
-import { ErrorMessageComponent, NbrInputComponent, TextFieldComponent } from './locatus/forms';
+import { LocatusDropzoneDirective } from './locatus/directives/locatus-dropzone.directive';
+
+
+import { ErrorMessageComponent, NbrInputComponent, TextFieldComponent, LocatusCheckboxComponent } from './locatus/forms';
 
 import { NgxTableService } from './components/ngx-table/ngxTableService.service';
 
@@ -79,6 +83,32 @@ import {
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
+
+import {
+  NbAuthBlockComponent,
+  NbAuthComponent,
+  NbLoginComponent,
+  NbLogoutComponent,
+  NbRegisterComponent,
+  NbRequestPasswordComponent,
+  NbResetPasswordComponent
+} from '../pages/auth';
+
+import { LocatusPaginationComponent } from './locatus/locatus-pagination/locatus-pagination.component';
+import { LocatusFiltersComponent } from './locatus/locatus-filters/locatus-filters.component';
+import { LocatusCardSearchComponent } from './locatus/locatus-card-search/locatus-card-search.component';
+import { LocatusSelectPropertyComponent } from './locatus/locatus-select-property/locatus-select-property.component';
+import { LocatusCurrencyPipe } from './locatus/pipes/locatus-currency.pipe';
+
+const AUTH_COMPONENTS = [
+  NbAuthBlockComponent,
+  NbAuthComponent,
+  NbLoginComponent,
+  NbLogoutComponent,
+  NbRegisterComponent,
+  NbRequestPasswordComponent,
+  NbResetPasswordComponent
+]
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -99,13 +129,20 @@ const NB_MODULES = [
   NbSecurityModule, // *nbIsGranted directive
   RouterModule,
   NgSelectModule,
-  NgxSpinnerModule
+  NgxSpinnerModule,
+  NbAlertModule
 ];
 
 const LOCATUS = [
   NbrInputComponent,
   ErrorMessageComponent,
-  TextFieldComponent
+  TextFieldComponent,
+  LocatusDropzoneDirective,
+  LocatusCheckboxComponent,
+  LocatusPaginationComponent,
+  LocatusFiltersComponent,
+  LocatusCardSearchComponent,
+  LocatusSelectPropertyComponent
 ];
 
 const COMPONENTS = [
@@ -146,7 +183,7 @@ const COMPONENTS = [
   FileComponent,
   MobileDropdownComponent,
   NgxDatepickerDropdownComponent,
-  FiltersComponent,
+  FiltersComponent
 ];
 
 const ENTRY_COMPONENTS = [
@@ -165,6 +202,7 @@ const PIPES = [
   PluralPipe,
   RoundPipe,
   TimingPipe,
+  LocatusCurrencyPipe
 ];
 
 const NB_THEME_PROVIDERS = [
@@ -182,7 +220,7 @@ const NB_THEME_PROVIDERS = [
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...LOCATUS, ...PIPES],
-  declarations: [...COMPONENTS, ...LOCATUS, ...PIPES],
+  declarations: [...COMPONENTS, ...LOCATUS, ...PIPES, ...AUTH_COMPONENTS],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {

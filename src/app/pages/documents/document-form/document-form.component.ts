@@ -1,13 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl, FormGroup } from '@angular/forms';
-import { PropertyService } from '../../../@core/data/property.service';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { ServicesService } from '../../../@core/data/services.service';
+import {
+  PropertyService,
+  ReservationsService,
+  ServicesService,
+  DocumentsService
+} from '@core/data';
 import * as faker from 'faker';
 import { FineUploader } from 'fine-uploader';
 import { DOCUMENT } from '@angular/common';
-import { DocumentsService } from '../../../@core/data/documents.service';
 
 @Component({
   selector: 'dialog-new-document',

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NotificationService } from '../../../@core/data/notification.service';
+import { NotificationService } from '../../../@core/data';
 import * as dateFns from 'date-fns';
 import * as frLocale from 'date-fns/locale/fr';
 

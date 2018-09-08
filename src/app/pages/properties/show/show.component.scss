@@ -1,5 +1,15 @@
 @import '../../../@theme/styles/themes';
 @include nb-install-component() {
+    /deep/ app-identification.form-danger {
+        nb-card-header {
+            border: 2px solid nb-theme(color-danger) !important;
+            color: nb-theme(color-danger) !important;
+        }
+        nb-card-body {
+            border: 2px solid nb-theme(color-danger) !important;
+            border-top: none !important;
+        }
+    }
     .bg-overlay {
         background-color: rgba(0, 0, 0, 0.2);
         height: 100%;

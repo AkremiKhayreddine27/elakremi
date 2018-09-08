@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TariffsService } from '../../../@core/data/tariffs.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { TariffsService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 
 @Component({
   selector: 'payment-terms',

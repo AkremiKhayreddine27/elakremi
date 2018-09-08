@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, AfterViewInit, Input, OnChanges, SimpleCh
 import { NbThemeService } from '@nebular/theme';
 import { delay } from 'rxjs/operators';
 import { NgxEchartsDirective } from 'ngx-echarts';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { ReservationsService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 import * as faker from 'faker';
 
 @Component({

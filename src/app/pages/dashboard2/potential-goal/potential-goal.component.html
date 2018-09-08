@@ -1,0 +1,24 @@
+<nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+  <nb-card-front>
+    <nb-card size="xsmall">
+      <nb-card-header>
+        Objectif potentiel (Nuitées)
+        <i class="nb-arrow-right" (click)="toggleView()"></i>
+      </nb-card-header>
+      <nb-card-body class="p-0">
+        <front></front>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-front>
+  <nb-card-back>
+    <nb-card size="xsmall">
+      <nb-card-header>
+        Objectif potentiel (Nuitées)
+        <i class="nb-arrow-right" (click)="toggleView()"></i>
+      </nb-card-header>
+      <nb-card-body>
+        <back></back>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-back>
+</nb-flip-card>

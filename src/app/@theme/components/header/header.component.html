@@ -12,21 +12,23 @@
 <div class="header-container">
   <nb-actions size="medium" [class.right]="position === 'normal'" [class.left]="position === 'inverse'">
     <nb-action icon="nb-gear" class="toggle-layout" (click)="toggleSettings()"></nb-action>
-    <nb-action>
+    <nb-action *ngIf="user | async as auth">
       <div class="dropdown" ngbDropdown>
         <a class="btn p-0 btn-tn border-0 d-flex justify-content-between" ngbDropdownToggle>
-          <span class="username"> {{ user.firstname[0] }}{{ user.lastname[0] }} </span>
+          <span *ngIf="auth.displayName" class="username"> {{ auth.displayName[0] }} </span>
+          <span *ngIf="!auth.displayName" class="username"> {{ auth.firstname[0] }}{{ auth.lastname[0] }} </span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
           <li class="arrow"></li>
           <li class="user-menu-header dropdown-item">
             <div class="user-card">
               <div class="user-picture">
-                <img src="assets/images/nick.png" />
+                <img [src]="auth.photoURL" />
               </div>
               <div class="user-details">
-                <span>{{ user.firstname }} {{ user.lastname }}</span>
-                <span>{{ user.email }}</span>
+                <span *ngIf="auth.displayName">{{ auth.displayName }}</span>
+                <span *ngIf="!auth.displayName">{{ auth.firstname }} {{ auth.lastname }}</span>
+                <span>{{ auth.email }}</span>
               </div>
             </div>
           </li>

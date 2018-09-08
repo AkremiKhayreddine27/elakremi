@@ -3,8 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DialogNewEventComponent } from '../dialog-new-event/dialog-new-event.component';
 import { CalendarEvent } from 'ngx-calendar';
 import * as dateFns from 'date-fns';
-import { CalendarService } from '../../../@core/data/calendar.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { CalendarService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 import { Calendar } from 'ngx-calendar';
 
 @Component({

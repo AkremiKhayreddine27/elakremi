@@ -6,19 +6,19 @@
           <a class="action" ngbDropdownToggle>
             <i class="fa fa-ellipsis-v"></i>
           </a>
-          <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
             <span *ngFor="let d of col.content">
-              <li *ngIf="d.type ==='option'" (click)="actionClicked(d.clickAction, row)" class="dropdown-item">
+              <div *ngIf="d.type ==='option'" (click)="actionClicked(d.clickAction, row)" class="dropdown-item">
                 <i [class]="d.icon"></i>
                 {{ d.title }}
-              </li>
-              <li *ngIf="d.type ==='data'" class="dropdown-item">
+              </div>
+              <div *ngIf="d.type ==='data'" class="dropdown-item">
                 <i [class]="d.icon"></i>
                 {{ getDataFromObject(row, d.title) }}
-              </li>
+              </div>
               <div *ngIf="d.type ==='divider'" class="dropdown-divider"></div>
             </span>
-          </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -37,9 +37,9 @@
         <span class="small">{{ getDataFromObject(row, d.path[1]) }}</span>
       </span>
       <span class="d-flex align-items-start" *ngIf="d.type === 'imageText'">
-        <img class="property-img mr-2" *ngIf="!isString(getDataFromObject(row, d.path[0]))" [src]="getDataFromObject(row, d.path[0])[0]"
+        <img class="property-img mr-2" *ngIf="isArray(getDataFromObject(row, d.path[0]))" [src]="getDataFromObject(row, d.path[0])[0].url"
         />
-        <img class="property-img mr-2" *ngIf="isString(getDataFromObject(row, d.path[0]))" [src]="getDataFromObject(row, d.path[0])"
+        <img class="property-img mr-2" *ngIf="!isArray(getDataFromObject(row, d.path[0]))" [src]="getDataFromObject(row, d.path[0]).url"
         />
         <span class="small">{{ getDataFromObject(row, d.path[1]) }}</span>
       </span>
@@ -52,7 +52,12 @@
             <i *ngIf="!isCollapsed" class="small nb-chevron-up-outline"></i>
           </span>
           <span class="small" *ngIf="d.type === 'date'">
-            {{ getDataFromObject(row, h) | date:'dd MMM yyyy' }}
+            <span *ngIf="isDate(getDataFromObject(row, h))">
+              {{ getDataFromObject(row, h) | date:'dd MMM yyyy' }}
+            </span>
+            <span *ngIf="!isDate(getDataFromObject(row, h))">
+              {{ getDataFromObject(row, h).toDate() | date:'dd MMM yyyy' }}
+            </span>
           </span>
           <span class="small" *ngIf="d.type ==='text'">
             {{ getDataFromObject(row, h) }}
@@ -104,7 +109,12 @@
             <i *ngIf="!isCollapsed " class="fa small-xs fa-chevron-up ml-1 "></i>
           </span>
           <span class="small-xs" *ngIf="d.type==='date' ">
-            {{ getDataFromObject(row, h) | date:'dd MMM yyyy' }}
+            <span *ngIf="isDate(getDataFromObject(row, h))">
+              {{ getDataFromObject(row, h) | date:'dd MMM yyyy' }}
+            </span>
+            <span *ngIf="!isDate(getDataFromObject(row, h))">
+              {{ getDataFromObject(row, h).toDate() | date:'dd MMM yyyy' }}
+            </span>
           </span>
           <span class="small-xs" *ngIf="d.type==='text' ">
             {{ getDataFromObject(row, h) }}

@@ -1,0 +1,19 @@
+<nb-card size="xlarge">
+  <nb-tabset fullWidth>
+    <nb-tab tabTitle="Revenues">
+      <div class="chart-container">
+        <chart-panel-summary [summary]="revenueSummary"></chart-panel-summary>
+      </div>
+    </nb-tab>
+    <nb-tab tabTitle="Dépenses">
+      <div class="chart-container">
+        <chart-panel-summary [summary]="expenseSummary"></chart-panel-summary>
+      </div>
+    </nb-tab>
+  </nb-tabset>
+  <nb-card-body>
+    <chart-panel-header [type]="period" (periodChange)="setPeriodAndGetChartData($event)">
+    </chart-panel-header>
+    <revenues-chart #ordersChart [data]="chartData | async"></revenues-chart>
+  </nb-card-body>
+</nb-card>

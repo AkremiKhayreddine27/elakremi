@@ -1,0 +1,17 @@
+<div class="property-btn-group pl-0 d-flex pb-2">
+    <i routerLink="/pages/properties/create" class="nb-plus-circled btn-add"></i>
+    <div class="dropdown d-flex align-items-center" ngbDropdown>
+        <h2 class="btn btn-property-dropdown btn-tn" ngbDropdownToggle>
+            <span *ngIf="currentProperty">{{ currentProperty.title }}</span>
+            <span class="text-secondary" *ngIf="!currentProperty && properties.length > 0">Choisir un bien</span>
+            <span class="text-secondary" routerLink="/pages/properties/create" *ngIf="!currentProperty && properties.length === 0">Ajouter un bien</span>
+            <i *ngIf="properties.length > 0" class="fa fa-caret-down text-secondary pl-1"></i>
+        </h2>
+        <ul *ngIf="properties.length > 0" class="dropdown-menu" ngbDropdownMenu>
+            <li [class.font-weight-bold]="currentProperty && currentProperty.id === property.id" *ngFor="let property of properties"
+                (click)="setCurrentProperty(property)" class="dropdown-item">
+                <span>{{ property.title }}</span>
+            </li>
+        </ul>
+    </div>
+</div>

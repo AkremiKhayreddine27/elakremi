@@ -3,7 +3,7 @@ import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dateFns from 'date-fns';
 import { CalendarEvent } from 'ngx-calendar';
-import { CalendarService } from '../../../@core/data/calendar.service';
+import { CalendarService } from '../../../@core/data';
 const HOURS_IN_DAY = 48;
 
 const colors = [

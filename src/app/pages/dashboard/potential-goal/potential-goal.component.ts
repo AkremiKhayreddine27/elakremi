@@ -1,10 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { delay } from 'rxjs/operators';
 import { NgxEchartsDirective } from 'ngx-echarts';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { FinancesService } from '../../../@core/data/finances.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { ReservationsService, FinancesService, PropertyService, TariffsService } from '@core/data';
 
 @Component({
   selector: 'potential-goal',
@@ -25,7 +23,12 @@ export class PotentialGoalComponent implements OnInit {
 
   themeSubscription: any;
 
-  constructor(private theme: NbThemeService, private financesService: FinancesService, private propertyService: PropertyService, private reservationService: ReservationsService) { }
+  constructor(
+    private theme: NbThemeService,
+    private tariffService: TariffsService,
+    private financesService: FinancesService,
+    private propertyService: PropertyService,
+    private reservationService: ReservationsService) { }
 
   ngOnInit() {
     this.current = this.reservationService.getTotalNbrNights(this.propertyService.currentProperty.id);
@@ -54,7 +57,7 @@ export class PotentialGoalComponent implements OnInit {
         tooltip = '{d}% <br/> {c} $';
         data1 = 'revenues';
         label1 = '{@value} $';
-        this.goal = 300 * 100;
+        this.goal = 300 * this.tariffService.findActiveTariff().price;
         this.finances = this.financesService.getPropertyFinances(this.propertyService.currentProperty);
         this.current = this.finances.revenue - this.finances.expenses;
         break;

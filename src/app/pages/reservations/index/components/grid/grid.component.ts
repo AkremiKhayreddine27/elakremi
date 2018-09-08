@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyService } from '../../../../../@core/data/property.service';
+import { PropertyService } from '../../../../../@core/data';
 import { map } from 'rxjs/operators';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ReservationsService } from '../../../../../@core/data/reservations.service';
+import { ReservationsService } from '../../../../../@core/data';
 import { DeleteConfirmationComponent } from '../../../../../@theme/components/delete-confirmation/delete-confirmation.component';
 
 @Component({

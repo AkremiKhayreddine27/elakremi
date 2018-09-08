@@ -6,8 +6,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Property } from '../../../@core/data/models/property';
 import { Calendar, CalendarEvent } from 'ngx-calendar';
 
-import { CalendarService } from '../../../@core/data/calendar.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { CalendarService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 
 const colors = [
   '#f4511e',

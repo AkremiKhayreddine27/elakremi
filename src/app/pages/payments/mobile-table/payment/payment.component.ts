@@ -4,7 +4,7 @@ import { PaymentFormComponent } from '../../payment-form/payment-form.component'
 import { SendNotificationComponent } from '../../../../@theme/components';
 import { DeleteConfirmationComponent } from '../../../../@theme/components/delete-confirmation/delete-confirmation.component';
 import * as dateFns from 'date-fns';
-import { PaymentService } from '../../../../@core/data/payment.service';
+import { PaymentService } from '../../../../@core/data';
 import { MobileDropdownComponent } from '../../../../@theme/components/mobile-dropdown/mobile-dropdown.component';
 
 @Component({

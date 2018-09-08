@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PropertyService } from '../../@core/data/property.service';
- 
+import { PropertyService } from '../../@core/data';
+
 @Component({
   selector: 'tariff',
   templateUrl: './tariff.component.html',
@@ -36,11 +36,11 @@ export class TariffComponent implements OnInit {
     const property = this.propertyService.properties.filter(p => {
       return p.title === propertyTitle.value;
     })[0];
-    this.propertyService.setCurrentProperty(property);
+    this.propertyService.setCurrentProperty(property.id);
   }
 
   save() {
-    
+
   }
 
 }

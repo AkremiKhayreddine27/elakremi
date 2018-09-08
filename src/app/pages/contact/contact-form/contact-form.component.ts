@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ContactsService } from '../../../@core/data/contacts.service';
+import { ContactsService } from '../../../@core/data';
 
 @Component({
   selector: 'dialog-new-contact',

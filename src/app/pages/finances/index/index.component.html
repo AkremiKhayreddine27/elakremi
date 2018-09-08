@@ -26,20 +26,19 @@
         <card-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
           (dropdownItemEvent)="handleDropdownEvent($event)" *ngIf="!isSearching">
         </card-header-actions>
-        <card-header-search class="w-100" [source]="source" [fields]="searchFields" (closeSearch)="isSearching = false" [isSearching]="isSearching"
-          *ngIf="isSearching"></card-header-search>
+        <locatus-card-search class="w-100" (searchChange)="onSearch($event)" [fields]="searchFields" (closeSearch)="isSearching = false"
+          [isSearching]="isSearching" *ngIf="isSearching"></locatus-card-search>
       </nb-card-header>
       <nb-card-body class="p-0">
         <card-mobile-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
           (dropdownItemEvent)="handleDropdownEvent($event)"></card-mobile-header-actions>
         <div class="border-bottom" [ngbCollapse]="isFilterCollapsed">
-          <filters [source]="source" (action)="handleFilter($event.action, $event.data)" [filters]="filters" (hasFilters)="hasFilters($event.filters)"></filters>
+          <locatus-filters [config]="filters" (action)="handleFilter($event.action, $event.data)" (hasFilters)="applyFilters($event.filters, $event.config)"></locatus-filters>
         </div>
-        <payments-table *ngIf="data.length > 0" [withBorders]="false" [isBgGrey]="false" [withAdd]="false" [data]="data"></payments-table>
-        <ngx-alert *ngIf="data.length === 0" message="Pas de paiements"></ngx-alert>
+        <payments-table [withBorders]="false" [isBgGrey]="false" [withAdd]="false" [data]="data$"></payments-table>
       </nb-card-body>
       <nb-card-footer class="d-flex justify-content-end p-0">
-        <ngx-pagination [refresh]="refreshPagination" [source]="source"></ngx-pagination>
+        <locatus-pagination [paging]="pagination$ | async" [total]="total$ | async" (changed)="paginate($event)"></locatus-pagination>
       </nb-card-footer>
     </nb-card>
   </nb-card-body>

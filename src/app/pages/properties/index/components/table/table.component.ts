@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { PropertyService } from '../../../../../@core/data/property.service';
+import { PropertyService } from '../../../../../@core/data';
+import { Property } from '../../../../../@core/data/models/property';
 
 @Component({
   selector: 'table-view',
@@ -21,8 +22,8 @@ export class TableComponent implements OnInit {
     this.service.delete(property);
   }
 
-  navigate(link, property) {
-    this.service.setCurrentProperty(property);
+  navigate(link, property: Property) {
+    this.service.setCurrentProperty(property.id);
     this.router.navigate(['/pages/' + link]);
   }
 

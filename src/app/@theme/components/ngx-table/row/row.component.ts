@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MobileDropdownComponent } from '../../mobile-dropdown/mobile-dropdown.component';
+import * as dateFns from 'date-fns';
+import { of } from 'rxjs/observable/of';
+import { Subscription } from 'rxjs/Subscription';
+
 @Component({
   selector: 'row',
   templateUrl: './row.component.html',
@@ -36,8 +40,16 @@ export class RowComponent implements OnInit, AfterViewInit {
     return this.getDataFromObject(object[parts[0]], parts.slice(1).join("."));
   }
 
+  isDate(date) {
+    return dateFns.isDate(date);
+  }
+
   isString(object) {
     return typeof object === 'string';
+  }
+
+  isArray(object) {
+    return Array.isArray(object);
   }
 
   ngAfterViewInit() {
@@ -50,9 +62,16 @@ export class RowComponent implements OnInit, AfterViewInit {
 
   collapse(d) {
     this.isCollapsed = !this.isCollapsed;
-    this.collapsedComponent = d.component;
-    this.collpaseNomenclature = { type: d.nomenclature, id: this.getDataFromObject(this.row, 'id') };
-    this.collpaseData = this.getDataFromObject(this.row, d.path[0]);
+    if (!this.isCollapsed) {
+      this.collapsedComponent = d.component;
+      if (d.getData) {
+        this.collpaseData = d.getData(this.getDataFromObject(this.row, 'id'));
+      }
+      if (d.path[0]) {
+        this.collpaseData = of(this.getDataFromObject(this.row, d.path[0]));
+      }
+      this.collpaseNomenclature = { id: this.getDataFromObject(this.row, 'id'), type: this.getDataFromObject(this.row, 'kind') };
+    }
   }
 
   showDropdown(data, options) {

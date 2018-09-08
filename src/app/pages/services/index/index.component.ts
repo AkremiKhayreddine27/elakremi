@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../../../@core/data/models/service';
-import { ServicesService } from '../../../@core/data/services.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { ServicesService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
+
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',

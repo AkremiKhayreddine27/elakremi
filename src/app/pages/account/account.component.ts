@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountComponent implements OnInit {
 
+    hasOverlay = false;
+
     tabs: any[] = [
         {
             title: 'Informations Personnelles',
@@ -25,6 +27,14 @@ export class AccountComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    optionsClicked() {
+        this.hasOverlay = !this.hasOverlay;
+    }
+
+    save() {
+
     }
 
 }

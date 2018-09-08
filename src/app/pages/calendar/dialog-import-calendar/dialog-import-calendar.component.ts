@@ -5,8 +5,8 @@ import * as dateFns from 'date-fns';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Property } from '../../../@core/data/models/property';
-import { CalendarService } from '../../../@core/data/calendar.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { CalendarService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 
 const colors = [
   '#f4511e',

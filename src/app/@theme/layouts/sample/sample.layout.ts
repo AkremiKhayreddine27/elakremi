@@ -9,9 +9,12 @@ import {
   NbThemeService,
 } from '@nebular/theme';
 
-import { PropertyService } from '../../../@core/data/property.service';
+import { PropertyService, StateService } from '@core/data';
 
-import { StateService } from '../../../@core/data/state.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../store';
+import { Property } from '@core/data/models';
 
 // TODO: move layouts into the framework
 @Component({
@@ -21,9 +24,9 @@ import { StateService } from '../../../@core/data/state.service';
 })
 export class SampleLayoutComponent implements OnDestroy, OnInit {
 
-  properties = [];
+  properties$: Observable<Property[]>;
 
-  currentProperty;
+  currentProperty$: Observable<Property>;
 
   subMenu: NbMenuItem[] = [
     {
@@ -73,12 +76,14 @@ export class SampleLayoutComponent implements OnDestroy, OnInit {
 
   currentTheme: string;
 
-  constructor(protected stateService: StateService,
-              protected menuService: NbMenuService,
-              protected themeService: NbThemeService,
-              protected bpService: NbMediaBreakpointsService,
-              protected sidebarService: NbSidebarService,
-              private propertyService: PropertyService) {
+  constructor(
+    private store: Store<fromStore.LocatusState>,
+    protected stateService: StateService,
+    protected menuService: NbMenuService,
+    protected themeService: NbThemeService,
+    protected bpService: NbMediaBreakpointsService,
+    protected sidebarService: NbSidebarService,
+    private propertyService: PropertyService) {
     this.stateService.onLayoutState()
       .pipe(takeWhile(() => this.alive))
       .subscribe((layout: string) => this.layout = layout);
@@ -95,7 +100,7 @@ export class SampleLayoutComponent implements OnDestroy, OnInit {
         takeWhile(() => this.alive),
         withLatestFrom(this.themeService.onMediaQueryChange()),
         delay(20),
-      )
+    )
       .subscribe(([item, [bpFrom, bpTo]]: [any, [NbMediaBreakpoint, NbMediaBreakpoint]]) => {
 
         if (bpTo.width <= isBp.width) {
@@ -107,23 +112,18 @@ export class SampleLayoutComponent implements OnDestroy, OnInit {
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
         this.currentTheme = theme.name;
-    });
+      });
   }
 
   ngOnInit() {
-    this.properties = this.propertyService.properties;
-    this.currentProperty = this.propertyService.currentProperty;
-    this.propertyService.refresh.subscribe(properties => {
-      this.properties = properties;
-    });
-    this.propertyService.refreshCurrentProperty.subscribe(property => {
-      this.currentProperty = property;
-    });
+    this.properties$ = this.store.select<any>(fromStore.getAllProperties);
+    this.currentProperty$ = this.store.select<any>(fromStore.getSelectedProperty);
+    this.store.dispatch(new fromStore.LoadProperties());
+    this.store.dispatch(new fromStore.SelectProperty(this.propertyService.all()[0].id));
   }
 
-  setCurrentProperty(property) {
-    this.currentProperty = property;
-    this.propertyService.setCurrentProperty(property);
+  setCurrentProperty(property: Property) {
+    this.store.dispatch(new fromStore.SelectProperty(property.id));
   }
 
   ngOnDestroy() {

@@ -8,8 +8,8 @@ import { Calendar } from 'ngx-calendar';
 import * as dateFns from 'date-fns';
 import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 
-import { PropertyService } from '../../../@core/data/property.service';
-import { CalendarService } from '../../../@core/data/calendar.service';
+import { PropertyService } from '../../../@core/data';
+import { CalendarService } from '../../../@core/data';
 import { Property } from '../../../@core/data/models/property';
 
 @Component({
@@ -117,8 +117,8 @@ export class CalendarHeaderComponent implements OnInit {
   }
 
   setCurrentProperty(property: Property) {
-    this.currentProperty = property;
-    this.propertyService.setCurrentProperty(property);
+    this.currentProperty = property; 
+    this.propertyService.setCurrentProperty(property.id);
   }
 
 }

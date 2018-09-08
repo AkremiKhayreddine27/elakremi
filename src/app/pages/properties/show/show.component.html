@@ -4,7 +4,7 @@
   </div>
   <div class="row m-0">
     <div class="col-md-6 p-1">
-      <app-identification formControlName="identification"></app-identification>
+      <app-identification [class.form-danger]="!identification.valid && isSubmitted" formControlName="identification"></app-identification>
     </div>
     <div class="col-md-6 p-1">
       <app-description formControlName="description"></app-description>
@@ -12,12 +12,12 @@
   </div>
   <div class="row m-0">
     <div class="col-12 p-1">
-      <app-location formControlName="location" [property]="property ? property : {}"></app-location>
+      <app-location formControlName="location"></app-location>
     </div>
   </div>
   <div class="row m-0">
     <div class="col-12 p-1">
-      <amenities></amenities>
+      <amenities [items]="amenties" formControlName="amenities"></amenities>
     </div>
   </div>
   <div class="row m-0">
@@ -32,7 +32,7 @@
   </div>
   <div class="row m-0">
     <div class="col-md-6 p-1">
-      <app-pics [images]="property ? property.images : []"></app-pics>
+      <app-pics formControlName="images"></app-pics>
     </div>
     <div class="col-md-6 p-1">
       <documents [documents]="property ? property.images : []"></documents>

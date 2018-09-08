@@ -2,19 +2,14 @@
   <div class="col-4">
     <span class="small">De {{ payment.payer.firstname }} {{ payment.payer.lastname }} à {{ payment.payee.firstname }} {{ payment.payee.lastname
       }}
-    </span> 
+    </span>
   </div>
   <div class="col-3">
     <div>
       <span class="small">{{ payment.paymentDate | date:'dd/MM/yyyy'}}</span>
     </div>
-    <div class="mt-1 mb-1" [ngSwitch]="payment.status.value">
-      <span *ngSwitchCase="'partiel'" class="badge badge-info p-1">{{ payment.status.value }}</span>
-      <span *ngSwitchCase="'en retard'" class="badge badge-danger p-1">{{ payment.status.value }}</span>
-      <span *ngSwitchCase="'annulé'" class="badge badge-danger p-1">{{ payment.status.value }}</span>
-      <span *ngSwitchCase="'litige'" class="badge badge-warning p-1">{{ payment.status.value }}</span>
-      <span *ngSwitchCase="'payé'" class="badge badge-success p-1">{{ payment.status.value }}</span>
-      <span *ngSwitchCase="'à payer'" class="badge badge-warning p-1">{{ payment.status.value }}</span>
+    <div class="mt-1 mb-1">
+      <span [class]="'badge p-1 ' + payment.status.cssClass">{{ payment.status.value }}</span>
     </div>
     <div>
       <span class="small">

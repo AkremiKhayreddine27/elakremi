@@ -1,0 +1,57 @@
+@import '../../../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+@include nb-install-component() {
+    $padding: 1rem;
+    .echart {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+    .info {
+        margin-left: 45%;
+        color: nb-theme(color-fg);
+    }
+    .success {
+        font-family: nb-theme(font-secondary);
+        font-size: 1.5rem;
+        font-weight: nb-theme(font-weight-bold);
+        color: nb-theme(link-color);
+        span {
+            font-size: 1rem;
+        }
+    }
+    .danger {
+        font-size: 1.15rem;
+        font-weight: nb-theme(font-weight-bolder);
+        color: nb-theme(color-danger);
+        span {
+            font-size: 1rem;
+        }
+    }
+    .grey {
+        font-size: 1.15rem;
+        font-weight: nb-theme(font-weight-bolder);
+        color: nb-theme(color-fg);
+        span {
+            font-size: 1rem;
+        }
+    }
+    .text-hint {
+        font-size: 1rem;
+    }
+    @include nb-for-theme(cosmic) {
+        color: nb-theme(color-fg-heading);
+        .value {
+            color: nb-theme(color-fg-highlight);
+        }
+        .details span {
+            color: nb-theme(color-fg);
+        }
+    }
+    @include media-breakpoint-down(xs) {
+        .value {
+            font-size: 1.75rem;
+        }
+    }
+}

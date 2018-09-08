@@ -1,34 +1,12 @@
 import { Component } from '@angular/core';
 
-import { StateService } from '../../../@core/data/state.service';
+import { StateService, PropertyService } from '@core/data';
 
 @Component({
   selector: 'ngx-theme-settings',
   styleUrls: ['./theme-settings.component.scss'],
   template: `
-    <h6>LAYOUTS</h6>
-    <div class="settings-row">
-      <a *ngFor="let layout of layouts"
-         href="#"
-         [class.selected]="layout.selected"
-         [attr.title]="layout.name"
-         (click)="layoutSelect(layout)">
-        <i [attr.class]="layout.icon"></i>
-      </a>
-    </div>
-    <h6>SIDEBAR</h6>
-    <div class="settings-row">
-      <a *ngFor="let sidebar of sidebars"
-         href="#"
-         [class.selected]="sidebar.selected"
-         [attr.title]="sidebar.name"
-         (click)="sidebarSelect(sidebar)">
-        <i [attr.class]="sidebar.icon"></i>
-      </a>
-    </div>
-    <div class="switcher">
-      <ngx-layout-direction-switcher [vertical]="true"></ngx-layout-direction-switcher>
-    </div>
+    <button class="btn btn-success cursor-pointer" (click)="dbGenerate()">Base de données</button>
   `,
 })
 export class ThemeSettingsComponent {
@@ -36,12 +14,18 @@ export class ThemeSettingsComponent {
   layouts = [];
   sidebars = [];
 
-  constructor(protected stateService: StateService) {
+  constructor(
+    public propertyService: PropertyService,
+    protected stateService: StateService) {
     this.stateService.getLayoutStates()
       .subscribe((layouts: any[]) => this.layouts = layouts);
 
     this.stateService.getSidebarStates()
       .subscribe((sidebars: any[]) => this.sidebars = sidebars);
+  }
+
+  dbGenerate() {
+    this.propertyService.generateProperties('firebase', 6);
   }
 
   layoutSelect(layout: any): boolean {

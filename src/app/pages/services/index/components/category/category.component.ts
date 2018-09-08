@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServicesService } from '../../../../../@core/data/services.service';
+import { ServicesService } from '../../../../../@core/data';
 @Component({
   selector: 'category',
   templateUrl: './category.component.html',

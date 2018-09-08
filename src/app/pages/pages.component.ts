@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { MENU_ITEMS } from './pages-menu';
 
 @Component({
@@ -13,5 +12,6 @@ import { MENU_ITEMS } from './pages-menu';
 })
 export class PagesComponent {
 
+  constructor() {}
   menu: any = MENU_ITEMS;
 }

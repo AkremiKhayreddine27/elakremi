@@ -1,22 +1,35 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import * as dateFns from 'date-fns';
-import { of } from 'rxjs/observable/of';
-import { delay } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
-import { FormGroup, FormControl, Validators, FormControlDirective } from '@angular/forms';
-import { PropertyService } from '../../../@core/data/property.service';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { ContactsService } from '../../../@core/data/contacts.service';
-import { PaymentService } from '../../../@core/data/payment.service';
-import { TariffsService } from '../../../@core/data/tariffs.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import * as dateFns from 'date-fns';
 import * as faker from 'faker';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { of } from 'rxjs/observable/of';
+import { delay, take } from 'rxjs/operators';
+import {
+  PropertyService,
+  SeasonalTariffService,
+  ReservationsService,
+  ContactsService,
+  PaymentService,
+  TariffsService,
+} from '@core/data';
+
 import { DialogNewContactComponent } from '../../contact/contact-form/contact-form.component';
-import { Property, Reservation } from '../../../@core/data/models';
-import { SelectItem } from '../../../@core/data/models/selectItem';
-import { Payment } from '../../../@core/data/models/payment';
-import { SeasonalTariffService } from '../../../@core/data/seasonal-tariff.service';
+import {
+  Property,
+  Reservation,
+  SelectItem,
+  Payment
+} from '@core/data/models';
+import 'style-loader!angular2-toaster/toaster.css';
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../store';
+import { Pagination, FilterConf, SortConf } from '../../../store/helpers';
+
+import { ToasterService, Toast, BodyOutputType } from 'angular2-toaster';
 
 @Component({
   selector: 'show-reservation',
@@ -46,6 +59,7 @@ export class NewReservationComponent implements OnInit {
   isSubmitted = false;
 
   constructor(
+    private store: Store<fromStore.LocatusState>,
     public route: ActivatedRoute,
     public router: Router,
     public modalService: NgbModal,
@@ -54,6 +68,7 @@ export class NewReservationComponent implements OnInit {
     public paymentService: PaymentService,
     public tariffsService: TariffsService,
     public seasonalTariffService: SeasonalTariffService,
+    public toasterService: ToasterService,
     public reservationsService: ReservationsService) { }
 
   ngOnInit() {
@@ -64,7 +79,23 @@ export class NewReservationComponent implements OnInit {
     this.id = this.route.snapshot.params.reservation;
     this.pageTitle = this.id ? 'Modifier la réservation ' + this.id : 'Ajouter une réservation';
     if (this.id) {
-      this.reservation = this.reservationsService.find(Number.parseInt(this.id));
+      this.store.select(fromStore.getSelectedReservation).subscribe(reservation => {
+        this.reservation = reservation;
+      });
+      this.store.dispatch(new fromStore.SelectReservation(Number.parseInt(this.id)));
+      if (this.reservation) {
+        this.store.dispatch(new fromStore.LoadPayments({
+          filters: [
+            {
+              field: 'nomenclature',
+              search: this.reservation.id.toString(),
+              filter(cell: any, search: any) {
+                return cell.id.toString() === search && cell.type === 'Réservation';
+              }
+            }
+          ], andOperator: true
+        }));
+      }
     }
     this.buildForm();
     this.onChanges();
@@ -92,7 +123,7 @@ export class NewReservationComponent implements OnInit {
         day: this.reservation.end.getDate()
       } : null, Validators.required),
       nbrNight: new FormControl(this.reservation && this.reservation.nbrNight ? this.reservation.nbrNight : 0),
-      reservationDate: new FormControl(this.reservation ? {
+      reservationDate: new FormControl(this.reservation && this.reservation.reservationDate ? {
         year: this.reservation.reservationDate.getFullYear(),
         month: dateFns.getMonth(this.reservation.reservationDate) + 1,
         day: this.reservation.reservationDate.getDate()
@@ -241,66 +272,24 @@ export class NewReservationComponent implements OnInit {
     this.form.patchValue({ deadlineDate: dateFns.parse(this.deadlineDate.value.year + '-' + this.deadlineDate.value.month + '-' + this.deadlineDate.value.day) });
   }
 
-  generateNewPayments() {
-    let payments = this.paymentService.createSojournPayments(this.form.value, true);
-    this.balance.patchValue({ value: this.reservationsService.calculateBalance(payments) });
-    this.adjusted.patchValue({ value: this.reservationsService.calculateAdjusted(payments) });
-    this.form.patchValue({ payments: payments });
-  }
-
-  updatePayments(payments: Payment[]) {
-    const deposit = (this.form.value.price.value * this.form.value.deposit) / 100;
-    const bail = Number.parseInt(this.form.value.bail.value);
-    if (deposit == 0 && this.reservation.deposit != 0) {
-      this.paymentService.delete(payments.find(payment => {
-        return payment.type.id === 1;
-      }));
-    }
-    if (bail == 0 && this.reservation.bail.value != 0) {
-      this.paymentService.delete(payments.find(payment => {
-        return payment.type.id === 3;
-      }));
-    }
-    if (deposit != 0 && this.reservation.deposit == 0) {
-      payments.push(this.paymentService.createDepositPayment(deposit, this.form.value, this.paymentService.getStatus(2)));
-    }
-    if (bail != 0 && this.reservation.bail.value == 0) {
-      payments.push(this.paymentService.createBailPayment(bail, this.form.value, this.paymentService.getStatus(2)));
-    }
-    const total = this.form.value.price.value - deposit;
-    payments.map(payment => {
-      switch (payment.type.id) {
-        case 3:
-          payment.price.value = bail;
-          break;
-        case 1:
-          payment.price.value = deposit;
-          break;
-        case 2:
-          payment.price.value = total;
-          break;
-      }
-    });
-    this.balance.patchValue({ value: this.reservationsService.calculateBalance(payments) });
-    this.adjusted.patchValue({ value: this.reservationsService.calculateAdjusted(payments) });
-    this.form.patchValue({ payments: payments });
-  }
-
   save() {
     this.isSubmitted = true;
     if (this.form.valid) {
       this.formatDates();
+      this.form.value.nbrNight = dateFns.differenceInDays(this.form.value.end, this.form.value.start) + ' nuitées';
       let property = this.form.value.property;
-      if (this.reservation) {
-        this.updatePayments(this.reservation.payments);
-        this.form.value.nbrNight = dateFns.differenceInDays(this.form.value.end, this.form.value.start) + ' nuitées';
-        this.reservationsService.update(this.reservation, this.form.value);
+      if (this.reservation) {        
+        this.store.dispatch(new fromStore.UpdateReservation(this.reservation.id, this.form.value));
+        this.store.dispatch(new fromStore.UpdateSoujournPayments(this.reservation, this.form.value));
+        this.store.dispatch(new fromStore.CalculateReservationBalance(this.reservation.id));
+        this.store.dispatch(new fromStore.CalculateReservationAdjusted(this.reservation.id));
       } else {
-        this.generateNewPayments();
-        this.form.value.nbrNight = dateFns.differenceInDays(this.form.value.end, this.form.value.start) + ' nuitées';
-        this.reservationsService.store(this.form.value);
+        this.store.dispatch(new fromStore.CreateReservation(this.form.value));
+        this.store.dispatch(new fromStore.CreateSoujournPayments(this.form.value));
+        this.store.dispatch(new fromStore.CalculateReservationBalance(this.form.value.id));
+        this.store.dispatch(new fromStore.CalculateReservationAdjusted(this.form.value.id));
       }
-      this.propertyService.setCurrentProperty(property);
+      this.propertyService.setCurrentProperty(property.id);
       this.router.navigateByUrl('/pages/reservations');
     }
   }

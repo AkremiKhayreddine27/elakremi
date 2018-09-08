@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
 import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { CalendarModule } from 'ngx-calendar';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+
 
 import { DialogNewEventComponent } from './calendar/dialog-new-event/dialog-new-event.component';
 import { DialogShowEventComponent } from './calendar/dialog-show-event/dialog-show-event.component';
@@ -20,6 +24,10 @@ import { DialogNewContactComponent } from './contact/contact-form/contact-form.c
 import { DialogCheckInComponent } from './reservations/dialog-check-in/dialog-check-in.component';
 import { DialogNewDocumentComponent } from './documents/document-form/document-form.component';
 
+
+import { reducers, effects } from '../store';
+import { Dashboard2Module } from './dashboard2/dashboard2.module';
+
 const PAGES_COMPONENTS = [
   PagesComponent,
 ];
@@ -30,7 +38,10 @@ const PAGES_COMPONENTS = [
     ThemeModule,
     DashboardModule,
     MiscellaneousModule,
-    CalendarModule.forRoot()
+    CalendarModule.forRoot(),
+    StoreModule.forFeature('locatus', reducers),
+    EffectsModule.forFeature(effects),
+    Dashboard2Module
   ],
   declarations: [
     ...PAGES_COMPONENTS,

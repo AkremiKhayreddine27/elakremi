@@ -1,6 +1,7 @@
 import { File } from './file';
 export interface Document {
-    id: number;
+    kind?: string;
+    id: string;
     title: string;
     description?: string;
     type?: string;
@@ -9,5 +10,9 @@ export interface Document {
     icon?: string;
     file?: File;
     link?: string;
-}
+    nomenclature: any;
+    nomenclatureType: any;
+    nomenclatureLink: any;
+    propertyId: number;
+} 
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { ContactsService } from '../../@core/data/contacts.service';
+import { ContactsService } from '../../@core/data';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DialogNewContactComponent } from './contact-form/contact-form.component';
 

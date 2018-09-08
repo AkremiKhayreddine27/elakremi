@@ -6,6 +6,9 @@
     "baseUrl": "./",
     "types": [],
     "paths": {
+      "@core/*": [
+        "app/@core/*"
+      ],
       "@angular/*": [
         "../node_modules/@angular/*"
       ],

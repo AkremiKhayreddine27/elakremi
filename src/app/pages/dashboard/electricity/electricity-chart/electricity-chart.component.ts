@@ -1,8 +1,8 @@
 import { delay } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
-import { FinancesService } from '../../../../@core/data/finances.service';
-import { PropertyService } from '../../../../@core/data/property.service';
+import { FinancesService } from '../../../../@core/data';
+import { PropertyService } from '../../../../@core/data';
 import * as dateFns from 'date-fns';
 
 declare const echarts: any;

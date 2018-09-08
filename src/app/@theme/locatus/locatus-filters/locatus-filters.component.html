@@ -1,0 +1,21 @@
+<div class="m-0 row p-2 pt-4">
+  <div *ngFor="let filter of config" class="form-group col-md-4">
+    <ng-select *ngIf="filter.type === 'select' && filter.action && !filter.field" class="w-100" [searchable]="false" [items]="filter.elements | async"
+      [multiple]="false" [(ngModel)]="filter.element" [closeOnSelect]="true" (clear)="onClear(filter)" (change)="callAction(filter.action, $event)"
+      [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'" [placeholder]="filter.placeholder">
+    </ng-select>
+    <ng-select *ngIf="filter.type === 'select' && filter.action && filter.field" class="w-100" [searchable]="false" [items]="filter.elements | async"
+      [multiple]="false" [(ngModel)]="filter.element" [closeOnSelect]="true" (clear)="onClear(filter)" (change)="callActionAndSetFilter(filter.field, filter.callback, filter.action, $event, filter.name)"
+      [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'" [placeholder]="filter.placeholder">
+    </ng-select>
+    <ng-select *ngIf="filter.type === 'select' && !filter.action" class="w-100" [searchable]="false" [items]="filter.elements | async"
+      [multiple]="false" [(ngModel)]="filter.element" [closeOnSelect]="true" (clear)="onClear(filter)" (change)="setFilter(filter.field, filter.callback, $event, filter.name)"
+      [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'" [placeholder]="filter.placeholder">
+    </ng-select>
+    <ng-select *ngIf="filter.type === 'selectGroup'" [items]="filter.elements | async" [bindLabel]="filter.bindLabel ? filter.bindLabel: 'value'"
+      [groupBy]="filter.groupBy" [selectableGroup]="true" [(ngModel)]="filter.element" [closeOnSelect]="true" [searchable]="false"
+      (clear)="onClear(filter)" [placeholder]="filter.placeholder" (change)="setGroupFilter(filter.field, filter.callback, $event, filter.name)">
+    </ng-select>
+    <ngx-datepicker-dropdown *ngIf="filter.type === 'datepicker'" #ngxDateDrop (dateChanged)="dateChanged($event.from, $event.to)"></ngx-datepicker-dropdown>
+  </div>
+</div>

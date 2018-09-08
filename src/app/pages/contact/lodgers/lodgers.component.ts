@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContactsService } from '../../../@core/data/contacts.service';
+import { ContactsService } from '../../../@core/data';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocatusAbstractComponent } from '../../../@core/utils/locatusComponent.abstract';
 

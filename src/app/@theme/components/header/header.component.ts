@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { AnalyticsService } from '../../../@core/utils/analytics.service';
-import { NotificationService } from '../../../@core/data/notification.service';
-import { getDeepFromObject } from '../../../@core/utils/helpers';
+import { NotificationService } from '../../../@core/data';
 
-
-import { NbAuthService, NB_AUTH_OPTIONS, NbAuthResult, NbAuthJWTToken } from '@nebular/auth';
 import * as faker from 'faker';
+import { Observable } from 'rxjs/Observable';
+import { User } from '@core/data/models';
+
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../../store';
 
 @Component({
   selector: 'ngx-header',
@@ -20,24 +22,7 @@ export class HeaderComponent implements OnInit {
 
   @Input() position = 'normal';
 
-  user: any = {
-    id: 1,
-    firstname: faker.name.firstName(),
-    lastname: faker.name.lastName(),
-    email: faker.internet.email(),
-    role: 'locataire',
-    phone: faker.phone.phoneNumber(),
-    location: {
-      country: 'France',
-      city: 'Issy-les-Moulineaux',
-      state: 'Ile-de-France',
-      address: 'Info Municipale, Chemin de Bretagne',
-      longitude: 2.2582740783036575,
-      latitude: 48.82377450294101,
-      postcode: '92130',
-      isValid: true
-    }
-  };
+  user: Observable<User>;
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
@@ -45,11 +30,11 @@ export class HeaderComponent implements OnInit {
 
   public unreadNotificationsNbr = 0;
 
-  constructor(private sidebarService: NbSidebarService,
+  constructor(
+    private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     protected router: Router,
-    @Inject(NB_AUTH_OPTIONS) protected config = {},
-    protected authService: NbAuthService,
+    private store: Store<fromStore.LocatusState>,
     private notificationService: NotificationService,
     private analyticsService: AnalyticsService) {
   }
@@ -60,12 +45,8 @@ export class HeaderComponent implements OnInit {
     this.notificationService.refreshUnread.subscribe(unread => {
       this.unreadNotificationsNbr = unread.length;
     });
-    this.authService.onTokenChange()
-    .subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        //this.user = token.getPayload(); // here we receive a payload from the token and assigne it to our `user` variable 
-      }
-    });
+    this.user = this.store.select<User>(fromStore.getAuth);
+    this.store.dispatch(new fromStore.Check());
   }
 
   toggleSidebar(): boolean {
@@ -87,18 +68,6 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    const redirectDelay = this.getConfigValue('forms.logout.redirectDelay');
-    this.authService.logout('email').subscribe((result: NbAuthResult) => {
-      const redirect = result.getRedirect();
-      if (redirect) {
-        setTimeout(() => {
-          return this.router.navigateByUrl('auth');
-        }, redirectDelay);
-      }
-    });
-  }
-
-  getConfigValue(key: string): any {
-    return getDeepFromObject(this.config, key, null);
+    //this.authService.signOut();
   }
 }

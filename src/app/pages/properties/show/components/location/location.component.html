@@ -156,7 +156,7 @@
             <yaga-icon [iconUrl]="greenIconUrl" [iconSize]="iconSize" [popupAnchor]="greenPopupAnchor" [shadowUrl]="shadowUrl" [shadowSize]="shadowSize"></yaga-icon>
             <yaga-popup>
               <div class="card border-0">
-                <img class="card-img-top" [src]="property.images[0]" />
+                <img class="card-img-top" [src]="nearby.property.images[0]" />
                 <div class="card-body">
                   <div class="description">
                     {{ nearby.property.title }}
@@ -170,3 +170,4 @@
     </nb-card-body>
   </nb-card>
 </div>
+<toaster-container></toaster-container>

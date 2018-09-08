@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ContactsService } from '../../../../@core/data/contacts.service';
+import { ContactsService } from '../../../../@core/data';
 import { DialogNewContactComponent } from '../../contact-form/contact-form.component';
 import { DeleteConfirmationComponent, SendNotificationComponent } from '../../../../@theme/components';
 import { MobileDropdownComponent } from '../../../../@theme/components/mobile-dropdown/mobile-dropdown.component';

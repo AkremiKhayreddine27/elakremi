@@ -1,10 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { PaymentFormComponent } from '../../payment-form/payment-form.component';
 import { SendNotificationComponent } from '../../../../@theme/components';
 import { DeleteConfirmationComponent } from '../../../../@theme/components/delete-confirmation/delete-confirmation.component';
+
 import * as dateFns from 'date-fns';
-import { PaymentService } from '../../../../@core/data/payment.service';
+
+import { PaymentService } from '../../../../@core/data';
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../../store';
+import { Payment } from '../../../../@core/data/models/payment';
 
 @Component({
   selector: 'payment',
@@ -17,7 +25,11 @@ export class PaymentComponent implements OnInit {
 
   @Input() toPay;
 
-  constructor(private modalService: NgbModal, private paymentService: PaymentService) { }
+  constructor(
+    private modalService: NgbModal,
+    private paymentService: PaymentService,
+    private store: Store<fromStore.LocatusState>
+  ) { }
 
   ngOnInit() {
 
@@ -40,13 +52,17 @@ export class PaymentComponent implements OnInit {
     };
   }
 
-  delete(payment) {
+  delete(payment: Payment) {
     const modalRef = this.modalService.open(DeleteConfirmationComponent, { size: 'lg', container: 'nb-layout' });
     modalRef.componentInstance.type = 'paiement';
     modalRef.componentInstance.title = payment.id;
     modalRef.result.then(confirmed => {
       if (confirmed) {
-        this.paymentService.delete(payment);
+        this.store.dispatch(new fromStore.DeletePayment(payment.id));
+        if (payment.nomenclature.type === 'Réservation') {
+          this.store.dispatch(new fromStore.CalculateReservationBalance(payment.nomenclature.id));
+          this.store.dispatch(new fromStore.CalculateReservationAdjusted(payment.nomenclature.id));
+        }
       }
     }, (reason) => {
 

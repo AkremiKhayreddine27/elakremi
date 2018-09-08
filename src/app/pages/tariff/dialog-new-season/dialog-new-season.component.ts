@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dateFns from 'date-fns';
-import { TariffsService } from '../../../@core/data/tariffs.service';
-import { SeasonalTariffService } from '../../../@core/data/seasonal-tariff.service';
+import { TariffsService } from '../../../@core/data';
+import { SeasonalTariffService } from '../../../@core/data';
 import * as faker from 'faker';
-import { PropertyService } from '../../../@core/data/property.service';
-import { SeasonService } from '../../../@core/data/season.service';
+import { PropertyService } from '../../../@core/data';
+import { SeasonService } from '../../../@core/data';
 
 @Component({
   selector: 'dialog-new-season',

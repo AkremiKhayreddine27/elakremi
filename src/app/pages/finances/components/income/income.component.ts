@@ -1,38 +1,33 @@
-import { AfterViewInit, Component, OnInit, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { FinancesService } from '../../../../@core/data/finances.service';
-import { PropertyService } from '../../../../@core/data/property.service';
+import { Component, OnInit } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { delay } from 'rxjs/operators';
-import { NgxEchartsDirective } from 'ngx-echarts';
-declare const echarts: any;
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../../store';
 
 @Component({
   selector: 'income',
   templateUrl: './income.component.html',
   styleUrls: ['./income.component.scss']
 })
-export class IncomeComponent implements OnInit, AfterViewInit, OnChanges {
-
-  @ViewChild(NgxEchartsDirective) charts: NgxEchartsDirective;
+export class IncomeComponent implements OnInit {
 
   option: any = {};
   themeSubscription: any;
 
-  public finances;
-
+  finances;
   constructor(
-    public financesService: FinancesService,
-    public propertyService: PropertyService,
-    private theme: NbThemeService
+    private theme: NbThemeService,
+    private store: Store<fromStore.LocatusState>
   ) { }
 
   ngOnInit() {
-    this.finances = this.financesService.getPropertyFinances(this.propertyService.currentProperty);
-    this.financesService.refresh.subscribe(finances => {
+    this.store.select<any>(fromStore.getFinances).subscribe(finances => {
       this.finances = finances;
       this.themeSubscription = this.theme.getJsTheme().pipe(delay(1)).subscribe(config => {
         const solarTheme: any = config.variables.solar;
-        this.charts.setOption({
+        this.option = {
           tooltip: {
             trigger: 'item',
             formatter: "{d}% {b} <br/> {c} $",
@@ -49,7 +44,7 @@ export class IncomeComponent implements OnInit, AfterViewInit, OnChanges {
               dimensions: ['value', 'potentialRevenue'],
               data: [
                 {
-                  value: [this.finances.revenue, this.finances.potentialRevenue],
+                  value: [finances.revenue, finances.potentialRevenue],
                   name: 'encaissé',
                   label: {
                     normal: {
@@ -70,7 +65,7 @@ export class IncomeComponent implements OnInit, AfterViewInit, OnChanges {
                   },
                 },
                 {
-                  value: this.finances.pendingRevenue,
+                  value: finances.pendingRevenue,
                   name: 'en attente',
                   label: {
                     normal: {
@@ -85,7 +80,7 @@ export class IncomeComponent implements OnInit, AfterViewInit, OnChanges {
                   },
                 },
                 {
-                  value: this.finances.inDelayRevenue,
+                  value: finances.inDelayRevenue,
                   name: 'en retards',
                   label: {
                     normal: {
@@ -102,91 +97,8 @@ export class IncomeComponent implements OnInit, AfterViewInit, OnChanges {
               ]
             }
           ]
-        });
+        };
       });
-
-    });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-  }
-
-  ngAfterViewInit() {
-    this.themeSubscription = this.theme.getJsTheme().pipe(delay(1)).subscribe(config => {
-
-      const solarTheme: any = config.variables.solar;
-      this.option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: "{d}% {b} <br/> {c} $",
-          position: ['0', '50%']
-        },
-        series: [
-          {
-            name: 'Revenue',
-            clockWise: true,
-            hoverAnimation: false,
-            type: 'pie',
-            center: ['45%', '50%'],
-            radius: solarTheme.radius,
-            dimensions: ['value', 'potentialRevenue'],
-            data: [
-              {
-                value: [this.finances.revenue, this.finances.potentialRevenue],
-                name: 'encaissé',
-                label: {
-                  normal: {
-                    position: 'center',
-                    formatter: '{@potentialRevenue} $ \n Total',
-                    textStyle: {
-                      fontSize: '18',
-                      fontFamily: 'Exo',
-                      fontWeight: '500',
-                      color: config.variables.fgHeading,
-                    },
-                  },
-                },
-                itemStyle: {
-                  normal: {
-                    color: config.variables.success,
-                  },
-                },
-              },
-              {
-                value: this.finances.pendingRevenue,
-                name: 'en attente',
-                label: {
-                  normal: {
-                    position: 'inner',
-                    show: false,
-                  },
-                },
-                itemStyle: {
-                  normal: {
-                    color: '#dee2e8',
-                  },
-                },
-              },
-              {
-                value: this.finances.inDelayRevenue,
-                name: 'en retards',
-                label: {
-                  normal: {
-                    position: 'inner',
-                    show: false,
-                  },
-                },
-                itemStyle: {
-                  normal: {
-                    color: config.variables.danger,
-                  },
-                },
-              }
-            ]
-          }
-        ]
-      };
 
     });
   }

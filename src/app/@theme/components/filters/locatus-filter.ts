@@ -9,5 +9,6 @@ export interface LocatusFilter {
     placeholder?: string;
     action?: string;
     bindLabel?: string;
+    groupBy?: any;
     callback?: (cell: any, search: any) => boolean;
 }

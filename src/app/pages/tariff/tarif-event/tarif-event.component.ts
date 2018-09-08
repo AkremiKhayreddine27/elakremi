@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DialogNewEventComponent } from '../dialog-new-event/dialog-new-event.component';
-import { TariffsService } from '../../../@core/data/tariffs.service';
+import { TariffsService } from '../../../@core/data';
 import * as dateFns from 'date-fns';
-import { EventTariffService } from '../../../@core/data/event-tariff.service';
-import { EventService } from '../../../@core/data/event.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { EventTariffService } from '../../../@core/data';
+import { EventService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 
 @Component({
   selector: 'tarif-event',

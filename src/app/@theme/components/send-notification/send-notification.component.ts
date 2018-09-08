@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ContactsService } from '../../../@core/data/contacts.service';
+import { ContactsService } from '../../../@core/data';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';

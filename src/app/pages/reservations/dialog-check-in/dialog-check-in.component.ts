@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ContactsService } from '../../../@core/data/contacts.service';
+import { ContactsService } from '../../../@core/data';
 
 @Component({
   selector: 'dialog-check-in',

@@ -4,6 +4,15 @@
 @import '~@nebular/theme/styles/global/bootstrap/breakpoints';
 
 @include nb-install-component() {
+    .bg-overlay {
+        background-color: rgba(0, 0, 0, 0.2);
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
     /deep/ nb-route-tabset ul {
         padding: 0 !important;
         flex-wrap: nowrap;

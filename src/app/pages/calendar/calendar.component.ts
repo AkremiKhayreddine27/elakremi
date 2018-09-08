@@ -14,10 +14,10 @@ import { DialogNewCalendarComponent } from './dialog-new-calendar/dialog-new-cal
 import { DialogNewEventComponent } from './dialog-new-event/dialog-new-event.component';
 import { DialogShowDayEventsComponent } from './dialog-show-day-events/dialog-show-day-events.component';
 
-import { CalendarService } from '../../@core/data/calendar.service';
-import { CalendarSettingsService } from '../../@core/data/calendar-settings.service';
-import { PropertyService } from '../../@core/data/property.service';
-import { ReservationsService } from '../../@core/data/reservations.service';
+import { CalendarService } from '../../@core/data';
+import { CalendarSettingsService } from '../../@core/data';
+import { PropertyService } from '../../@core/data';
+import { ReservationsService } from '../../@core/data';
 
 @Component({
   selector: 'app-calendar',

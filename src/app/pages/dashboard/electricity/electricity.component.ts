@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
-
-import { ElectricityService } from '../../../@core/data/electricity.service';
-import { FinancesService } from '../../../@core/data/finances.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { FinancesService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 
 @Component({
   selector: 'ngx-electricity',

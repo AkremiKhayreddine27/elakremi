@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 
-import { CalendarService } from '../../../@core/data/calendar.service';
+import { CalendarService } from '../../../@core/data';
 
 const colors = [
   '#f4511e',

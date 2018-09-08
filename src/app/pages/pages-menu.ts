@@ -9,6 +9,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   }, 
   {
+    title: 'Tableau de bord 2',
+    icon: 'nb-grid-a-outline',
+    link: '/pages/dashboard2',
+  }, 
+  {
     title: 'Biens',
     icon: 'nb-home',
     link: '/pages/properties',

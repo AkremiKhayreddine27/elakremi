@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, forwardRef, ChangeDetectorRef, AfterViewI
 import { FormControl, FormGroup, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
-import { ContactsService } from '../../../../../@core/data/contacts.service';
-import { PropertyService } from '../../../../../@core/data/property.service';
+import { ContactsService } from '../../../../../@core/data';
+import { PropertyService } from '../../../../../@core/data';
 
 @Component({
   selector: 'app-identification',

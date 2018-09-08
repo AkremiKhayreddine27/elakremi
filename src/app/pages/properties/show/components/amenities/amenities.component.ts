@@ -1,32 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Self, Optional, Input, OnDestroy } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 @Component({
   selector: 'amenities',
   templateUrl: './amenities.component.html',
-  styleUrls: ['./amenities.component.scss']
+  styleUrls: ['./amenities.component.scss'],
 })
-export class AmenitiesComponent implements OnInit {
+export class AmenitiesComponent implements OnInit, OnDestroy, ControlValueAccessor {
+
+  @Input() items = [];
+
+  amenities;
 
   isCollapsed: boolean = true;
 
-  public amenties = [
-    { id: 1, name: 'Parking' },
-    { id: 2, name: 'Salle de sport' },
-    { id: 3, name: 'Jacuzzi' },
-    { id: 4, name: 'Piscine' },
-    { id: 5, name: 'Ascenseur' },
-    { id: 6, name: 'Interphone' },
-    { id: 7, name: 'Air de jeux' },
-    { id: 8, name: 'accés internet' },
-    { id: 9, name: 'Chauffage collectif' },
-    { id: 10, name: 'laverie' },
-    { id: 11, name: 'Climatisation' },
-    { id: 12, name: 'Serrure Connecté' }
-  ];
-
-  constructor() { }
+  constructor(@Optional() @Self() public controlDir: NgControl) {
+    controlDir.valueAccessor = this;
+  }
 
   ngOnInit() {
+    const control = this.controlDir.control;
+    let validators = control.validator ? [control.validator] : [];
+    control.setValidators(validators);
+    control.updateValueAndValidity();
+    this.items.map(item => {
+      if (this.exist(this.amenities, item)) {
+        item.value = true;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.items = this.items.map(item => {
+      item.value = false;
+      return item;
+    });
+  }
+
+  writeValue(value: any) {
+    this.amenities = value;
+  }
+
+  exist(items, item) {
+    return items.find(i => {
+      return i.id == item.id;
+    });
+  }
+
+  registerOnChange(fn: (value: any) => void) {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void) {
+    this.onTouched = fn;
+  }
+
+  onChange(value: any) {
+
+  }
+
+  onTouched() {
+
+  }
+
+  checkboxChanged($event) {
+    this.amenities = this.items.filter(item => {
+      return item.value;
+    });
+    this.onChange(this.amenities);
   }
 
 }

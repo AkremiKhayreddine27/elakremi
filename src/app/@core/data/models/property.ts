@@ -37,6 +37,7 @@ export interface Property {
     amount?: number;
     links?: any[];
     equipements?: Equipement[];
+    amenities?: any[];
     calendars?: Calendar[];
     services?: Service[];
     reservations?: Reservation[];

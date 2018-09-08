@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Property } from '../../../@core/data/models/property';
-import { PropertyService } from '../../../@core/data/property.service';
+import { PropertyService } from '../../../@core/data';
 import { Router } from '@angular/router';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
+
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../store';
+import { Pagination, FilterConf, SortConf } from '../../../store/helpers';
 
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',
-  styleUrls: ['./index.component.scss']
+  styleUrls: ['./index.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IndexComponent implements OnInit {
 
@@ -20,7 +25,9 @@ export class IndexComponent implements OnInit {
 
   isGridView = true;
 
-  properties;
+  properties$: Observable<Property[]>;
+  pagination$: Observable<Pagination>;
+  total$: Observable<number>;
 
   headerActions = [
     { title: 'Chercher', type: 'link', icon: 'fa fa-search', clickAction: 'search', displayInMobile: true },
@@ -30,19 +37,19 @@ export class IndexComponent implements OnInit {
         {
           title: 'Type',
           action: 'sort',
-          value: 'type',
+          value: 'type.value',
           direction: 'asc'
         },
         {
           title: 'Statut',
           action: 'sort',
-          value: 'status',
+          value: 'status.value',
           direction: 'asc',
         },
         {
           title: 'Platform',
           action: 'sort',
-          value: 'platform',
+          value: 'platform.value',
           direction: 'asc',
         }
       ], displayInMobile: false
@@ -70,12 +77,15 @@ export class IndexComponent implements OnInit {
 
   withFilters = false;
 
-  total;
-  paging;
-
   filters = [];
 
-  constructor(public propertyService: PropertyService, public router: Router) { }
+  filtersConf: FilterConf;
+  sortConf: SortConf[] = [];
+
+  constructor(
+    private store: Store<fromStore.LocatusState>,
+    public propertyService: PropertyService,
+    public router: Router) { }
 
   ngOnInit() {
     this.filters = [
@@ -122,6 +132,12 @@ export class IndexComponent implements OnInit {
       }
     ];
 
+    this.total$ = this.store.select<any>(fromStore.getPropertiesCount);
+    this.pagination$ = this.store.select<any>(fromStore.getPropertiesPagination);
+    this.properties$ = this.store.select<any>(fromStore.getPaginatedSortedFiltredProperties);
+    this.filtersConf = { filters: [], andOperator: true };
+    this.store.dispatch(new fromStore.LoadProperties(this.filtersConf, [], { page: 1, perPage: 3 }));
+    /*
     this.source.load(this.propertyService.all());
     this.source.setFilter([]);
     this.source.onChanged().subscribe(value => {
@@ -131,6 +147,39 @@ export class IndexComponent implements OnInit {
       this.source.load(this.propertyService.all());
       this.properties = of(properties).pipe(delay(500));
     });
+    */
+  }
+
+  paginate(pagination: Pagination) {
+    this.store.dispatch(new fromStore.LoadProperties({ ...this.filtersConf }, [...this.sortConf], { ...pagination }));
+  }
+
+  applyFilters(filters, config) {
+    this.filtersConf = { filters, andOperator: true };
+    this.store.dispatch(new fromStore.LoadProperties({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 3 }));
+  }
+
+  onSearch(filters: FilterConf) {
+    this.filtersConf = filters;
+    if (filters.filters.length === 0) {
+      this.resetFilters();
+    }
+    this.store.dispatch(new fromStore.LoadProperties({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 3 }));
+  }
+
+  sort(element) {
+    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
+    this.sortConf = [
+      {
+        field: element.value,
+        direction: element.direction
+      }
+    ];
+    this.store.dispatch(new fromStore.LoadProperties({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  resetFilters() {
+    this.filtersConf = { filters: [], andOperator: true };
   }
 
   handleFilter(action, data) {
@@ -162,16 +211,6 @@ export class IndexComponent implements OnInit {
     console.log('export');
   }
 
-  sort(element) {
-    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
-    this.source.setSort([
-      {
-        field: element.value,
-        direction: element.direction
-      }
-    ]);
-  }
-
   filter() {
     this.isFilterCollapsed = !this.isFilterCollapsed;
     this.isSearching = false;
@@ -179,30 +218,6 @@ export class IndexComponent implements OnInit {
 
   add() {
     this.router.navigateByUrl('/pages/properties/create');
-  }
-
-  onSearch(query) {
-    if (query !== '') {
-      this.source.setFilter([
-        {
-          field: 'title',
-          search: query
-        },
-        {
-          field: 'location',
-          search: query,
-          filter: (cell: any, search: string) => {
-            if (cell.address.toLowerCase().indexOf(search) !== -1) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-        }
-      ], false);
-    } else {
-      this.source.setFilter([]);
-    }
   }
 
   hasFilters(filters) {

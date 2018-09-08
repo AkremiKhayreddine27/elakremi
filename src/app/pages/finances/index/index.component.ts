@@ -1,25 +1,29 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FinancesService } from '../../../@core/data/finances.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { FinancesService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Subject } from 'rxjs/Subject';
 import { PaymentFormComponent } from '../../payments/payment-form/payment-form.component';
-import { Search } from '../../../@theme/components/card-header-search/search.interface';
 import * as dateFns from 'date-fns';
-import { PaymentService } from '../../../@core/data/payment.service';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { ServicesService } from '../../../@core/data/services.service';
+import { PaymentService } from '../../../@core/data';
+import { ReservationsService } from '../../../@core/data';
+import { ServicesService } from '../../../@core/data';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
+
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../store';
+import { Pagination, FilterConf, SortConf } from '../../../store/helpers';
+import { Payment } from '@core/data/models';
 
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexComponent implements OnInit, OnDestroy, Search {
+export class IndexComponent implements OnInit {
 
   headerActions = [
     { title: 'Chercher', type: 'link', icon: 'fa fa-search', clickAction: 'onSearch', displayInMobile: true },
@@ -71,12 +75,6 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
 
   filters: any[] = [];
 
-  refreshPagination: Subject<any> = new Subject();
-
-  source: LocalDataSource = new LocalDataSource();
-
-  public finances;
-  public data: any[] = [];
 
   searchFields = ['status.value', 'type.value', 'method.value', 'payer', 'payee', 'price.value'];
 
@@ -86,8 +84,6 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
   ];
 
   period = this.periods[0];
-
-  public property = { id: this.propertyService.currentProperty.id, value: this.propertyService.currentProperty.title };
 
   properties;
 
@@ -101,29 +97,53 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
 
   types;
 
+  data$: Observable<Payment[]>;
+  filtersConf: FilterConf;
+  sortConf: SortConf[];
+  pagination$: Observable<Pagination>;
+  loaded$: Observable<boolean>;
+  total$: Observable<number>;
+
   constructor(
     public financesService: FinancesService,
     public propertyService: PropertyService,
     private modalService: NgbModal,
     private paymentService: PaymentService,
     private reservationsService: ReservationsService,
-    private servicesService: ServicesService
+    private servicesService: ServicesService,
+    private store: Store<fromStore.LocatusState>
   ) {
   }
 
   ngOnInit() {
-    this.properties = of(this.propertyService.properties.map(property => {
+    this.properties = of(this.propertyService.all().map(property => {
       return { id: property.id, value: property.title };
     })).pipe(delay(500));
+
     this.reservations = of(this.reservationsService.findBy('property.id', this.propertyService.currentProperty.id).map(reservation => {
       return { id: reservation.id, value: reservation.title };
     })).pipe(delay(500));
+
     this.services = of(this.servicesService.findBy('property.id', this.propertyService.currentProperty.id).map(service => {
       return { id: service.id, value: service.title };
     })).pipe(delay(500));
+
     let statuses = this.paymentService.getStatuses();
+
     this.types = of(this.paymentService.types).pipe(delay(500));
+
     this.filters = [
+      {
+        name: 'property',
+        type: 'select',
+        field: 'propertyId',
+        placeholder: 'Choisir une bien',
+        elements: this.properties,
+        element: { id: this.propertyService.currentProperty.id, value: this.propertyService.currentProperty.title },
+        callback: function (cell: any, search: any) {
+          return cell.toString() === search;
+        }
+      },
       {
         name: 'reservation',
         type: 'select',
@@ -131,11 +151,7 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
         placeholder: 'Choisir une réservation',
         elements: this.reservations,
         callback: function (cell: any, search: any) {
-          if (cell.id.toString() === search && cell.type === 'Réservation') {
-            return true;
-          } else {
-            return false;
-          }
+          return cell.id.toString() === search && cell.type === 'Réservation';
         }
       },
       {
@@ -145,11 +161,7 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
         placeholder: 'Choisir une service',
         elements: this.services,
         callback: function (cell: any, search: string) {
-          if (cell.id.toString() === search && cell.type === 'Service') {
-            return true;
-          } else {
-            return false;
-          }
+          return cell.id.toString() === search && cell.type === 'Service';
         }
       },
       { type: 'datepicker' },
@@ -160,11 +172,7 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
         placeholder: 'Choisir une statut',
         elements: statuses,
         callback: function (cell: any, search: any) {
-          if (cell.id.toString() === search) {
-            return true;
-          } else {
-            return false;
-          }
+          return cell.id.toString() === search;
         }
       },
       {
@@ -190,6 +198,7 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
       }
     ];
 
+    this.resetSort();
     for (let start = 0; start < 12; start++) {
       let date: any = dateFns.subMonths(dateFns.startOfMonth(new Date()), start);
       this.periods.push({
@@ -198,25 +207,63 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
         data: date
       });
     }
+
     this.setPeriod(this.period);
-    this.source.onChanged().subscribe(value => {
-      this.refreshPagination.next(this.source);
-      this.data = value.elements;
-    });
-    this.propertyService.refreshCurrentProperty.subscribe(property => {
-      if (property !== null) {
-        this.setPeriod(this.period);
-      } else {
-        this.source.load([]);
-      }
-    });
+
+    this.total$ = this.store.select<any>(fromStore.getPaymentsCount);
+    this.pagination$ = this.store.select<any>(fromStore.getPaymentsPagination);
+    this.loaded$ = this.store.select<any>(fromStore.getPaymentsLoaded);
+    this.data$ = this.store.select<any>(fromStore.getPaginatedSortedFiltredPayments);
   }
 
-  setCurrentProperty(title) {
-    const property = this.propertyService.properties.filter(p => {
-      return p.title === title;
-    })[0];
-    this.propertyService.setCurrentProperty(property);
+  paginate(pagination: Pagination) {
+    this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { ...pagination }));
+  }
+
+  applyFilters(filters, config) {
+    this.filtersConf = { filters, andOperator: true };
+    this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  onSearch(filters: FilterConf) {
+    this.filtersConf = filters;
+    if (filters.filters.length === 0) {
+      this.resetFilters();
+    }
+    this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  sort(element) {
+    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
+    this.sortConf = [
+      {
+        field: element.value,
+        direction: element.direction
+      }
+    ];
+    this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  resetFilters() {
+    this.filtersConf = {
+      filters: [
+        {
+          field: 'propertyId',
+          search: this.propertyService.currentProperty.id.toString(),
+          filter: function (cell: any, search: any) {
+            return cell.toString() === search
+          }
+        }
+      ],
+      andOperator: false,
+    };
+  }
+
+  resetSort() {
+    this.sortConf = [{
+      field: 'start',
+      direction: 'desc',
+    }];
   }
 
   setPeriod(period) {
@@ -225,18 +272,72 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
     switch (period.value) {
       case "année en cours":
         start = dateFns.startOfYear(new Date());
-        this.finances = this.financesService.getPropertyFinances(this.propertyService.currentProperty, start, new Date());
-        this.source = this.financesService.getPropertyPayments(this.propertyService.currentProperty, start, new Date());
+        this.filtersConf = {
+          filters: [
+            {
+              field: 'propertyId',
+              search: this.propertyService.currentProperty.id.toString(),
+              filter: function (cell: any, search: any) {
+                return cell.toString() === search
+              }
+            },
+            {
+              field: 'deadlineDate',
+              search: start.toString(),
+              filter: function (cell: any, search: any) {
+                return dateFns.isWithinRange(cell, start, new Date());
+              }
+            }
+          ],
+          andOperator: true,
+        };
+        this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
         break;
       case 'année dernière':
         start = dateFns.startOfYear(dateFns.subYears(new Date(), 1));
         let end = dateFns.endOfYear(dateFns.subYears(new Date(), 1));
-        this.finances = this.financesService.getPropertyFinances(this.propertyService.currentProperty, start, end);
-        this.source = this.financesService.getPropertyPayments(this.propertyService.currentProperty, start, end);
+        this.filtersConf = {
+          filters: [
+            {
+              field: 'propertyId',
+              search: this.propertyService.currentProperty.id.toString(),
+              filter: function (cell: any, search: any) {
+                return cell.toString() === search
+              }
+            },
+            {
+              field: 'deadlineDate',
+              search: start.toString(),
+              filter: function (cell: any, search: any) {
+                return dateFns.isWithinRange(cell, start, end);
+              }
+            }
+          ],
+          andOperator: true,
+        };
+        this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
         break;
       default:
-        this.finances = this.financesService.getPropertyFinances(this.propertyService.currentProperty, period.data, new Date());
-        this.source = this.financesService.getPropertyPayments(this.propertyService.currentProperty, period.data, new Date());
+        this.filtersConf = {
+          filters: [
+            {
+              field: 'propertyId',
+              search: this.propertyService.currentProperty.id.toString(),
+              filter: function (cell: any, search: any) {
+                return cell.toString() === search
+              }
+            },
+            {
+              field: 'deadlineDate',
+              search: period.data.toString(),
+              filter: function (cell: any, search: any) {
+                return dateFns.isWithinRange(cell, period.data, new Date());
+              }
+            }
+          ],
+          andOperator: true,
+        };
+        this.store.dispatch(new fromStore.LoadPayments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
         break;
     }
   }
@@ -249,40 +350,9 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
     this[event.item.action](event.item);
   }
 
-  onSearch() {
-    this.isSearching = !this.isSearching;
-    this.isFilterCollapsed = true;
-  }
-
   filter() {
     this.isFilterCollapsed = !this.isFilterCollapsed;
     this.isSearching = false;
-  }
-
-  sort(element) {
-    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
-    this.source.setSort([
-      {
-        field: element.value,
-        direction: element.direction,
-        compare: function (direction: any, a: any, b: any) {
-
-          let f = a.value || a.value === 0 ? a.value : a;
-          let s = b.value || b.value === 0 ? b.value : b;
-
-          let first = typeof f === 'string' ? f.toLowerCase() : f;
-          let second = typeof s === 'string' ? s.toLowerCase() : s;
-
-          if (first < second) {
-            return -1 * direction;
-          }
-          if (first > second) {
-            return direction;
-          }
-          return 0;
-        }
-      }
-    ]);
   }
 
   create() {
@@ -298,10 +368,6 @@ export class IndexComponent implements OnInit, OnDestroy, Search {
       return f.search !== '';
     });
     this.withFilters = w.length === 0 ? false : true;
-  }
-
-  ngOnDestroy() {
-    this.source.reset();
   }
 
 }

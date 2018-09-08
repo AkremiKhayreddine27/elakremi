@@ -1,12 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DialogNewSeasonComponent } from '../dialog-new-season/dialog-new-season.component';
-import { PropertyService } from '../../../@core/data/property.service';
-import { TariffsService } from '../../../@core/data/tariffs.service';
+import {
+  PropertyService,
+  TariffsService,
+  SeasonalTariffService,
+  SeasonService,
+  EventTariffService
+} from '../../../@core/data';
 import * as dateFns from 'date-fns';
-import { SeasonalTariffService } from '../../../@core/data/seasonal-tariff.service';
-import { SeasonService } from '../../../@core/data/season.service';
-import { EventTariffService } from '../../../@core/data/event-tariff.service';
 
 @Component({
   selector: 'tarif-saison',

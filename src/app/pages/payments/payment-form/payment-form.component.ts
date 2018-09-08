@@ -2,19 +2,22 @@ import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators, NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dateFns from 'date-fns';
-import { PaymentService } from '../../../@core/data/payment.service';
+import { PaymentService } from '../../../@core/data';
 import { Payment } from '../../../@core/data/models/payment';
-import { ContactsService } from '../../../@core/data/contacts.service';
-import { DateService } from '../../../@core/data/date.service';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { PropertyService } from '../../../@core/data/property.service';
+import { ContactsService } from '../../../@core/data';
+import { DateService } from '../../../@core/data';
+import { ReservationsService } from '../../../@core/data';
+import { PropertyService } from '../../../@core/data';
 import * as faker from 'faker';
 import { Observable } from 'rxjs/Observable';
 import { SelectItem, User, Reservation } from '../../../@core/data/models';
 import { filter, find } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
-import { ServicesService } from '../../../@core/data/services.service';
+import { ServicesService } from '../../../@core/data';
+
+import { Store } from '@ngrx/store';
+import * as fromStore from '../../../store';
 
 @Component({
   selector: 'payment-form',
@@ -54,6 +57,7 @@ export class PaymentFormComponent implements OnInit {
   isSubmitted = false;
 
   constructor(
+    private store: Store<fromStore.LocatusState>,
     public activeModal: NgbActiveModal,
     public paymentService: PaymentService,
     public contactsService: ContactsService,
@@ -154,6 +158,10 @@ export class PaymentFormComponent implements OnInit {
     }
   }
 
+  /**
+   * to do
+   * paymentDate when state is Réglé error if undifined
+   */
   submit() {
     this.isSubmitted = true;
     if (this.form.valid) {
@@ -161,10 +169,12 @@ export class PaymentFormComponent implements OnInit {
       this.form.patchValue({ deadlineDate: dateFns.parse(this.deadlineDate.value.year + '-' + this.deadlineDate.value.month + '-' + this.deadlineDate.value.day) });
       this.form.patchValue({ propertyId: this.paymentService.getNomenclature(this.service.findBy('property.id', this.propertyService.currentProperty.id), this.nomenclature.value.id).property.id });
       if (this.payment) {
-        this.paymentService.update(this.payment, this.form.value);
+        this.store.dispatch(new fromStore.UpdatePayment(this.payment.id, this.form.value));
       } else {
-        this.paymentService.store(this.form.value);
+        this.store.dispatch(new fromStore.CreatePayment(this.form.value));
       }
+      this.store.dispatch(new fromStore.CalculateReservationBalance(this.nomenclature.value.id));
+      this.store.dispatch(new fromStore.CalculateReservationAdjusted(this.nomenclature.value.id));
       this.activeModal.dismiss();
     }
   }

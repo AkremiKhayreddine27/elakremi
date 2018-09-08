@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { PropertyService } from '../../../../../@core/data/property.service';
-import { ServicesService } from '../../../../../@core/data/services.service';
+import { PropertyService } from '../../../../../@core/data';
+import { ServicesService } from '../../../../../@core/data';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteConfirmationComponent } from '../../../../../@theme/components/delete-confirmation/delete-confirmation.component';
 import { MobileDropdownComponent } from '../../../../../@theme/components/mobile-dropdown/mobile-dropdown.component';
+import { Property } from '@core/data/models';
 
 @Component({
   selector: 'grid',
@@ -52,23 +53,23 @@ export class GridComponent implements OnInit {
     this.router.navigate(['/pages/properties/' + property.id]);
   }
 
-  navigateToReservations(property) {
-    this.service.setCurrentProperty(property);
+  navigateToReservations(property: Property) {
+    this.service.setCurrentProperty(property.id);
     this.router.navigate(['/pages/reservations']);
   }
 
-  navigateToServices(property) {
-    this.service.setCurrentProperty(property);
+  navigateToServices(property: Property) {
+    this.service.setCurrentProperty(property.id);
     this.router.navigate(['/pages/categories/services']);
   }
 
-  navigateToCalendars(property) {
-    this.service.setCurrentProperty(property);
+  navigateToCalendars(property: Property) {
+    this.service.setCurrentProperty(property.id);
     this.router.navigate(['/pages/calendars']);
   }
 
-  navigateToFinances(property) {
-    this.service.setCurrentProperty(property);
+  navigateToFinances(property: Property) {
+    this.service.setCurrentProperty(property.id);
     this.router.navigate(['/pages/finances']);
   }
 
@@ -89,8 +90,8 @@ export class GridComponent implements OnInit {
     });
   }
 
-  navigate(link, property) {
-    this.service.setCurrentProperty(property);
+  navigate(link, property: Property) {
+    this.service.setCurrentProperty(property.id);
     this.router.navigate(['/pages/' + link]);
   }
 }

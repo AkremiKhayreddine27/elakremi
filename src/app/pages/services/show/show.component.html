@@ -4,16 +4,15 @@
       <i class="nb-gear"></i>Services
     </span>
     <card-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"
-      *ngIf="!isSearching">
+      (dropdownItemEvent)="handleDropdownEvent($event)" *ngIf="!isSearching">
     </card-header-actions>
-    <card-header-search class="w-100" [source]="source" [fields]="searchFields" (closeSearch)="isSearching = false" [isSearching]="isSearching"
-      *ngIf="isSearching"></card-header-search>
+    <locatus-card-search class="w-100" (searchChange)="onSearch($event)" [fields]="searchFields" (closeSearch)="isSearching = false"
+      [isSearching]="isSearching" *ngIf="isSearching"></locatus-card-search>
   </nb-card-header>
   <nb-card-body class="p-0">
     <card-mobile-header-actions [isFilterCollapsed]="!withFilters" [actions]="headerActions" (actionEvent)="handleHeaderEvent($event)"></card-mobile-header-actions>
     <div [ngbCollapse]="isFilterCollapsed">
-      <filters [refreshFilters]="refreshFilters" [source]="source" (action)="handleFilter($event.action, $event.data)" [filters]="filters"
-        (hasFilters)="hasFilters($event.filters)"></filters>
+      <locatus-filters [config]="filters" (action)="handleFilter($event.action, $event.data)" (hasFilters)="applyFilters($event.filters, $event.config)"></locatus-filters>
     </div>
     <div *ngIf="data | async as services; else loading">
       <div *ngIf="services.length > 0; else noItems">
@@ -38,6 +37,6 @@
     </ng-template>
   </nb-card-body>
   <nb-card-footer class="d-flex justify-content-end p-0">
-    <ngx-pagination [source]="source"></ngx-pagination>
+    <locatus-pagination [paging]="pagination$ | async" [total]="total$ | async" (changed)="paginate($event)"></locatus-pagination>
   </nb-card-footer>
 </nb-card>

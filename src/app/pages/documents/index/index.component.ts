@@ -1,20 +1,28 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PropertyService } from '../../../@core/data/property.service';
-import { ReservationsService } from '../../../@core/data/reservations.service';
-import { DocumentsService } from '../../../@core/data/documents.service';
+
+import {
+  PropertyService,
+  DocumentsService
+} from '@core/data';
+
 import { DialogNewDocumentComponent } from '../document-form/document-form.component';
 import { SendNotificationComponent } from '../../../@theme/components';
 import { FileComponent } from '../file/file.component';
-import { of } from 'rxjs/observable/of';
-import { delay } from 'rxjs/operators';
-import { LocatusAbstractComponent } from '../../../@core/utils/locatusComponent.abstract';
+import { LocatusAbstractComponent } from '@core/utils/locatusComponent.abstract';
+import { Document } from '@core/data/models';
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import * as fromStore from '../../../store';
+import { Pagination, FilterConf, SortConf } from '../../../store/helpers';
 
 @Component({
   selector: 'index',
   templateUrl: './index.component.html',
-  styleUrls: ['./index.component.scss']
+  styleUrls: ['./index.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IndexComponent extends LocatusAbstractComponent implements OnInit {
 
@@ -125,7 +133,7 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit {
         {
           title: 'Type',
           action: 'sort',
-          value: 'type',
+          value: 'type.value',
           direction: 'asc',
         },
         {
@@ -137,7 +145,7 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit {
         {
           title: 'Catégory',
           action: 'sort',
-          value: 'owner.title',
+          value: 'nomenclature.title',
           direction: 'asc',
         }
       ]
@@ -160,9 +168,15 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit {
   ];
 
 
-  searchFields = ['title', 'description', 'owner.title', 'file.name'];
+  searchFields = ['title', 'description', 'type.value', 'nomenclatureType.value'];
 
   properties;
+
+  filtersConf: FilterConf;
+  sortConf: SortConf[];
+  pagination$: Observable<Pagination>;
+  loaded$: Observable<boolean>;
+  total$: Observable<number>;
 
   constructor(
     public route: ActivatedRoute,
@@ -170,19 +184,72 @@ export class IndexComponent extends LocatusAbstractComponent implements OnInit {
     public modalService: NgbModal,
     public dataService: DocumentsService,
     private propertyService: PropertyService,
-    private reservationsService: ReservationsService,
-    public cdr: ChangeDetectorRef
+    public cdr: ChangeDetectorRef,
+    private store: Store<fromStore.LocatusState>
   ) {
     super(router, modalService, cdr, dataService);
   }
 
   ngOnInit() {
-    this.source.load(this.dataService.all());
-    this.detectSourceChanges();
+    this.total$ = this.store.select<any>(fromStore.getDocumentsCount);
+    this.pagination$ = this.store.select<any>(fromStore.getDocumentsPagination);
+    this.loaded$ = this.store.select<any>(fromStore.getDocumentsLoaded);
+    this.data = this.store.select<any>(fromStore.getAllDocuments);
+    this.resetFilters();
+    this.resetSort();
+    this.store.dispatch(new fromStore.LoadDocuments(this.filtersConf, this.sortConf, { page: 1, perPage: 10 }));
     this.filters = this.dataService.initFilters(this.propertyService);
-    this.dataService.initSort(this.source);
   }
 
+  paginate(pagination: Pagination) {
+    this.store.dispatch(new fromStore.LoadDocuments({ ...this.filtersConf }, [...this.sortConf], { ...pagination }));
+  }
+
+  applyFilters(filters, config) {
+    this.filtersConf = { filters, andOperator: true };
+    this.store.dispatch(new fromStore.LoadDocuments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  resetFilters() {
+    this.filtersConf = {
+      filters: [
+        {
+          field: 'propertyId',
+          search: this.propertyService.currentProperty.id.toString(),
+          filter: function (cell: any, search: any) {
+            return cell.toString() === search
+          }
+        }
+      ],
+      andOperator: false,
+    };
+  }
+
+  onSearch(filters: FilterConf) {
+    this.filtersConf = filters;
+    if (filters.filters.length === 0) {
+      this.resetFilters();
+    }
+    this.store.dispatch(new fromStore.LoadDocuments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  sort(element) {
+    element.direction = element.direction === 'asc' ? 'desc' : 'asc';
+    this.sortConf = [
+      {
+        field: element.value,
+        direction: element.direction
+      }
+    ];
+    this.store.dispatch(new fromStore.LoadDocuments({ ...this.filtersConf }, [...this.sortConf], { page: 1, perPage: 10 }));
+  }
+
+  resetSort() {
+    this.sortConf = [{
+      field: 'createdAt',
+      direction: 'desc',
+    }];
+  }
 
   create() {
     const modalRef = this.modalService.open(DialogNewDocumentComponent, { size: 'lg', container: 'nb-layout' });

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dateFns from 'date-fns';
-import { CalendarSettingsService } from '../../../@core/data/calendar-settings.service';
+import { CalendarSettingsService } from '../../../@core/data';
 
 @Component({
   selector: 'app-calendar-settings',
